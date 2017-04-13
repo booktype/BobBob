@@ -3,12 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "deep-equal": "^1.0.1",
     "diff": "^3.2.0",
     "draft-js": "https://git@github.com/vkefallinos/draft-js/tarball/bobbob-develop",
     "fbjs": "^0.8.7",
-    "jsondiffpatch": "^0.2.4",
-    "ot-json0": "^1.0.1",
+    "nedb": "^1.8.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "rtc-signaller": "^6.3.0",

@@ -15,45 +15,13 @@ import createEntityStrategy from './utils/createEntityStrategy';
 import generateTransformation from './generators/generateTransformationForEditorState'
 import Transformation from './immutables/Transformation';
 import applyTransformationToEditorState from './transactions/applyTransformationToEditorState';
+import DataStore from 'nedb';
 var messenger = require('rtc-switchboard-messenger');
 var signaller = require('rtc-signaller')(messenger(document.location.protocol+"//"+document.location.hostname+':8997/'));
 
-
 // send through an announce message
 // this will occur once the websocket has been opened and active
-signaller.announce({ room: document.location.pathname });
 
-var jsondiffpatch = require('jsondiffpatch').create({
-    // used to match objects when diffing arrays, by default only === operator is used
-    objectHash: function(obj) {
-        // this function is used only to when objects are not equal by ref
-        return obj.key;
-    },
-    arrays: {
-        // default true, detect items moved inside the array (otherwise they will be registered as remove+add)
-        detectMove: false,
-        // default false, the value of items moved is not included in deltas
-        includeValueOnMove: false
-    },
-    textDiff: {
-        // default 60, minimum string length (left and right sides) to use text diff algorythm: google-diff-match-patch
-        minLength: 3
-    },
-    // propertyFilter: function(name, context) {
-    //   /*
-    //    this optional function can be specified to ignore object properties (eg. volatile data)
-    //     name: property name, present in either context.left or context.right objects
-    //     context: the diff context (has context.left and context.right objects)
-    //   */
-    //   return name.slice(0, 1) !== '$';
-    // },
-    nested: false,
-    cloneDiffValues: false /* default false. if true, values in the obtained delta will be cloned
-      (using jsondiffpatch.clone by default), to ensure delta keeps no references to left or right objects.
-       this becomes useful if you're diffing and patching the same objects multiple times without serializing deltas.
-      instead of true, a function can be specified here to provide a custom clone(value)
-      */
-});
 class App extends Component {
   constructor(props){
     super(props)
@@ -62,6 +30,15 @@ class App extends Component {
         return {
           strategy: createEntityStrategy(decorator.name),
           component: decorator.component
+        }
+        if(document.location.pathname){
+          signaller.announce({ room: document.location.pathname });
+          // Type 3: Persistent datastore with automatic loading
+          var Datastore = require('nedb')
+          this.db = new Datastore({ filename: document.location.pathname, autoload: true });
+          this.db.findOne({name: document.location.pathname}, function(err, doc){
+            console.log(doc,err)
+          })
         }
     }))
     this.state = {
@@ -95,6 +72,11 @@ class App extends Component {
       console.log('we have successfully connected', data);
     });
 
+  }
+  handleKeyCommand = (command)=>{
+    if(command==="ctrl-s"){
+
+    }
   }
   handleBeforeInput = (chars)=>{
     // signaller.send("/chars", {chars, selection:this.state.editorState.getSelection()})
