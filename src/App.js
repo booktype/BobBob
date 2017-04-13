@@ -16,7 +16,7 @@ import generateTransformation from './generators/generateTransformationForEditor
 import Transformation from './immutables/Transformation';
 import applyTransformationToEditorState from './transactions/applyTransformationToEditorState';
 var messenger = require('rtc-switchboard-messenger');
-var signaller = require('rtc-signaller')(messenger('http://localhost:8997/'));
+var signaller = require('rtc-signaller')(messenger(document.location.protocol+"//"+document.location.hostname+':8997/'));
 
 
 // send through an announce message
@@ -65,7 +65,8 @@ class App extends Component {
         }
     }))
     this.state = {
-      editorState: EditorState.createEmpty(decorators)
+      editorState: EditorState.createEmpty(decorators),
+      sync: false
     };
 
     this.controller = new ContentController(this.state.editorState)
@@ -101,6 +102,9 @@ class App extends Component {
   handleCursor = (command)=>{
     // signaller.send("/chars", {command, selection:this.state.editorState.getSelection()})
   }
+  toggleSync = ()=>{
+    this.setState({sync:!this.state.sync})
+  }
   onChange= (editorState) =>{
     // const delta = jsondiffpatch.diff(
     //   convertToRaw(editorState.getCurrentContent()).blocks,
@@ -111,13 +115,15 @@ class App extends Component {
     //   signaller.send('/diff', delta)
     //
     // }
-    const transform = generateTransformation(this.state.editorState, editorState)
-    if(transform){
-      if(transform.text){
-        signaller.send('/ottext', transform.text)
-      }else{
-        signaller.send('/otblocks', transform.blocks)
+    if(this.state.sync){
+      const transform = generateTransformation(this.state.editorState, editorState)
+      if(transform){
+        if(transform.text){
+          signaller.send('/ottext', transform.text)
+        }else{
+          signaller.send('/otblocks', transform.blocks)
 
+        }
       }
     }
     const previousBlocksArray = this.controller.blocksArray
@@ -139,12 +145,13 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h2>BobBob</h2>
         </div>
         <ControllerContainer
           controller={this.controller}
           onChange={this.onChange}
         />
+        <button onClick={this.toggleSync}>Sync {this.state.sync}</button>
         <RichEditor ref="editor"
           handleKeyCommand={this.handleKeyCommand}
           handleBeforeInput={this.handleBeforeInput}

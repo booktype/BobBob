@@ -1,7 +1,7 @@
 var server = require('http').createServer();
 var switchboard = require('./')(server, { servelib: true });
 var port = parseInt(process.env.NODE_PORT || process.env.PORT || process.argv[2], 10) || 3000;
-var host = process.env.NODE_HOST || process.env.HOST || 'localhost';
+var host = process.env.NODE_HOST || process.env.HOST || '0.0.0.0';
 var replify = require('replify');
 
 server.on('request', function(req, res) {
