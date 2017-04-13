@@ -1,0 +1,26 @@
+{
+  "name": "bobbob",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "deep-equal": "^1.0.1",
+    "diff": "^3.2.0",
+    "draft-js": "https://git@github.com/vkefallinos/draft-js/tarball/bobbob-develop",
+    "fbjs": "^0.8.7",
+    "jsondiffpatch": "^0.2.4",
+    "ot-json0": "^1.0.1",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "rtc-signaller": "^6.3.0",
+    "rtc-switchboard-messenger": "^2.0.3"
+  },
+  "devDependencies": {
+    "react-scripts": "0.9.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

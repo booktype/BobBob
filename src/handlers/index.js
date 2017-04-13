@@ -1,0 +1,1 @@
+export {onPaste} from './onPaste'

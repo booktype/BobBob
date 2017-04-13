@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - 0.10
+  - 0.12
+  - 4.1
+  - stable
+
+notifications:
+  email:
+    - damon.oehlman@gmail.com
+  irc: "irc.freenode.org#rtc.io"
