@@ -60,7 +60,7 @@ class RichEditor extends React.Component {
     }
   }
 
-  _keyBindingFn(e){
+  _keyBindingFn=(e)=>{
       let command = []
       const key = keycodes[e.keyCode.toString()]
       if (key) {
@@ -77,8 +77,8 @@ class RichEditor extends React.Component {
         command = command.join("-")
     }
     if(command=="ctrl-s"){
-      this.props.handleKeyCommand(command)
       e.preventDefault()
+      this.props.handleKeyCommand(command)
     }
     return getDefaultKeyBinding(e);
   }
@@ -116,12 +116,12 @@ class RichEditor extends React.Component {
         className += ' RichEditor-hidePlaceholder';
       }
     }
-
     return (
       <div className="RichEditor-root">
 
-        <div className={className} onClick={this.focus}>
+        <div className={className} onClick={this.props.onClick} onMouseOver={this.props.onMouseOver}>
           <Editor
+            readOnly={this.props.readOnly}
             blockStyleFn={getBlockStyle}
             customStyleFn={this.customStyleFn}
             customStyleMap={DefaultDraftInlineStyle}

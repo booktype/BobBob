@@ -1,6 +1,6 @@
 {
-  "short_name": "create-react-pwa",
-  "name": "Create React PWApp",
+  "short_name": "bobbob-editor",
+  "name": "BobBob Editor",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,6 +8,8 @@
       "type": "image/png"
     }
   ],
+  "theme_color": "cornflowerblue",
+  "background_color": "gray",
   "start_url": "./",
   "display": "standalone"
 }

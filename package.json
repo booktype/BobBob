@@ -2,24 +2,36 @@
   "name": "bobbob",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://vkefallinos.github.io/bobbob",
   "dependencies": {
+    "autobahn": "^0.12.0",
+    "bindings": "^1.2.1",
     "diff": "^3.2.0",
     "draft-js": "https://git@github.com/vkefallinos/draft-js/tarball/bobbob-develop",
     "fbjs": "^0.8.7",
-    "nedb": "^1.8.0",
+    "level": "^1.6.0",
+    "leveldown": "^1.6.0",
+    "localforage": "^1.5.0",
+    "msgpack-lite": "^0.1.26",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "rtc-signaller": "^6.3.0",
-    "rtc-switchboard-messenger": "^2.0.3"
+    "react-jsonschema-form": "^0.46.0",
+    "schemapack": "^1.4.2"
   },
   "devDependencies": {
+    "concurrently": "^3.4.0",
     "react-scripts": "0.9.5",
-    "sw-precache": "^4.2.2"
+    "sw-precache": "^4.2.2",
+    "websocket-stream": "^4.0.0",
+    "ws": "^1.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "start": "concurrently --kill-others \"node server/serverws\" \"react-scripts start\" \". ./python_env/bin/activate && crossbar start\"",
     "build": "react-scripts build && sw-precache --config=sw-precache-config.js",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   }
 }

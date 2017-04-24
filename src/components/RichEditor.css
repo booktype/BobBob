@@ -12,8 +12,16 @@
   cursor: text;
   font-size: 16px;
   margin-top: 10px;
+  counter-reset: endnote;
 }
-
+.RichEditor-editor .endnote::after {
+  counter-increment: endnote;
+  content: "[" counter(endnote) "]";
+  font-size: 10px;
+}
+.RichEditor-editor .endnote:hover {
+  cursor: pointer;
+}
 .RichEditor-editor .public-DraftEditorPlaceholder-root,
 .RichEditor-editor .public-DraftEditor-content {
   margin: 0 -15px -15px;
@@ -61,4 +69,30 @@
 
 .RichEditor-activeButton {
   color: #5890ff;
+}
+
+.RichEditor-controls .waves-effect {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  vertical-align: middle;
+  z-index: 1;
+  transition: .3s ease-out;
+}
+.RichEditor-controls .btn {
+  border: none;
+  border-radius: 2px;
+  display: inline-block;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 2rem;
+  text-transform: uppercase;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
 }

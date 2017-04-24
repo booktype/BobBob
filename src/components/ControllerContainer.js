@@ -1,7 +1,7 @@
 import React from 'react';
 import BlockStyleControls from './BlockStyleControls';
 import InlineStyleControls from './InlineStyleControls';
-
+import EntityStyleControls from './EntityStyleControls';
 
 class ControllerContainer extends React.Component {
   constructor(props){
@@ -19,6 +19,13 @@ class ControllerContainer extends React.Component {
       <InlineStyleControls
         controller={this.props.controller}
         onChange={this.onChange}
+      />
+      <EntityStyleControls
+        controller={this.props.controller}
+        onChange={this.onChange}
+        setReadOnly={this.props.setReadOnly}
+        hoverTarget={this.props.hoverTarget}
+        clickTarget={this.props.clickTarget}
       />
       {/* <button onClick={onSend}> send </button> */}
     </div>

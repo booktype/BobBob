@@ -22,7 +22,6 @@ export default {
     "cols" : "cols",
     "colspan" : "colSpan",
     "content" : "content",
-    "contenteditable" : "contentEditable",
     "contextmenu" : "contextMenu",
     "controls" : "controls",
     "coords" : "coords",

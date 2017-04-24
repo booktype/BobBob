@@ -1,4 +1,6 @@
 import {ContentBlock, BlockMapBuilder, genKey, SelectionState, Modifier} from "draft-js"
+import CharacterMetadata from "draft-js/lib/CharacterMetadata";
+import DraftEntityInstance from "draft-js/lib/DraftEntityInstance";
 import {Map} from 'immutable';
 class ContentController {
   constructor(editorState){
@@ -31,12 +33,13 @@ class ContentController {
     this.blocksArray = head.concat([this.currentBlock, newBlock]).concat(tail)
     return this
   }
-  appendChild = (type)=>{
+  appendChild = (type, text="")=>{
     const head = this.blocksArray.slice(0, this.index+1)
     const tail = this.blocksArray.slice(this.index-2)
     this.currentBlock = new ContentBlock({
       key: genKey(),
       type,
+      text,
       depth:this.currentDepth+1,
     })
     this.blocksArray =  head.concat([this.currentBlock]).concat(tail)
@@ -126,6 +129,54 @@ class ContentController {
     this.currentDepth++
     this.currentBlock = block
     return this
+  }
+  createEntity = (type, mutability="MUTABLE", data={})=>{
+
+    const entityMap = this.currentContent.getEntityMap()
+    const lastKey = entityMap.keySeq().last()
+    let key
+    if(lastKey){
+      key = `${Number(lastKey)+1}`
+    }else{
+      key = "1"
+    }
+    console.log(key)
+    const newEntityMap = entityMap.set(
+                            key,
+                            new DraftEntityInstance({
+                              type,
+                              mutability,
+                              data
+                            })
+                          )
+    this.currentContent = this.currentContent.set(
+      "entityMap",
+      newEntityMap
+    )
+    return key
+  }
+  insertCharacterAtSelectionEndWithEntity = (char,entityKey) => {
+    const head = this.blocksArray.slice(0, this.index)
+    const tail = this.blocksArray.slice(this.index+1)
+    const charList = this.currentBlock.getCharacterList()
+    const text = this.currentBlock.getText()
+    const focusOffset = this.selection.getFocusOffset()
+    const anchorOffset = this.selection.getAnchorOffset()
+    const offset = focusOffset>anchorOffset?focusOffset:anchorOffset
+    const headCharList = charList.slice(0,offset)
+    const tailCharList = charList.slice(offset)
+    const headText = text.slice(0,offset)
+    const tailText = text.slice(offset)
+    this.blocksArray = head.concat(
+      this.currentBlock.merge({
+        characterList: headCharList.concat([new CharacterMetadata(
+          {
+            entity: entityKey,
+          }
+        )]).concat(tailCharList),
+        text: headText.concat(char).concat(tailText)
+      })
+    ).concat(tail)
   }
   insertElementAfter = (type)=>{
     const head = this.blocksArray.slice(0, this.index+1)

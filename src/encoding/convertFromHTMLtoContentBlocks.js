@@ -23,6 +23,8 @@ import generateRandomKey from 'draft-js/lib/generateRandomKey'
 import URI from 'fbjs/lib/URI';
 
 import reactAttributes from '../constants/reactAttributes'
+import getElementAttributes from './getElementAttributes';
+import getStyleProperties from './getStyleProperties';
 import invariant from 'fbjs/lib/invariant'
 import nullthrows from 'fbjs/lib/nullthrows'
 import {Set} from 'immutable';
@@ -120,30 +122,10 @@ function getEmptyChunk(): Chunk {
 }
 
 function getAttributes(attr){
-  const attributes = {}
-  if(!attr){
-    return Map({})
-  }
-  const excludeAttr = ["style", "contentEditable"]
-  for (var i = 0; i < attr.length; i++) {
-    if(!excludeAttr.includes(attr[i].name) && reactAttributes[attr[i].name]){
-      attributes[reactAttributes[attr[i].name]] = attr[i].value;
-    }
-  }
-  return Map(attributes)
+  return getElementAttributes(attr)
 }
 function getStyleAttributes(attr){
-  const attributes = {}
-  if(!attr){
-    return Map({})
-  }
-  const defaultValues = ['inherit', 'initial', '0px']
-  for (var i = 0; i < attr.length; i++) {
-    if(defaultValues.indexOf(attr[attr[i]])==-1){
-      attributes[attr[i].replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })] = attr[attr[i]]
-    }
-  }
-  return Map(attributes)
+  return getStyleProperties(attr) 
 }
 function getWhitespaceChunk(inEntity: ?string): Chunk {
   var entities = new Array(1);
@@ -281,7 +263,6 @@ function processInlineTag(
     currentStyle = currentStyle.add(styleToCheck).toOrderedSet();
   } else if (node instanceof HTMLElement) {
     const htmlElement = node;
-    console.log([htmlElement])
     currentStyle = currentStyle.withMutations(style => {
       const properties = getStyleAttributes(htmlElement.style)
       for(let prop in properties){
@@ -293,6 +274,7 @@ function processInlineTag(
             }
           }
         }
+        console.log(prop)
         style.add(`${prop}__${properties[prop]}`)
       }
       const fontWeight = htmlElement.style.fontWeight;

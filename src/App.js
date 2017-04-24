@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './logotext.png';
 import './App.css';
 import RichEditor from './components/Editor'
 import ControllerContainer from './components/ControllerContainer'
@@ -9,105 +9,122 @@ import { convertToRaw,
   Editor, EditorState, RichUtils,
   SelectionState, CompositeDecorator,
   ContentState} from 'draft-js';
+import {BlockMapBuilder, Modifier} from 'draft-js'
 import ContentController from './transactions/ContentController';
 import DefaultDraftEntityArray from './immutables/DefaultDraftEntityArray';
 import createEntityStrategy from './utils/createEntityStrategy';
-import generateTransformation from './generators/generateTransformationForEditorState'
-import Transformation from './immutables/Transformation';
-import applyTransformationToEditorState from './transactions/applyTransformationToEditorState';
-import DataStore from 'nedb';
-var messenger = require('rtc-switchboard-messenger');
-var signaller = require('rtc-signaller')(messenger(document.location.protocol+"//"+document.location.hostname+':8997/'));
+import diffConvertFromDraftStateToRaw from './encoding/diffConvertDraftStateToRaw'
+import convertRawToDraftState from './encoding/convertRawToDraftState'
+// import msgpack from 'msgpack-lite';
 
-// send through an announce message
-// this will occur once the websocket has been opened and active
+var worker = new Worker('worker.js')
+const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
+  (decorator)=>{
+    return {
+      strategy: createEntityStrategy(decorator.name),
+      component: decorator.component
+    }
+  }
+))
 
 class App extends Component {
   constructor(props){
     super(props)
-    const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
-      (decorator)=>{
-        return {
-          strategy: createEntityStrategy(decorator.name),
-          component: decorator.component
-        }
-        if(document.location.pathname){
-          signaller.announce({ room: document.location.pathname });
-          // Type 3: Persistent datastore with automatic loading
-          var Datastore = require('nedb')
-          this.db = new Datastore({ filename: document.location.pathname, autoload: true });
-          this.db.findOne({name: document.location.pathname}, function(err, doc){
-            console.log(doc,err)
-          })
-        }
-    }))
-    this.state = {
-      editorState: EditorState.createEmpty(decorators),
-      sync: false
-    };
+    this.name = document.location.pathname.replace("/","")
+    worker.onmessage = (e)=>{
+      let editorState = null;
+      switch (e.data.command) {
+        case "newcontent":
+          let content  = convertRawToDraftState(e.data.content)
+          editorState = EditorState.createWithContent(
+            Modifier.enableOT(content),
+            decorators
+          )
+          this.controller = new ContentController(editorState)
 
-    this.controller = new ContentController(this.state.editorState)
-    // when a new peer is announced, log it
+          break;
+        case "updatecontent":
+          editorState = EditorState.set(
+            this.state.editorState,
+            {
+              currentContent: convertRawToDraftState(e.data.content),
+            }
+          )
+          break;
+      }
+      this.setState({
+        editorState
+      })
+    }
+    worker.postMessage({
+      command: "createorload",
+      name: this.name
+    })
+    this.state = {
+      editorState: '',
+      sync: false,
+      readOnly: false
+    };
+  }
+  onSave = ()=>{
+  }
+  setReadOnly=(readOnly)=>{
+    this.setState({readOnly})
   }
   componentDidMount(){
-
-    signaller.on('peer:announce', (data) => {
-     console.log('new peer found in room: ', data);
-    //  signaller.send('/setstate', convertToRaw(this.state.editorState.getCurrentContent()))
-    });
-
-    signaller.on('message:otblocks', (content)=>{
-      this.setState({
-        editorState: applyTransformationToEditorState({blocks:new Transformation(content)}, this.state.editorState)
-      })
-    })
-    signaller.on('message:ottext', (content)=>{
-      console.log(content, Transformation)
-      this.setState({
-        editorState: applyTransformationToEditorState({text:new Transformation(content)}, this.state.editorState)
-      })
-    })
-    // for our sanity, pop a message once we are connected
-    signaller.once('connected', function(data) {
-      console.log('we have successfully connected', data);
-    });
+    if(this.name){
+    }
 
   }
+
   handleKeyCommand = (command)=>{
     if(command==="ctrl-s"){
-
+      console.log("Save")
+      worker.postMessage({
+        command: "save",
+      })
     }
   }
   handleBeforeInput = (chars)=>{
-    // signaller.send("/chars", {chars, selection:this.state.editorState.getSelection()})
   }
   handleCursor = (command)=>{
-    // signaller.send("/chars", {command, selection:this.state.editorState.getSelection()})
   }
   toggleSync = ()=>{
+    worker.postMessage({command: "sync", value: !this.state.sync})
+    console.log("sync is" , !this.state.sync)
     this.setState({sync:!this.state.sync})
   }
   onChange= (editorState) =>{
-    // const delta = jsondiffpatch.diff(
-    //   convertToRaw(editorState.getCurrentContent()).blocks,
-    //   convertToRaw(this.state.editorState.getCurrentContent()).blocks
-    // )
-    // if(delta){
-    //   // signaller.send('/sync', convertToRaw(editorState.getCurrentContent()))
-    //   signaller.send('/diff', delta)
+    console.log("change")
+    if(editorState===this.state.editorState){
+      return
+    }
+    const prevContent = this.state.editorState.getCurrentContent()
+    let currentContent = editorState.getCurrentContent()
+    const operations = currentContent.getOperations()
+
+    operations.forEach((operation, contentHash)=>{
+      const operationName = operation[0]
+      const operationArgs = operation[1]
+      operationArgs.forEach((arg)=>{
+        if(arg)
+        console.log(arg.constructor.name)
+      })
+    })
+    currentContent = Modifier.clearOperations(currentContent)
+    editorState = EditorState.set(editorState, {currentContent})
+    // if(prevContent.getBlockMap()!==currentContent.getBlockMap() ||
+    //    prevContent.getEntityMap()!==currentContent.getEntityMap()
+    //   ){
+    //   worker.postMessage({
+    //     command: "update",
+    //     change: diffConvertFromDraftStateToRaw(
+    //       prevContent,
+    //       currentContent
+    //     )
+    //   })
     //
     // }
-    if(this.state.sync){
-      const transform = generateTransformation(this.state.editorState, editorState)
-      if(transform){
-        if(transform.text){
-          signaller.send('/ottext', transform.text)
-        }else{
-          signaller.send('/otblocks', transform.blocks)
-
-        }
-      }
-    }
     const previousBlocksArray = this.controller.blocksArray
     this.controller.editorState = editorState
     this.controller.currentContent = editorState.getCurrentContent()
@@ -122,22 +139,47 @@ class App extends Component {
 
     this.setState({editorState})
   }
+  onClick=(e)=>{
+    this.setState({clickTarget:e.target})
+    // if(e.target.dataset.entity){
+    //   console.log(e.target.dataset.entity)
+    //   const entity = this.controller.currentContent.getEntity(e.target.dataset.entity)
+    //   this.setState({
+    //     modalActive: true,
+    //     modalTitle: entity.getType(),
+    //     modalChildren: "this is where the children go"
+    //   })
+    // }
+  }
+  onHover=(e)=>{
+    this.setState({hoverTarget:e.target})
+
+  }
   render() {
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>BobBob</h2>
         </div>
-        <ControllerContainer
-          controller={this.controller}
-          onChange={this.onChange}
-        />
-        <button onClick={this.toggleSync}>Sync {this.state.sync}</button>
-        <RichEditor ref="editor"
-          handleKeyCommand={this.handleKeyCommand}
-          handleBeforeInput={this.handleBeforeInput}
-          onChange={this.onChange} editorState={this.state.editorState}/>
+{this.state.editorState?
+        <div>
+          <ControllerContainer
+            controller={this.controller}
+            onChange={this.onChange}
+            setReadOnly={this.setReadOnly}
+            hoverTarget={this.state.hoverTarget}
+            clickTarget={this.state.clickTarget}
+          />
+            <RichEditor ref="editor"
+              readOnly={this.state.readOnly}
+              onClick={this.onClick}
+              onMouseOver={this.onHover}
+              onSave={this.onSave}
+              handleKeyCommand={this.handleKeyCommand}
+              handleBeforeInput={this.handleBeforeInput}
+              onChange={this.onChange} editorState={this.state.editorState}/>
+
+        </div>:null}
       </div>
     );
   }

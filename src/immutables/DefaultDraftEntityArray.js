@@ -3,6 +3,14 @@ import React from 'react';
 
 export default [
     {
+      name: "ENDNOTE",
+      component: (props)=>{
+        return (
+          <sup className={"endnote"} data-entity={props.entityKey}></sup>
+        )
+      }
+    },
+    {
       name: "LINK",
       component: (props) => {
         const {url} = props.contentState.getEntity(props.entityKey).getData();
