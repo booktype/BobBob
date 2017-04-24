@@ -17,7 +17,10 @@ import diffConvertFromDraftStateToRaw from './encoding/diffConvertDraftStateToRa
 import convertRawToDraftState from './encoding/convertRawToDraftState'
 // import msgpack from 'msgpack-lite';
 
-var worker = new Worker('worker.js')
+var worker = new Worker('/static/edit/js/draft/worker.js')
+// var worker = {
+//   postMessage: ()=>{}
+// }
 const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
   (decorator)=>{
     return {
@@ -158,9 +161,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="App-header">
+        {/* <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-        </div>
+        </div> */}
 {this.state.editorState?
         <div>
           <ControllerContainer
