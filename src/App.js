@@ -16,11 +16,18 @@ import createEntityStrategy from './utils/createEntityStrategy';
 import diffConvertFromDraftStateToRaw from './encoding/diffConvertDraftStateToRaw'
 import convertRawToDraftState from './encoding/convertRawToDraftState'
 // import msgpack from 'msgpack-lite';
+import axios from "axios";
+import editorStateToJSON from './encoding/editorStateToJSON';
+import editorStateFromRaw from './encoding/editorStateFromRaw';
+import {html_beautify} from 'js-beautify';
+import onPaste from './handlers/onPaste'
+import './styles/app.scss';
 
-var worker = new Worker('/static/edit/js/draft/worker.js')
+var worker = new Worker('../_worker')
 // var worker = {
 //   postMessage: ()=>{}
 // }
+
 const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
   (decorator)=>{
     return {
@@ -34,42 +41,75 @@ class App extends Component {
   constructor(props){
     super(props)
     this.name = document.location.pathname.replace("/","")
-    worker.onmessage = (e)=>{
-      let editorState = null;
-      switch (e.data.command) {
-        case "newcontent":
-          let content  = convertRawToDraftState(e.data.content)
-          editorState = EditorState.createWithContent(
-            Modifier.enableOT(content),
-            decorators
-          )
-          this.controller = new ContentController(editorState)
-
-          break;
-        case "updatecontent":
-          editorState = EditorState.set(
-            this.state.editorState,
-            {
-              currentContent: convertRawToDraftState(e.data.content),
-            }
-          )
-          break;
-      }
-      this.setState({
-        editorState
-      })
-    }
-    worker.postMessage({
-      command: "createorload",
-      name: this.name
-    })
+    // worker.onmessage = (e)=>{
+    //   let editorState = null;
+    //   switch (e.data.command) {
+    //     case "newcontent":
+    //       let content  = convertRawToDraftState(e.data.content)
+    //       editorState = EditorState.createWithContent(
+    //         Modifier.enableOT(content),
+    //         decorators
+    //       )
+    //       this.controller = new ContentController(editorState)
+    //
+    //       break;
+    //     case "updatecontent":
+    //       editorState = EditorState.set(
+    //         this.state.editorState,
+    //         {
+    //           currentContent: convertRawToDraftState(e.data.content),
+    //         }
+    //       )
+    //       break;
+    //   }
+    //   this.setState({
+    //     editorState
+    //   })
+    // }
+    // worker.postMessage({
+    //   command: "createorload",
+    //   name: this.name,
+    //   hash: document.location.hash,
+    //   pathname: document.location.pathname
+    // })
     this.state = {
       editorState: '',
       sync: false,
       readOnly: false
     };
+
+    setTimeout(()=>{
+      const chapter_url = `/_api/books/${window.booktype.currentBookID}/chapters/${window.booktype.editor.getCurrentChapterID()}/`
+      axios
+      .get(chapter_url)
+      .then((response)=>{
+        const editorState = onPaste(EditorState.createEmpty(), response.data.content)
+        // const editorState = editorStateFromRaw(JSON.parse(response.data.content_json))
+        this.controller = new ContentController(editorState)
+
+        this.setState({
+            editorState
+        })
+      })
+      let csrftoken = window.booktype.getCookie('csrftoken');
+      window.booktype.editor.edit.saveContent = () => {
+        const editorState = editorStateToJSON(this.state.editorState)
+        axios.patch(chapter_url,{content_json:editorState, content: this.toHtml()},{headers:{
+          "X-CSRFToken": csrftoken
+        }})
+      }
+      const defaultSetTheme = window.booktype.editor.themes.setTheme
+      window.booktype.editor.themes.setTheme = (themename) => {
+        console.log(themename)
+        this.setTheme(themename)
+        defaultSetTheme(themename)
+      }
+
+    },5000)
   }
   onSave = ()=>{
+    window.booktype.editor.edit.saveContent()
+
   }
   setReadOnly=(readOnly)=>{
     this.setState({readOnly})
@@ -83,9 +123,10 @@ class App extends Component {
   handleKeyCommand = (command)=>{
     if(command==="ctrl-s"){
       console.log("Save")
-      worker.postMessage({
-        command: "save",
-      })
+      this.onSave()
+      // worker.postMessage({
+      //   command: "save",
+      // })
     }
   }
   handleBeforeInput = (chars)=>{
@@ -158,6 +199,54 @@ class App extends Component {
     this.setState({hoverTarget:e.target})
 
   }
+  toHtml = () => {
+    let mainEditor = document.querySelector("[data-contents]")
+    mainEditor = mainEditor.cloneNode(true)
+    // mainEditor.innerHTML = mainEditor.querySelector("[data-contents]").innerHTML
+
+    // let editors = mainEditor.querySelectorAll(".contenteditor")
+
+    // editors.forEach((editor)=>{
+    //
+    //   let contents = editor.querySelector("[data-contents]")
+    //
+    //   editor.outerHTML = contents.innerHTML
+    //
+    // })
+    let elements = mainEditor.querySelectorAll("[data-offset-key]")
+    elements.forEach((element)=>{
+      element.removeAttribute("data-offset-key")
+      if(!element.attributes.length){
+
+        element.innerHTML = element.firstChild.innerHTML
+      }
+    })
+
+    elements = mainEditor.querySelectorAll("[contenteditable]")
+    elements.forEach((element)=>{
+      element.outerHTML = element.innerHTML
+    })
+    elements = mainEditor.querySelectorAll(".public-DraftStyleDefault-block")
+    elements.forEach((element)=>{
+      element.classList.remove("public-DraftStyleDefault-ltr")
+      element.classList.remove("public-DraftStyleDefault-block")
+    })
+    elements = mainEditor.querySelectorAll(".datablock")
+    elements.forEach((element)=>{
+      element.remove()
+    })
+    elements = mainEditor.querySelectorAll("span")
+    elements.forEach((element)=>{
+      if(!element.attributes.length){
+        element.outerHTML = element.innerHTML
+      }
+    })
+    elements = mainEditor.querySelectorAll("[data-text]")
+    elements.forEach((element)=>{
+      element.outerHTML = element.innerHTML
+    })
+    return html_beautify(mainEditor.innerHTML)
+  }
   render() {
     return (
       <div className="App">
@@ -165,7 +254,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
         </div> */}
 {this.state.editorState?
-        <div>
+        <div className={`editor-${this.state.themename}`}>
           <ControllerContainer
             controller={this.controller}
             onChange={this.onChange}

@@ -27,7 +27,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 var autobahn = require('autobahn');
-
+var axios = require('axios')
 
 // A poor man's user database.
 //
@@ -56,9 +56,25 @@ var USERDB = {
 function authenticate (args) {
    var realm = args[0];
    var authid = args[1];
+   var sessionid = authid.split("_")[0]
+   var csrf = authid.split("_")[1]
    var details = args[2];
-
+   var d = new autobahn.when.defer();
+   axios.get("http://localhost:8000/_api/users/current", {headers: {
+     Cookie:" sessionid="+sessionid+";csrftoken="+csrf
+   }}).then(function(response){
+     console.log(response.data)
+     d.resolve({
+       secret: sessionid,
+       role: 'frontend'
+     })
+   })
+   .catch(function (error) {
+      d.reject(error.response.data.detail)
+      console.log(error.response.data)
+    });
    console.log("authenticate called:", realm, authid, details);
+   return d.promise;
 
    if (USERDB[authid] !== undefined) {
       return USERDB[authid];
