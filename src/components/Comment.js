@@ -1,10 +1,9 @@
 import React from 'react';
-
 const styles = {
   circleImage: {
     "position": "absolute",
-    "width": "42px",
-    "height": "42px",
+    "width": "30px",
+    "height": "30px",
     "overflow": "hidden",
     "left": "15px",
     "display": "inline-block",
@@ -16,8 +15,8 @@ const styles = {
   },
   inlineCommentImage:{
     "position": "absolute",
-    "width": "42px",
-    "height": "42px",
+    "width": "30px",
+    "height": "30px",
     "overflow": "hidden",
     "display": "inline-block",
     "verticalAlign": "middle",
