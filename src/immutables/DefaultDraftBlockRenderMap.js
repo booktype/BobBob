@@ -32,6 +32,10 @@ const DefaultDraftBlockRenderMap = Map({
     element: 'div',
     void: true
   },
+  'img': {
+    element: 'img',
+    void: true
+  },
   'table':{
     element: 'table',
     type: "structure",

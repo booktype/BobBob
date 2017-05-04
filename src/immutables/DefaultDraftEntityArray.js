@@ -10,17 +10,17 @@ export default [
         )
       }
     },
-    {
-      name: "LINK",
-      component: (props) => {
-        const {url} = props.contentState.getEntity(props.entityKey).getData();
-        return (
-          <a href={url}>
-            {props.children}
-          </a>
-        );
-      }
-    },
+    // {
+    //   name: "LINK",
+    //   component: (props) => {
+    //     const {url} = props.contentState.getEntity(props.entityKey).getData();
+    //     return (
+    //       <a href={url}>
+    //         {props.children}
+    //       </a>
+    //     );
+    //   }
+    // },
     {
       name: "QUOTE",
       component: (props) => {
@@ -46,7 +46,7 @@ export default [
     {
       name: "IMAGE",
       component: (props) => {
-        const {href, src, width, height, alt} = props.contentState.getEntity(props.entityKey).getData()
+        const {href, src, width, height, alt, style} = props.contentState.getEntity(props.entityKey).getData()
         if(href){
           return (
            <a href={href}>
@@ -55,7 +55,7 @@ export default [
           )
         }
         return (
-          <img src={src} width={width} height={height}/>
+          <img src={src} width={width} height={height} style={style}/>
         )
       }
     }

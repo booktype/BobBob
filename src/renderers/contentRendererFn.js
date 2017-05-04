@@ -104,8 +104,18 @@ export default function contentRendererFn(props){
       childProps,
       <Component {...componentProps} />,
     );
+
     const data = block.getData().toJSON()
     const attributes = data.attributes || {}
+    if(attributes.dataset){
+      for(var prop in attributes.dataset){
+        attributes[`data-${prop}`] = attributes.dataset[prop]
+      }
+      delete attributes.dataset
+    }
+    if(attributes.className && attributes.className.constructor === Array){
+      attributes.className = attributes.className.join(" ")
+    }
     const style = data.style || {}
     processedBlocks.push({
       block: child,

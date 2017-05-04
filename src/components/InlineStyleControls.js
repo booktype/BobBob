@@ -6,18 +6,45 @@ var INLINE_STYLES = [
   {label: 'Italic', style: 'ITALIC'},
   {label: 'Underline', style: 'UNDERLINE'},
   {label: 'Monospace', style: 'CODE'},
-  {label: 'Blue', style: 'color__blue'}
+  {label: 'Blue', style: 'color__blue'},
+  {label: 'Link', style: 'LINK'},
+  {label: 'Comment', style: 'COMMENT'},
 ];
 
 const InlineStyleControls = (props) => {
   var currentStyle = props.controller.currentInlineStyle;
   function toggleInlineStyle(inlineStyle) {
-    props.onChange(
-      RichUtils.toggleInlineStyle(
-        props.controller.editorState,
-        inlineStyle
-      )
-    );
+    if(inlineStyle === "LINK"){
+      props.onChange(
+        RichUtils.toggleInlineStyleWithMeta(
+          props.controller.editorState,
+          inlineStyle,
+          {
+            attributes: {
+              href: "http://google.com"
+            }
+          }
+        )
+      );
+    }else if(inlineStyle === "COMMENT"){
+      props.onChange(
+        RichUtils.toggleInlineStyleWithMeta(
+          props.controller.editorState,
+          inlineStyle,
+          {
+          }
+        )
+      );
+
+    }else{
+      props.onChange(
+        RichUtils.toggleInlineStyle(
+          props.controller.editorState,
+          inlineStyle,
+        )
+      );
+
+    }
   }
   return (
     <div className="RichEditor-controls">

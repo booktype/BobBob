@@ -47,7 +47,7 @@ var NBSP = '&nbsp;';
 var SPACE = ' ';
 
 // Arbitrary max indent
-var MAX_DEPTH = 10;
+var MAX_DEPTH = 20;
 
 // used for replacing characters in HTML
 var REGEX_CR = new RegExp('\r', 'g');
@@ -95,6 +95,8 @@ const imgAttr = [
   'height',
   'src',
   'width',
+  'style',
+  'transform-data'
 ];
 
 var lastBlock;
@@ -125,7 +127,7 @@ function getAttributes(attr){
   return getElementAttributes(attr)
 }
 function getStyleAttributes(attr){
-  return getStyleProperties(attr) 
+  return getStyleProperties(attr)
 }
 function getWhitespaceChunk(inEntity: ?string): Chunk {
   var entities = new Array(1);
@@ -190,7 +192,7 @@ function getBlockMapSupportedTags(
   });
 
   return tags
-    .filter((tag) => tag && tag !== unstyledElement)
+    // .filter((tag) => tag && tag !== unstyledElement)
     .toArray()
     .sort();
 }
@@ -215,6 +217,7 @@ function getBlockTypeForTag(
   lastList: ?string,
   blockRenderMap: DraftBlockRenderMap
 ): DraftBlockType {
+  console.log(tag)
   const matchedTypes = blockRenderMap
     .filter((draftBlock: DraftBlockRenderConfig) => (
       draftBlock.element === tag ||
@@ -228,7 +231,7 @@ function getBlockTypeForTag(
     .toSet()
     .toArray()
     .sort();
-
+  console.log(matchedTypes)
   // if we dont have any matched type, return unstyled
   // if we have one matched type return it
   // if we have multi matched types use the multi-match function to gather type
@@ -385,7 +388,9 @@ function genFragment(
   blockRenderMap: DraftBlockRenderMap,
   inEntity?: string
 ): {chunk: Chunk, entityMap: EntityMap} {
+
   var nodeName = node.nodeName.toLowerCase();
+
   var newBlock = false;
   var nextBlockType = 'unstyled';
   var lastLastBlock = lastBlock;
@@ -395,8 +400,18 @@ function genFragment(
   }
   // Base Case
   if (nodeName === '#text') {
+    var blocks = []
+    if(node.nextSibling){
+      blocks.push({
+        type: node.parentElement.nodeName.toLowerCase(),
+        depth:depth+1,
+        attributes:{},
+        style: {}
+      })
+    }
     var text = node.textContent;
-    if (text.trim() === '' && inBlock !== 'pre') {
+
+    if (text.trim().replace("\n","").replace(" ", "") === '' && inBlock !== 'pre') {
       return {chunk: getWhitespaceChunk(inEntity), entityMap};
     }
     if (inBlock !== 'pre') {
@@ -412,7 +427,7 @@ function genFragment(
         text,
         inlines: Array(text.length).fill(inlineStyle),
         entities: Array(text.length).fill(inEntity),
-        blocks: [],
+        blocks,
       },
       entityMap,
     };
@@ -444,6 +459,7 @@ function genFragment(
     node.attributes.getNamedItem('src') &&
     node.attributes.getNamedItem('src').value
   ) {
+    console.log("Found Image")
     const image: HTMLImageElement = node;
     const entityConfig = {};
 
@@ -455,14 +471,20 @@ function genFragment(
     });
     const imageURI = new URI(entityConfig.src).toString();
     node.textContent = imageURI; // Output src if no decorator
-
+    var entkey
+    if(!newEntityMap.size){
+      entkey = 1
+    }else{
+      entkey = Number(newEntityMap.keySeq().last()) + 1
+    }
     newEntityMap = addEntityToEntityMap(
       newEntityMap,
       new DraftEntityInstance({
         type: 'IMAGE',
         mutability: 'MUTABLE',
         data: entityConfig || {},
-      })
+      }),
+      entkey.toString()
     );
     inEntity = newEntityMap.keySeq().last();
   }
@@ -526,7 +548,11 @@ function genFragment(
       });
 
       entityConfig.url = new URI(anchor.href).toString();
-
+      if(!newEntityMap.size){
+        entkey = 1
+      }else{
+        entkey = Number(newEntityMap.keySeq().last()) + 1
+      }
       newEntityMap = addEntityToEntityMap(
         newEntityMap,
         new DraftEntityInstance({
@@ -534,6 +560,7 @@ function genFragment(
           mutability: 'MUTABLE',
           data: entityConfig || {},
         }),
+        entkey.toString()
       );
       entityId = newEntityMap.keySeq().last();
     } else {
@@ -594,9 +621,9 @@ function getChunkForHTML(
   const supportedBlockTags = getBlockMapSupportedTags(blockRenderMap);
 
   var safeBody = DOMBuilder(html);
-  for(let block of safeBody.children){
-    // unnestBlocks(block)
-  }
+  // for(let block of safeBody.children){
+  //   // unnestBlocks(block)
+  // }
   if (!safeBody) {
     return null;
   }
@@ -623,7 +650,6 @@ function getChunkForHTML(
     0,
     blockRenderMap
   );
-
   // join with previous block to prevent weirdness on paste
   if (chunk.text.indexOf('\r') === 0) {
     chunk = {
@@ -664,7 +690,7 @@ function convertFromHTMLtoContentBlocks(
   // Be ABSOLUTELY SURE that the dom builder you pass here won't execute
   // arbitrary code in whatever environment you're running this in. For an
   // example of how we try to do this in-browser, see getSafeBodyFromHTML.
-  console.log(blockRenderMap)
+
   var chunkData = getChunkForHTML(html, DOMBuilder, blockRenderMap, OrderedMap());
   if (chunkData == null) {
     return null;
@@ -704,7 +730,10 @@ function convertFromHTMLtoContentBlocks(
           characterList,
         });
       },
-    ),
+    ).filter((block)=>{
+      console.log(block)
+      return true
+    }),
     entityMap: newEntityMap,
   };
 }

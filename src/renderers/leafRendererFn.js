@@ -1,8 +1,13 @@
 import React from 'react';
+import {Map} from 'immutable';
 
 export default function leafRendererFn(props) {
   const {block} = props;
   let {text} = props;
+  let meta = Map()
+  if(props.start || text){
+    meta = block.getCharacterList().get(props.start).getMeta()
+  }
 
   // If the leaf is at the end of its block and ends in a soft newline, append
   // an extra line feed character. Browsers collapse trailing newline
@@ -12,8 +17,7 @@ export default function leafRendererFn(props) {
     text += '\n';
   }
 
-  const {customStyleMap, customStyleFn, offsetKey, styleSet} = props;
-
+  const {customStyleMap, customStyleFn, offsetKey, styleSet, metaMap} = props;
   let mergedStyles = {};
   let styleMapEntry = {}
   let Element = styleSet.reduce((MappedElement, styleName) => {
@@ -37,7 +41,16 @@ export default function leafRendererFn(props) {
         [mergedStyles.textDecoration, style.textDecoration].join(' ').trim();
     }
     if( element.tag !== undefined ){
-      const attributes = element.attributes || {}
+      if(element.void){
+        return (props)=>(
+          <element.tag />
+        )
+      }
+      let attributes = element.attributes || {}
+      if(meta.get(styleName)){
+        const metaAttributes = metaMap.get(meta.get(styleName)).getData().attributes
+        attributes = Object.assign({[`data-${styleName}`]:meta.get(styleName)},attributes, metaAttributes)
+      }
       return (props)=>(
         <element.tag style={style} {...attributes}>
           {MappedElement(props)}

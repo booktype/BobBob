@@ -1,12 +1,34 @@
 
 export default {
+  DEFAULT: {
+    tag: "span",
+    style: {
+
+    }
+  },
+  BREAK: {
+    tag: "br",
+    style: {},
+    void: true
+  },
   BOLD: {
     tag:"b",
     style:{
       fontWeight: 'bold',
     }
   },
+  LINK:{
+    tag: "a",
+    style: {
 
+    }
+  },
+  COMMENT:{
+    tag: "span",
+    style: {
+      backgroundColor: 'yellow'
+    }
+  },
   CODE: {
     tag:"code",
     style:{

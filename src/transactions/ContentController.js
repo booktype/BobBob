@@ -156,27 +156,29 @@ class ContentController {
     return key
   }
   insertCharacterAtSelectionEndWithEntity = (char,entityKey) => {
-    const head = this.blocksArray.slice(0, this.index)
-    const tail = this.blocksArray.slice(this.index+1)
-    const charList = this.currentBlock.getCharacterList()
-    const text = this.currentBlock.getText()
-    const focusOffset = this.selection.getFocusOffset()
-    const anchorOffset = this.selection.getAnchorOffset()
-    const offset = focusOffset>anchorOffset?focusOffset:anchorOffset
-    const headCharList = charList.slice(0,offset)
-    const tailCharList = charList.slice(offset)
-    const headText = text.slice(0,offset)
-    const tailText = text.slice(offset)
-    this.blocksArray = head.concat(
-      this.currentBlock.merge({
-        characterList: headCharList.concat([new CharacterMetadata(
-          {
-            entity: entityKey,
-          }
-        )]).concat(tailCharList),
-        text: headText.concat(char).concat(tailText)
-      })
-    ).concat(tail)
+    this.currentContent = Modifier.insertText(this.currentContent, this.selection,char, null, entityKey, null)
+
+    // const head = this.blocksArray.slice(0, this.index)
+    // const tail = this.blocksArray.slice(this.index+1)
+    // const charList = this.currentBlock.getCharacterList()
+    // const text = this.currentBlock.getText()
+    // const focusOffset = this.selection.getFocusOffset()
+    // const anchorOffset = this.selection.getAnchorOffset()
+    // const offset = focusOffset>anchorOffset?focusOffset:anchorOffset
+    // const headCharList = charList.slice(0,offset)
+    // const tailCharList = charList.slice(offset)
+    // const headText = text.slice(0,offset)
+    // const tailText = text.slice(offset)
+    // this.blocksArray = head.concat(
+    //   this.currentBlock.merge({
+    //     characterList: headCharList.concat([new CharacterMetadata(
+    //       {
+    //         entity: entityKey,
+    //       }
+    //     )]).concat(tailCharList),
+    //     text: headText.concat(char).concat(tailText)
+    //   })
+    // ).concat(tail)
   }
   insertElementAfter = (type)=>{
     const head = this.blocksArray.slice(0, this.index+1)
@@ -246,6 +248,7 @@ class ContentController {
   }
 
   getCurrentContent = () =>{
+    return this.currentContent
     const lastKey = this.currentBlock.getKey()
     console.log(this.currentContent)
     const selectionState = new SelectionState({

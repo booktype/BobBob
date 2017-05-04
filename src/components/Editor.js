@@ -1,6 +1,7 @@
 import React from 'react'
 import contentRendererFn from '../renderers/contentRendererFn';
 import leafRendererFn from '../renderers/leafRendererFn';
+import blockRendererFn from '../renderers/blockRendererFn';
 import DefaultDraftBlockRenderMap from '../immutables/DefaultDraftBlockRenderMap';
 import DefaultDraftInlineStyle from '../immutables/DefaultDraftInlineStyle';
 import DefaultDraftEntityArray from '../immutables/DefaultDraftEntityArray';
@@ -80,6 +81,11 @@ class RichEditor extends React.Component {
       e.preventDefault()
       this.props.handleKeyCommand(command)
     }
+    if(command=="ctrl-enter"){
+
+      this.props.onChange(RichUtils.insertSoftNewline(this.props.editorState))
+      return "handled"
+    }
     return getDefaultKeyBinding(e);
   }
   _handleKeyCommand(command) {
@@ -117,7 +123,7 @@ class RichEditor extends React.Component {
       }
     }
     return (
-      <div className="RichEditor-root">
+      <div className="RichEditor-root" id="contenteditor">
 
         <div className={className} onClick={this.props.onClick} onMouseOver={this.props.onMouseOver}>
           <Editor
@@ -128,6 +134,16 @@ class RichEditor extends React.Component {
             blockRenderMap={DefaultDraftBlockRenderMap}
             leafRendererFn={leafRendererFn}
             contentRendererFn={contentRendererFn}
+            blockRendererFn={()=> {
+              return {
+                component: blockRendererFn,
+                editable: true,
+                props: {
+                  editorState: this.props.editorState,
+                  onChange: this.props.onChange
+                }
+              }
+            }}
             editorState={this.props.editorState}
             handleKeyCommand={this.props.handleKeyCommand}
             keyBindingFn={this._keyBindingFn}
@@ -140,6 +156,7 @@ class RichEditor extends React.Component {
             spellCheck={true}
           />
         </div>
+
       </div>
     );
   }

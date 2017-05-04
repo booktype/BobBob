@@ -1,4 +1,5 @@
 export default {
+    "data-transform": "data-transform",
     "accept" : "accept",
     "acceptcharset" : "acceptCharset",
     "accesskey" : "accessKey",
@@ -18,6 +19,7 @@ export default {
     "checked" : "checked",
     "cite" : "cite",
     "classid" : "classID",
+    "class": "className",
     "classname" : "className",
     "cols" : "cols",
     "colspan" : "colSpan",
