@@ -14,6 +14,7 @@ import Draft, {
   convertFromRaw,
   getDefaultKeyBinding,
   Editor, EditorState, RichUtils, CompositeDecorator} from 'draft-js';
+// import docx2html from '../encoding/docx2html';
 import ContentController from '../transactions/ContentController';
 import './RichEditor.css';
 function getBlockStyle(block) {
@@ -100,7 +101,14 @@ class RichEditor extends React.Component {
     return false;
   }
 
-
+  handleDroppedFiles = (selection, files) => {
+    console.log("asas",files)
+    if(files[0].name.endsWith("docx")){
+      // docx2html(files[0]).then((html)=>{
+      //   this._onPaste(null, html.toString())
+      // })
+    }
+  }
 
   _onPaste = (text, html) => {
     if(html){
@@ -149,6 +157,7 @@ class RichEditor extends React.Component {
             keyBindingFn={this._keyBindingFn}
             onChange={this.props.onChange}
             handlePastedText={this._onPaste}
+            handleDroppedFiles={this.handleDroppedFiles}
             handleBeforeInput={this.props.handleBeforeInput}
             onTab={this.onTab}
             placeholder="Tell a story..."

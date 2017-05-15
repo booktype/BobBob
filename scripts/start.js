@@ -21,8 +21,8 @@ var getProcessForPort = require('react-dev-utils/getProcessForPort');
 var openBrowser = require('react-dev-utils/openBrowser');
 var prompt = require('react-dev-utils/prompt');
 var fs = require('fs');
-var config = require('../config/webpack.config.dev');
-var paths = require('../config/paths');
+var config = require('../build_config/webpack.config.dev');
+var paths = require('../build_config/paths');
 
 var useYarn = fs.existsSync(paths.yarnLockFile);
 var cli = useYarn ? 'yarn' : 'npm';
@@ -257,6 +257,10 @@ function runDevServer(host, port, protocol) {
     // https://github.com/facebookincubator/create-react-app/issues/293
     watchOptions: {
       ignored: /node_modules/
+    },
+    proxy: {
+      '/api': 'http://localhost:3030',
+      '/authentication': 'http://localhost:3030',
     },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
     https: protocol === "https",

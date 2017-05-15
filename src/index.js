@@ -1,9 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import './index.css';
+import Router from './router';
+
+import reactTapPlugin from 'react-tap-event-plugin';
+reactTapPlugin();
+
+
+
+
 
 ReactDOM.render(
-  <App />,
-  document.getElementById('content')
+  <Router />,
+  document.getElementById('app')
 );

@@ -28,7 +28,7 @@ class ControllerContainer extends React.Component {
           <InlineStyleControls controller={this.props.controller} onChange={this.onChange}/>
           <EntityStyleControls controller={this.props.controller} onChange={this.onChange} setReadOnly={this.props.setReadOnly} hoverTarget={this.props.hoverTarget} clickTarget={this.props.clickTarget}/>
         </div>
-        <SideContent query={"comment"}/>
+        <SideContent query={"comment"} controller={this.props.controller} onChange={this.onChange}/>
       </div>
     )
   }

@@ -5,6 +5,7 @@ import {startsWith} from '../compat'
 import {CharacterMetadata, ContentBlock, genKey} from 'draft-js';
 import Immutable from 'immutable';
 import DefaultDraftBlockRenderMap from '../../../immutables/DefaultDraftBlockRenderMap';
+import reactAttributes from '../../../constants/reactAttributes';
 import DraftMetaInstance from 'draft-js/lib/DraftMetaInstance';
 var inlineElements = {
   "span": "DEFAULT",
@@ -252,6 +253,9 @@ export function formatAttributes(attributes) {
     value = value
       ? unquote(value)
       : key
+    if(!reactAttributes[key]){
+      return attrs
+    }
     if (key === 'class') {
       attrs.className = value.split(' ')
     } else if (key === 'style') {

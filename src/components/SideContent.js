@@ -67,7 +67,7 @@ class SideContent extends React.Component {
     items.forEach((item)=>{
       if(!existing.includes(item.dataset[this.props.query])){
         this.items.push({
-          top: item.getBoundingClientRect().top-150+window.scrollY,
+          top: item.getBoundingClientRect().top-90+window.scrollY,
           header: ()=><CommentBoxSummary comments={comments}/>,
           body: ()=><CommentBody comments={comments} onSubmit={submitComment}/>
         })

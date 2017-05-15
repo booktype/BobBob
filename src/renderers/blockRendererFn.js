@@ -155,7 +155,6 @@ class DraftEditorBlock extends React.Component {
           />
         );
       }).toArray();
-      console.log(this.props.decorator)
       var decoratorKey = leafSet.get('decoratorKey');
       if (decoratorKey == null) {
         return leaves;
@@ -168,7 +167,6 @@ class DraftEditorBlock extends React.Component {
       var decorator = nullthrows(this.props.decorator);
 
       var DecoratorComponent = decorator.getComponentForKey(decoratorKey);
-      console.log(DecoratorComponent)
       if (!DecoratorComponent) {
         return leaves;
       }
