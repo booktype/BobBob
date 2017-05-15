@@ -29,7 +29,7 @@ const styles = {
     "display": "block",
     "borderBottom": "1px solid #ddd",
     "boxSizing": "border-box",
-    "padding": "2rem",
+    // "padding": "2rem",
     "backgroundColor": "white"
   },
   inactiveItemBody:{

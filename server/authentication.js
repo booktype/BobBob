@@ -1,6 +1,7 @@
 const authentication = require('feathers-authentication');
 const jwt = require('feathers-authentication-jwt');
 const local = require('feathers-authentication-local');
+const { populate } = require('feathers-hooks-common');
 
 
 module.exports = function () {
@@ -18,10 +19,25 @@ module.exports = function () {
   app.service('authentication').hooks({
     before: {
       create: [
-        authentication.hooks.authenticate(config.strategies)
+        authentication.hooks.authenticate(config.strategies),
+        populate({
+          schema: {
+            include: [{
+              service: 'users',
+              nameAs: 'user',
+              parentField: 'ownerID',
+              childField: '_id'
+            }]
+          }
+        })
       ],
       remove: [
         authentication.hooks.authenticate('jwt')
+      ]
+    },
+    after: {
+      all: [
+
       ]
     }
   });

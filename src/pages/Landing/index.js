@@ -33,8 +33,8 @@ class LandingPage extends Component {
 
     // On successfull login
     client.on('authenticated', login => {
-      // Get all users and messages
       this.setState({ login });
+      console.log(login)
     });
 
     // On logout reset all all local state (which will then show the login screen)

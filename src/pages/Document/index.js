@@ -70,6 +70,7 @@ class App extends Component {
           content = Modifier.enableOT(content)
           this.otService.on("join", (ot)=>{
             console.log("join",ot)
+
             // this.setState({socketId: ot.socketId})
           })
           this.otService.on("operation", (ot)=>{
@@ -154,7 +155,7 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="App" style={{width: "60%", margin: "auto"}}>
+      <div className="App" style={{width: "50%", margin: "auto"}}>
         {this.state.editorState?
         <div className={`editor-${this.state.themename}`}>
           <ControllerContainer

@@ -26,7 +26,7 @@ const styles = {
   comment: {
     "position": "relative",
     "display": "block",
-    "padding": "0.75rem 1.25rem",
+    // "padding": "0.75rem 1.25rem",
     "marginBottom": "0",
     "border": "none",
     "borderRadius": "0",
@@ -140,7 +140,17 @@ const CommentBody = (props) => {
           })
         }
       </ul>
-      <CommentForm onSubmit={props.onSubmit}/>
+      <CommentForm onSubmit={(e)=>{
+        e.preventDefault()
+        const content = e.target.previousElementSibling.value
+        props.onSubmit([...props.comments, {
+          content,
+          author: {
+            name: props.userId
+          },
+          "date": "1493832941",
+        }], props.metaKey)
+      }}/>
     </div>
   )
 }

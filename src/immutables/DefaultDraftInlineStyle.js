@@ -26,7 +26,7 @@ export default {
   COMMENT:{
     tag: "span",
     style: {
-      backgroundColor: 'yellow'
+      backgroundColor: 'lightgoldenrodyellow'
     }
   },
   CODE: {
