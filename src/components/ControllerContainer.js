@@ -1,4 +1,5 @@
 import React from 'react';
+import {Tabs, Tab} from 'material-ui/Tabs';
 import BlockStyleControls from './BlockStyleControls';
 import InlineStyleControls from './InlineStyleControls';
 import EntityStyleControls from './EntityStyleControls';
@@ -22,12 +23,22 @@ class ControllerContainer extends React.Component {
   }
   render() {
     return (
-      <div>
-        <div style={styles.controller}>
-          <BlockStyleControls controller={this.props.controller} onChange={this.onChange}/>
-          <InlineStyleControls controller={this.props.controller} onChange={this.onChange}/>
-          <EntityStyleControls controller={this.props.controller} onChange={this.onChange} setReadOnly={this.props.setReadOnly} hoverTarget={this.props.hoverTarget} clickTarget={this.props.clickTarget}/>
-        </div>
+      <div style={styles.controller}>
+        <Tabs>
+          <Tab label="Inline">
+            <InlineStyleControls controller={this.props.controller} onChange={this.onChange}/>
+          </Tab>
+          <Tab label="Block">
+            <BlockStyleControls controller={this.props.controller} onChange={this.onChange}/>
+          </Tab>
+          <Tab label="Entity">
+            <EntityStyleControls controller={this.props.controller} onChange={this.onChange}
+              setReadOnly={this.props.setReadOnly}
+              hoverTarget={this.props.hoverTarget}
+              clickTarget={this.props.clickTarget}/>
+
+          </Tab>
+        </Tabs>
         <SideContent query={"comment"} controller={this.props.controller} onChange={this.onChange}/>
       </div>
     )

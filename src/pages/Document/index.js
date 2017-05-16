@@ -143,10 +143,13 @@ class App extends Component {
     this.setState({editorState})
   }
   onClick=(e)=>{
+    console.log(e.target)
     this.setState({clickTarget:e.target})
   }
   onHover=(e)=>{
-    this.setState({hoverTarget:e.target})
+    if(e.target.dataset.entity){
+      this.setState({hoverTarget:e.target})
+    }
   }
   toHtml = () => {
     let mainEditor = document.querySelector("[data-contents]")

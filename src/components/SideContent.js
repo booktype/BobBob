@@ -11,7 +11,7 @@ const styles = {
     // margin: ".5rem 0 1rem 0",
     position: "relative",
     float: "right",
-    right: -20,
+    right: 160,
     top: 0,
     margin: 0,
   }
@@ -71,7 +71,6 @@ class SideContent extends React.Component {
     this.items = []
     const existing =[]
     const submitComment = (comments, key)=>{
-      console.log(comments, key)
       const currentContent = nextProps.controller.currentContent
       let editorState = EditorState.set(
         nextProps.controller.editorState,
@@ -83,7 +82,6 @@ class SideContent extends React.Component {
       )
       nextProps.onChange(editorState)
       nextProps.controller.userId
-      console.log()
     }
     items.forEach((item)=>{
       if(!existing.includes(item.dataset[this.props.query])){
@@ -97,20 +95,29 @@ class SideContent extends React.Component {
 
         this.items.push({
           key: metaKey,
-          top: item.getBoundingClientRect().top-90+window.scrollY,
+          top: item.getBoundingClientRect().top-25+window.scrollY,
           header: ()=><CommentBoxSummary comments={data.comments}/>,
           body: ()=><CommentBody userId={nextProps.controller.userId} metaKey={metaKey} comments={data.comments} onSubmit={submitComment}/>
         })
         existing.push(item.dataset[this.props.query])
       }
     })
+    if(nextProps.controller.currentInlineStyle.has("COMMENT")){
+      const key = nextProps.controller.currentBlock.getMetaAt(
+          nextProps.controller.selection.getFocusOffset()
+        )
+        .get("COMMENT")
+      if(key !== this.state.active){
+        this.activate(key)
+      }
+    }
   }
-  activate=(index, key)=>{
-    if(index === this.state.active){
+  activate=(key)=>{
+    if(key === this.state.active){
       this.setState({active: null})
       this.styleSheet.deleteRule(0)
     }else{
-      this.setState({active:index})
+      this.setState({active:key})
       this.styleSheet.insertRule(`[data-comment="${key}"]{background-color: yellow !important;}`,0)
     }
   }
@@ -125,11 +132,11 @@ class SideContent extends React.Component {
           }else{
             topStart+=30
           }
-          const active = this.state.active === idx
+          const active = this.state.active === item.key
           if(active){
             topStart -=30
           }
-          return <SideContentItem onClick={e=>this.activate(idx, item.key)} {...item}
+          return <SideContentItem onClick={e=>this.activate(item.key)} {...item}
               position={topStart}
               active={active} key={idx} />
         })}
