@@ -11,7 +11,7 @@ import { convertToRaw,
   ContentBlock, CharacterMetadata,
   ContentState} from 'draft-js';
 import {BlockMapBuilder, Modifier} from 'draft-js'
-import ContentController from '../../transactions/ContentController';
+import ContentController from '../../transactions/ChainModifier';
 import DefaultDraftEntityArray from '../../immutables/DefaultDraftEntityArray';
 import createEntityStrategy from '../../utils/createEntityStrategy';
 import convertRawToDraftState from '../../encoding/convertRawToDraftState'

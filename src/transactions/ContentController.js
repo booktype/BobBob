@@ -18,7 +18,7 @@ class ContentController {
   toggleBlockInBlock=(type)=>{
     const head = this.blocksArray.slice(0, this.index+1)
     const tail = this.blocksArray.slice(this.index+1)
-    console.log(this.currentBlock)
+    
     const newBlock = new ContentBlock({
       key: genKey(),
       type,

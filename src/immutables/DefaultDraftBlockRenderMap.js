@@ -40,9 +40,13 @@ const DefaultDraftBlockRenderMap = Map({
     element: 'table',
     type: "structure",
     toggle: (controller)=>{
+
       return controller.insertElementAfter("table")
-      .appendChild("tbody").appendChild("tr").appendChild("td")
-      .insertElementAfter("td").getCurrentContent()
+      .appendChild("tbody")
+      .appendChild("tr")
+      .appendChild("td")
+      .insertElementAfter("td")
+      .getCurrentContent()
     }
   },
   'caption': {
