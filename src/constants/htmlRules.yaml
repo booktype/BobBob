@@ -1,0 +1,336 @@
+---
+inline:
+  A:
+    excludeChildren:
+    - A
+    children:
+    - inline
+    attributes:
+    - download
+    - href
+    - hreflang
+    - media
+    - ping
+    - rel
+    - shape
+    - target
+  EM:
+    children:
+    - inline
+  CODE:
+    children:
+    - inline
+  SUB:
+    children:
+    - inline
+  IMG:
+    empty: true
+    attributes:
+    - align
+    - alt
+    - border
+    - crossorigin
+    - height
+    - ismap
+    - sizes
+    - src
+    - srcset
+    - usemap
+    - width
+  BASEFONT:
+    empty: true
+    attributes:
+    - color
+  BDO:
+    children:
+    - inline
+  Q:
+    children:
+    - inline
+    attributes:
+    - cite
+  VAR:
+    children:
+    - inline
+  S:
+    children:
+    - inline
+  B:
+    children:
+    - inline
+  U:
+    children:
+    - inline
+  ABBR:
+    children:
+    - inline
+  BR:
+    empty: true
+  SUP:
+    children:
+    - inline
+  SMALL:
+    children:
+    - inline
+  STRONG:
+    children:
+    - inline
+  MAP:
+    children:
+    - AREA
+    - block
+    attributes:
+    - name
+  FONT:
+    children:
+    - inline
+    attributes:
+    - color
+  SPAN:
+    children:
+    - inline
+  AREA:
+    empty: true
+    attributes:
+    - alt
+    - coords
+    - download
+    - href
+    - hreflang
+    - media
+    - ping
+    - rel
+    - shape
+    - target
+  ACRONYM:
+    children:
+    - inline
+  BIG:
+    children:
+    - inline
+  TT:
+    children:
+    - inline
+  KBD:
+    children:
+    - inline
+  I:
+    children:
+    - inline
+  DFN:
+    children:
+    - inline
+  STRIKE:
+    children:
+    - inline
+  SAMP:
+    children:
+    - inline
+  CITE:
+    children:
+    - inline
+block:
+  DL:
+    children:
+    - DT
+    - DD
+  BLOCKQUOTE:
+    children:
+    - flow
+    attributes:
+    - cite
+  TH:
+    parents:
+    - TR
+    children:
+    - flow
+    attributes:
+    - align
+    - bgcolor
+    - colspan
+    - headers
+    - rowspan
+    - scope
+  FORM:
+    exclude:
+    - FORM
+    children:
+    - flow
+    attributes:
+    - accept
+    - accept-charset
+    - action
+    - autocomplete
+    - enctype
+    - method
+    - name
+    - novalidate
+    - target
+  HR:
+    empty: true
+    attributes:
+    - color
+  H6:
+    children:
+    - inline
+  DD:
+    parents:
+    - DL
+    children:
+    - flow
+  TBODY:
+    parents:
+    - TABLE
+    children:
+    - TR
+    attributes:
+    - align
+    - bgcolor
+  P:
+    children:
+    - inline
+  CAPTION:
+    parents:
+    - TABLE
+    children:
+    - inline
+    attributes:
+    - align
+  COL:
+    parents:
+    - COLGROUP
+    - TABLE
+    empty: true
+    attributes:
+    - align
+    - bgcolor
+    - span
+  TFOOT:
+    parents:
+    - TABLE
+    children:
+    - TR
+    attributes:
+    - bgcolor
+  DT:
+    parents:
+    - DL
+    children:
+    - inline
+  H5:
+    children:
+    - inline
+  DIV:
+    children:
+    - flow
+  THEAD:
+    parents:
+    - TABLE
+    children:
+    - TR
+    attributes:
+    - align
+  PRE:
+    excludeChildren:
+    - IMG
+    - OBJECT
+    - APPLET
+    - BIG
+    - SMALL
+    - SUB
+    - SUP
+    - FONT
+    - BASEFONT
+    children:
+    - inline
+  OL:
+    children:
+    - LI
+    attributes:
+    - reversed
+    - start
+  CENTER:
+    children:
+    - flow
+  COLGROUP:
+    parents:
+    - TABLE
+    children:
+    - COL
+    attributes:
+    - align
+    - bgcolor
+    - span
+  H2:
+    children:
+    - inline
+  H3:
+    children:
+    - inline
+  H1:
+    children:
+    - inline
+  TR:
+    parents:
+    - TBODY
+    - THEAD
+    - TFOOT
+    children:
+    - TD
+    - TH
+    attributes:
+    - align
+    - bgcolor
+  H4:
+    children:
+    - inline
+  LI:
+    parents:
+    - UL
+    - OL
+    children:
+    - flow
+    attributes:
+    - value
+  UL:
+    children:
+    - LI
+  IFRAME:
+    children:
+    - flow
+    attributes:
+    - align
+    - height
+    - name
+    - sandbox
+    - seamless
+    - src
+    - srcdoc
+    - width
+  ADDRESS:
+    children:
+    - inline
+    - P
+  TABLE:
+    children:
+    - CAPTION
+    - COLGROUP
+    - COL
+    - THEAD
+    - TBODY
+    - TFOOT
+    attributes:
+    - align
+    - bgcolor
+    - border
+    - summary
+  TD:
+    parents:
+    - TR
+    children:
+    - flow
+    attributes:
+    - bgcolor
+    - colspan
+    - headers
+    - rowspan
