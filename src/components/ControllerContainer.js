@@ -4,6 +4,7 @@ import BlockStyleControls from './BlockStyleControls';
 import InlineStyleControls from './InlineStyleControls';
 import EntityStyleControls from './EntityStyleControls';
 import SideContent from './SideContent'
+import BlockTree from './BlockTree'
 const styles = {
   controller: {
     position: "fixed",
@@ -18,6 +19,7 @@ class ControllerContainer extends React.Component {
   constructor(props) {
     super(props)
   }
+
   onChange = (editorState) => {
     this.props.onChange(editorState)
   }
@@ -39,6 +41,7 @@ class ControllerContainer extends React.Component {
 
           </Tab>
         </Tabs>
+        <BlockTree controller={this.props.controller} onChange={this.onChange}/>
         <SideContent query={"comment"} controller={this.props.controller} onChange={this.onChange}/>
       </div>
     )
