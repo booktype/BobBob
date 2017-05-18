@@ -9,44 +9,13 @@ const styles = {
     paddingLeft: 0,
     listStyleType: "none",
     // margin: ".5rem 0 1rem 0",
-    position: "relative",
+    position: "absolute",
     float: "right",
     right: 160,
     top: 0,
     margin: 0,
   }
 }
-// let comments = [
-//   {
-//     "author": {
-//       "name": "vasilis",
-//       "avatar": "http://www.clker.com/cliparts/c/f/c/5/1368304250375490740bioman-avatar-3-blue-icon-hi.png"
-//     },
-//     "text": "amoasd",
-//     "cid": "de00666c-7676-4049-8719-42580592f6af",
-//     "content": "this is a comment",
-//     "date": "1493832933"
-//   },
-//   {
-//     "date": "1493832949",
-//     "text": "",
-//     "author": {
-//       "name": "vasilis",
-//       "avatar": "http://www.clker.com/cliparts/c/f/c/5/1368304250375490740bioman-avatar-3-blue-icon-hi.png"
-//     },
-//     "content": "and another anwser\n",
-//     "cid": "515e69e2-856d-4c39-a656-bf804c98dfcb"
-//   }, {
-//     "date": "1493832941",
-//     "text": "",
-//     "author": {
-//       "name": "vasilis",
-//       "avatar": "http://www.clker.com/cliparts/c/f/c/5/1368304250375490740bioman-avatar-3-blue-icon-hi.png"
-//     },
-//     "content": "and this is an answer",
-//     "cid": "f24e11c6-81db-4a5a-ac06-b6836f73776e"
-//   }
-// ]
 
 
 class SideContent extends React.Component {
@@ -92,10 +61,9 @@ class SideContent extends React.Component {
                      .getMetaMap()
                      .get(metaKey)
                      .getData()
-
         this.items.push({
           key: metaKey,
-          top: item.getBoundingClientRect().top-25+window.scrollY,
+          top: item.getBoundingClientRect().top-60-window.scrollY,
           header: ()=><CommentBoxSummary comments={data.comments}/>,
           body: ()=><CommentBody userId={nextProps.controller.userId} metaKey={metaKey} comments={data.comments} onSubmit={submitComment}/>
         })
@@ -110,27 +78,34 @@ class SideContent extends React.Component {
       if(key !== this.state.active){
         this.activate(key)
       }
+    }else{
+      this.activate(null)
     }
   }
   activate=(key)=>{
-    if(key === this.state.active){
+    if(key && key === this.state.active){
       this.setState({active: null})
       this.styleSheet.deleteRule(0)
-    }else{
+    }else if(key){
       this.setState({active:key})
       this.styleSheet.insertRule(`[data-comment="${key}"]{background-color: yellow !important;}`,0)
+    }else{
+      if(this.styleSheet.rules.length){
+        this.styleSheet.deleteRule(0)
+      }
+      this.setState({active:null})
     }
   }
   render() {
     let topStart = 0
 
     return (
-      <ul style={styles.collapsible} >
+      <ul style={{...styles.collapsible, top: -window.scrollY}} >
         {this.items.map((item, idx)=>{
           if(topStart<=item.top-25){
             topStart = item.top
           }else{
-            topStart+=30
+            topStart+=40
           }
           const active = this.state.active === item.key
           if(active){

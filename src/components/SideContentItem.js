@@ -48,7 +48,7 @@ const SideContentItem = (props) => {
     )
   }else{
     return (
-      <li style={{...styles.activeItem, marginTop: props.position+40, position: "absolute"}}>
+      <li style={{...styles.activeItem, top: props.position+40, position: "absolute"}}>
         <div onClick={props.onClick} style={styles.itemHeader}>
           <props.header active={true} />
         </div>
