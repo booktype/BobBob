@@ -1,4 +1,3 @@
-
 import {Map} from 'immutable';
 
 `
@@ -32,158 +31,327 @@ const DefaultDraftBlockRenderMap = Map({
     element: 'div',
     void: true
   },
-  'img': {
-    element: 'img',
-    void: true
+  "figure": {
+    "name": "Figure",
+    "children": [
+      "flow", "figcaption"
+    ],
+    "element": "figure"
   },
-  'table':{
-    element: 'table',
-    type: "structure",
+  'unstyled': {
+    element: 'div',
+  },
+  "figcaption": {
+    "name": "Figure caption",
+    "parents": ["figure"],
+    "children": ["flow"],
+    "element": "figcaption"
+  },
+  "dl": {
+    "name": "Description list",
+    "children": [
+      "dt", "dd"
+    ],
+    "attributes": ["compact"],
+    "element": "dl"
+  },
+  "blockquote": {
+    "name": "Quote",
+    "children": ["flow"],
+    "attributes": ["cite"],
+    "element": "blockquote"
+  },
+  "th": {
+    "name": "Header Cell",
+    "parents": ["tr"],
+    "children": ["flow"],
+    "attributes": [
+      "abbr",
+      "align",
+      "axis",
+      "bgcolor",
+      "char",
+      "charoff",
+      "colspan",
+      "headers",
+      "height",
+      "nowrap",
+      "rowspan",
+      "scope",
+      "valign",
+      "width"
+    ],
+    "element": "th"
+  },
+  "hr": {
+    "name": "Separator",
+    "attributes": [
+      "align", "noshade", "size", "width"
+    ],
+    "element": "hr",
+    "void": true
+  },
+  "h6": {
+    "name": "Heading 6",
+    "children": ["inline"],
+    "attributes": ["align"],
+    "element": "h6"
+  },
+  "dd": {
+    "name": "Term description",
+    "parents": ["dl"],
+    "children": ["flow"],
+    "element": "dd"
+  },
+  "tbody": {
+    "name": "Table body",
+    "parents": ["table"],
+    "children": ["tr"],
+    "attributes": [
+      "align", "char", "charoff", "valign"
+    ],
+    "element": "tbody"
+  },
+  "p": {
+    "name": "Paragraph",
+    "children": ["inline"],
+    "attributes": ["align"],
+    "element": "p"
+  },
+  "caption": {
+    "name": "Table caption",
+    "parents": ["table"],
+    "children": ["inline"],
+    "attributes": ["align"],
+    "element": "caption"
+  },
+  "col": {
+    "parents": [
+      "colgroup", "table"
+    ],
+    "attributes": [
+      "align",
+      "char",
+      "charoff",
+      "span",
+      "valign",
+      "width"
+    ],
+    "element": "col",
+    "void": true
+  },
+  "tfoot": {
+    "name": "Table footer",
+    "parents": ["table"],
+    "children": ["tr"],
+    "attributes": [
+      "align", "char", "charoff", "valign"
+    ],
+    "element": "tfoot"
+  },
+  "dt": {
+    "name": "Term",
+    "parents": ["dl"],
+    "children": ["inline"],
+    "element": "dt"
+  },
+  "h5": {
+    "name": "Heading 5",
+    "children": ["inline"],
+    "attributes": ["align"],
+    "element": "h5"
+  },
+  "div": {
+    "name": "Division",
+    "children": ["flow"],
+    "attributes": ["align"],
+    "element": "div"
+  },
+  "thead": {
+    "name": "Table head",
+    "parents": ["table"],
+    "children": ["tr"],
+    "attributes": [
+      "align", "char", "charoff", "valign"
+    ],
+    "element": "thead"
+  },
+  "pre": {
+    "name": "Preformatted text",
+    "excludeChildren": [
+      "img",
+      "big",
+      "small",
+      "sub",
+      "sup",
+      "font"
+    ],
+    "children": ["inline"],
+    "attributes": ["width"],
+    "element": "pre"
+  },
+  "ol": {
+    "name": "Ordered List",
     toggle: (controller)=>{
-
-      return controller.insertElementAfter("table")
-      .appendChild("tbody")
-      .appendChild("tr")
-      .appendChild("td")
-      .insertElementAfter("td")
-      .getCurrentContent()
-    }
+      console.log("ol")
+      return controller.insertElementAfter("ol")
+      .appendChild("li").getCurrentContent()
+    },
+    "children": ["li"],
+    "attributes": [
+      "compact", "reversed", "start", "type"
+    ],
+    "element": "ol"
   },
-  'caption': {
-    element: 'caption',
-    parents: ['table']
+  "center": {
+    "children": ["flow"],
+    "element": "center"
   },
-  colgroup: {
-    element: 'colgroup',
-    parents: ['table']
+  "colgroup": {
+    "parents": ["table"],
+    "children": ["col"],
+    "attributes": [
+      "align",
+      "char",
+      "charoff",
+      "span",
+      "valign",
+      "width"
+    ],
+    "element": "colgroup"
   },
-  col: {
-    element: 'col',
-    parents: ['colgroup']
+  "h2": {
+    "name": "Heading 2",
+    "children": ["inline"],
+    "attributes": ["align"],
+    "element": "h2"
   },
-  'tbody':{
-    element: 'tbody',
-    parents: ['table']
+  "h3": {
+    "name": "Heading 3",
+    "children": ["inline"],
+    "attributes": ["align"],
+    "element": "h3"
   },
-  'thead':{
-    element: 'thead',
-    parents: ['table']
+  "h1": {
+    "name": "Heading 1",
+    "children": ["inline"],
+    "attributes": ["align"],
+    "element": "h1"
   },
-  'tfoot':{
-    element: 'tfoot',
-    parents: ['table']
-  },
-  'tr':{
-    element: 'tr',
-    parents: ['tbody', 'thead', 'tfoot'],
+  "tr": {
+    "name": "Row",
     toggle: (controller)=>{
       const columns = controller.queryParent("tr")
                                      .countChildren()
       return controller.insertElementBefore("tr")
                             .appendChildren("td", columns)
                             .getCurrentContent()
-    }
+    },
+    "parents": [
+      "tbody", "thead", "tfoot"
+    ],
+    "children": [
+      "td", "th"
+    ],
+    "attributes": [
+      "align", "bgcolor", "char", "charoff", "valign"
+    ],
+    "element": "tr"
   },
-  'th':{
-    element: 'th',
-    parents: ['tr'],
-    type: "text"
+  "h4": {
+    "name": "Heading 4",
+    "children": ["inline"],
+    "attributes": ["align"],
+    "element": "h4"
   },
-  'td':{
-    element: 'td',
-    parents: ['tr'],
-    type: "text",
-    toggle: (controller)=>{
-      const at_index = controller.getChildIndex()
-      return controller.queryParent("tbody")
-        .queryAndAppend("tr","td", at_index).getCurrentContent()
-    }
+  "li": {
+    "name": "List item",
+    "parents": [
+      "ul", "ol"
+    ],
+    "children": ["flow"],
+    "attributes": [
+      "type", "value"
+    ],
+    "element": "li"
   },
-  'ul':{
-    element: 'ul',
-    type: 'structure',
+  "ul": {
+    "name": "Unordered List",
     toggle: (controller)=>{
       return controller.insertElementAfter("ul")
       .appendChild("li").getCurrentContent()
-    }
+    },
+    "children": ["li"],
+    "attributes": [
+      "compact", "type"
+    ],
+    "element": "ul"
   },
-  'ol':{
-    element: 'ol',
-    type: 'structure',
+  "address": {
+    "name": "Address",
+    "children": [
+      "inline", "p"
+    ],
+    "element": "address"
+  },
+  "table": {
+    "name": "Table",
     toggle: (controller)=>{
-      console.log("ol")
-      return controller.insertElementAfter("ol")
-      .appendChild("li").getCurrentContent()
-    }
-  },
-  'li':{
-    element: 'li',
-    parents: ['ul', 'ol'],
-    type: "text"
-  },
-  h1: {
-    element: 'h1',
-    type: "block"
-  },
-  h2: {
-    element: 'h2',
-    type: "block"
-  },
-  h3: {
-    element: 'h3',
-    type: "block"
-  },
-  h4: {
-    element: 'h4',
-    type: "block"
-  },
-  h5: {
-    element: 'h5',
-    type: "block"
-  },
-  h6: {
-    element: 'h6',
-    type: "block"
-  },
-  'blockquote': {
-    element: 'blockquote',
-    type: 'block'
-  },
-  'p':{
-    element: 'p',
-    type: 'block'
-  },
-  hr:{
-    element: 'hr',
-    void: true
-  },
-  pre: {
-    element: 'pre'
-  },
-  figure: {
-    element: 'figure',
-    type: 'structure'
-  },
-  figcaption: {
-    element: 'figcaption',
-    parents: ['figure'],
-    type: 'text'
-  },
-  'div': {
-    element: 'div',
-    type: 'text'
-  },
 
-  // 'atomic': {
-  //   element: 'figure',
-  // },
-  // 'code-block': {
-  //   element: 'pre',
-  //   wrapper: PRE_WRAP,
-  // },
-  'unstyled': {
-    element: 'div',
+      return controller.insertElementAfter("table")
+      .appendChild("tbody")
+      .appendChild("tr")
+      .appendChildren("td", 2)
+      .getCurrentContent()
+    },
+    "children": [
+      "tbody",
+      "caption",
+      "colgroup",
+      "col",
+      "thead",
+      "tfoot"
+    ],
+    "attributes": [
+      "align",
+      "bgcolor",
+      "border",
+      "cellpadding",
+      "cellspacing",
+      "frame",
+      "rules",
+      "summary",
+      "width"
+    ],
+    "element": "table"
   },
+  "td": {
+    "name": "Cell",
+    toggle: (controller)=>{
+        const at_index = controller.getChildIndex()
+        return controller.queryParent("tbody")
+          .queryAndAppend("tr","td", at_index).getCurrentContent()
+    },
+    "parents": ["tr"],
+    "children": ["flow"],
+    "attributes": [
+      "abbr",
+      "align",
+      "axis",
+      "bgcolor",
+      "char",
+      "charoff",
+      "colspan",
+      "headers",
+      "height",
+      "nowrap",
+      "rowspan",
+      "scope",
+      "valign",
+      "width"
+    ],
+    "element": "td"
+  }
 });
 
 export default DefaultDraftBlockRenderMap;
