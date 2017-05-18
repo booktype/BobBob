@@ -122,6 +122,7 @@ inline:
     - "face"
     - "size"
   SPAN:
+    name: Content
     children:
     - "inline"
   AREA:
