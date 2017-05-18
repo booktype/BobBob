@@ -92,7 +92,6 @@ class RichEditor extends React.Component {
   _handleKeyCommand(command) {
     this.props.handleKeyCommand(command)
     const {editorState} = this.state;
-    console.log(command)
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       this.onChange(newState);
@@ -102,7 +101,6 @@ class RichEditor extends React.Component {
   }
 
   handleDroppedFiles = (selection, files) => {
-    console.log("asas",files)
     if(files[0].name.endsWith("docx")){
       // docx2html(files[0]).then((html)=>{
       //   this._onPaste(null, html.toString())

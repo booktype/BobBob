@@ -7,7 +7,6 @@ class StyleButton extends React.Component {
     super();
     this.onToggle = (e) => {
       e.preventDefault();
-      console.log("toggle", this.props , this.refs)
       if(this.props.inputs){
         this.setState({
           showForm: true
@@ -43,7 +42,6 @@ class StyleButton extends React.Component {
                 schema={{"type":"object","properties":this.props.inputs}}
                 uiSchema={this.props.inputs}
                 onSubmit={(data)=>{
-                  console.log(data)
                   this.setState({showForm: false})
                   this.props.setReadOnly(false)
                   this.props.onToggle(this.props.style,data.formData)
