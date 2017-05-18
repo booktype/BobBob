@@ -3,6 +3,32 @@ import StyleButton from './StyleButton';
 import DefaultDraftBlockRenderMap from '../immutables/DefaultDraftBlockRenderMap'
 import {EditorState, RichUtils } from 'draft-js';
 
+const toggleCheck = (type, selectionType, parentSelectionType) =>{
+  const selectionTypeRules = DefaultDraftBlockRenderMap.get(selectionType)
+  const typeRules = DefaultDraftBlockRenderMap.get(type)
+  if(selectionTypeRules.children &&
+    (
+       selectionTypeRules.children.includes("flow") ||
+       selectionTypeRules.children.includes(type)
+    )
+  ){
+    console.log("element allowed")
+    if(selectionTypeRules.excludeChildren &&
+      !selectionTypeRules.excludeChildren.includes(type)
+    ){
+      console.log("child is excluded")
+    }
+    if(typeRules.parents &&
+       !typeRules.parents.includes(selectionType)
+     ){
+       console.log("parent is not allowed")
+    }
+  }else{
+    console.log("child is not allowed")
+  }
+
+}
+
 const BLOCK_TYPES = [
   {label: 'H1', style: 'h1'},
   {label: 'H2', style: 'h2'},
@@ -23,6 +49,10 @@ const BLOCK_TYPES = [
 const BlockStyleControls = (props) => {
   const {controller} = props;
   function toggleBlockType(type) {
+    const focusKey = controller.selection.getFocusKey()
+    const currentBlock = controller.currentContent.getBlockForKey(focusKey)
+    const previousBlock = controller.currentContent.getBlockBefore(focusKey)
+    toggleCheck(type, currentBlock.getType(),previousBlock.getType())
     const toggle = DefaultDraftBlockRenderMap.get(type).toggle
     if(toggle){
       props.onChange(

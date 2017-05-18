@@ -82,7 +82,7 @@ class RichEditor extends React.Component {
       e.preventDefault()
       this.props.handleKeyCommand(command)
     }
-    if(command=="ctrl-enter"){
+    if(command==="ctrl-enter"){
 
       this.props.onChange(RichUtils.insertSoftNewline(this.props.editorState))
       return "handled"

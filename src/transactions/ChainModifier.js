@@ -17,37 +17,91 @@ class ChainModifier {
     this.editorState = editorState
     this.updateEditorState(this.currentContent)
   }
+  countChildren = ()=>{
+    const tail = this.blocksArray.slice(this.index+1)
+    let counter = 0
+    for (let block of tail){
+      if(block.getDepth() === this.currentDepth+1){
+        counter++
+      }
+      if(block.getDepth()===this.currentDepth){
+        break
+      }
+    }
+    return counter
+  }
+  getChildIndex = () => {
+    const head = this.blocksArray.slice(0, this.index+1)
+    const type = this.currentBlock.getType()
+    const index = head.reverse().findIndex((block)=>{
+      return block.getType()=== type
+    }) + 1
+    console.log(type, index )
+  }
+  queryParent = (type)=>{
+    const head = this.blocksArray.slice(0, this.index)
+    const block = head.reverse().find((block)=>{
+      return block.getType()===type
+    })
+
+    const selection = new SelectionState({
+      focusKey: block.getKey(),
+      anchorKey: block.getKey(),
+      focusOffset:0,
+      anchorOffset:0,
+    })
+    this.updateEditorState(this.currentContent, selection)
+    return this
+  }
   queryAndAppend = (query, type, at_index) => {
     this.currentContent.getBlockMap()
     const head = this.blocksArray.slice(0, this.index+1)
     const tail = this.blocksArray.slice(this.index+1)
-
+    let selection;
     let last_insert = -1
     for (let i=0;i<tail.length;i++){
       let block = tail[i]
       let insert = -1
       if(block.getType() === query){
         if(!at_index){
-          tail.splice(i-1,0,
-            new ContentBlock({
-              key: genKey(),
-              type,
-              depth:block.getDepth()+1,
-            })
-          )
+          console.log(tail[i-1])
+          selection = new SelectionState({
+            focusKey:tail[i].getKey(),
+            anchorKey:tail[i].getKey(),
+            focusOffset:0,
+            anchorOffset:0
+          })
+          this.updateEditorState(this.currentContent, selection)
+          this.appendChild(type)
+          // tail.splice(i-1,0,
+          //   new ContentBlock({
+          //     key: genKey(),
+          //     type,
+          //     depth:block.getDepth()+1,
+          //   })
+          // )
           last_insert = i
           i++
         }else{
           insert = i+at_index
         }
         if(i==insert){
-          tail.splice(i-1,0,
-            new ContentBlock({
-              key: genKey(),
-              type,
-              depth:block.getDepth()+1,
-            })
-          )
+
+          selection = new SelectionState({
+            focusKey:tail[i].getKey(),
+            anchorKey:tail[i].getKey(),
+            focusOffset:0,
+            anchorOffset:0
+          })
+          this.updateEditorState(this.currentContent, selection)
+          this.appendChild(type)
+          // tail.splice(i-1,0,
+          //   new ContentBlock({
+          //     key: genKey(),
+          //     type,
+          //     depth:block.getDepth()+1,
+          //   })
+          // )
           last_insert = i
           i++
         }
@@ -64,11 +118,10 @@ class ChainModifier {
     return this
 
   }
-  appendChild = (type, text="") => {
-    console.log(this.selection.toJSON())
+  appendChild = (type, text=" ") => {
     return this.appendChildren(type, 1, text)
   }
-  appendChildren = (type, size, text="") => {
+  appendChildren = (type, size, text=" ") => {
     const currentBlock = this.currentContent.getBlockForKey(this.selection.getFocusKey())
     let newBlockMap = [
       currentBlock
@@ -86,11 +139,8 @@ class ChainModifier {
           characterList: List(Repeat(charData, text.length))
         })
       )
-      console.log(newBlockMap)
-      console.log(newKey)
     }
     newBlockMap = BlockMapBuilder.createFromArray(newBlockMap)
-    console.log(newBlockMap)
     const withFragment = Modifier.replaceWithFragment(
       this.currentContent,
       this.selection.merge({
@@ -127,82 +177,76 @@ class ChainModifier {
     return this
   }
   insertElementAfter = (type) => {
-    const currentBlock = this.currentContent.getBlockForKey(this.selection.getFocusKey())
+    const charData = CharacterMetadata.create({});
     const newBlockKey = genKey()
-    const withNewBlock = Modifier.splitBlock(
+    const newBlock = new ContentBlock({
+      key: newBlockKey,
+      type,
+      depth: this.currentBlock.getDepth(),
+      text:" ",
+      characterList: List([charData])
+    })
+    const newBlockMap = BlockMapBuilder.createFromArray(
+      [
+        this.currentBlock,
+        newBlock,
+      ]
+    )
+    const withNewBlock = Modifier.replaceWithFragment(
       this.currentContent,
       this.selection.merge({
-        anchorOffset: currentBlock.getText().length,
-        focusOffset: currentBlock.getText().length
+        focusOffset: this.currentBlock.getText().length,
+        anchorOffset: 0
       }),
-      newBlockKey
+      newBlockMap
     )
+
     const newSelection = this.selection.merge({
       focusKey: newBlockKey,
       anchorKey: newBlockKey,
       anchorOffset: 0,
       focusOffset: 0
     })
-    const withType = Modifier.setBlockType(
-      withNewBlock,
-      newSelection,
-      type
-    )
-    const adjustedDepth = Modifier.adjustBlockDepth(
-      withType,
-      newSelection,
-      currentBlock.getDepth(),
-      100
-    )
-    const withoutData = Modifier.setBlockData(
-      adjustedDepth,
-      newSelection,
-      new Map({})
-    )
-    this.updateEditorState(withoutData, newSelection)
+    console.log(withNewBlock.getBlocksAsArray(), this.currentContent.getBlocksAsArray())
+    this.updateEditorState(withNewBlock, newSelection)
     return this
   }
   insertElementBefore = (type)=>{
-    const blockBefore = this.currentContent.getBlockBefore(
-      this.selection.getFocusKey()
-    )
-    const currentBlock = this.currentContent.getBlockForKey(
-      this.selection.getFocusKey()
-    )
+    const previousBlock = this.currentContent.getBlockBefore(this.selection.getFocusKey())
+    const charData = CharacterMetadata.create({});
     const newBlockKey = genKey()
-    const withNewBlock = Modifier.splitBlock(
-      this.currentContent,
-      this.selection.merge({
-        anchorOffset: blockBefore.getText().length,
-        focusOffset: blockBefore.getText().length,
-        anchorKey: blockBefore.getKey(),
-        focusKey: blockBefore.getKey()
-      }),
-      newBlockKey
+    const newBlock = new ContentBlock({
+      key: newBlockKey,
+      type,
+      depth: this.currentBlock.getDepth(),
+      text:" ",
+      characterList: List([charData])
+    })
+    const newBlockMap = BlockMapBuilder.createFromArray(
+      [
+        previousBlock,
+        newBlock,
+      ]
     )
+    const withNewBlock = Modifier.replaceWithFragment(
+      this.currentContent,
+      new SelectionState({
+        focusOffset: previousBlock.getText().length,
+        anchorOffset: 0,
+        anchorKey: previousBlock.getKey(),
+        focusKey: previousBlock.getKey()
+      }),
+      newBlockMap
+    )
+
     const newSelection = this.selection.merge({
       focusKey: newBlockKey,
       anchorKey: newBlockKey,
       anchorOffset: 0,
       focusOffset: 0
     })
-    const withType = Modifier.setBlockType(
-      withNewBlock,
-      this.selection,
-      type
-    )
-    const adjustedDepth = Modifier.adjustBlockDepth(
-      withType,
-      newSelection,
-      currentBlock.getDepth(),
-      100
-    )
-    const withoutData = Modifier.setBlockData(
-      adjustedDepth,
-      this.selection,
-      new Map({})
-    )
-    this.updateEditorState(withoutData, newSelection)
+    console.log(withNewBlock.getBlocksAsArray(), this.currentContent.getBlocksAsArray())
+    this.updateEditorState(withNewBlock, newSelection)
     return this
   }
   toggleBlockInBlock = (type)=>{
