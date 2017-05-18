@@ -1,6 +1,7 @@
 ---
 inline:
   A:
+    name: Link
     excludeChildren:
     - "A"
     children:
@@ -22,15 +23,19 @@ inline:
     - "target"
     - "type"
   EM:
+    name: Emphasis
     children:
     - "inline"
   CODE:
+    name: Code
     children:
     - "inline"
   SUB:
+    name: Subscript
     children:
     - "inline"
   IMG:
+    name: Image
     empty: "true"
     attributes:
     - "align"
@@ -56,51 +61,59 @@ inline:
     - "face"
     - "size"
   BDO:
+    name: Bidirectional Override
     children:
     - "inline"
     attributes:
     - "dir"
   Q:
+    name: Short Quotation
     children:
     - "inline"
     attributes:
     - "cite"
   VAR:
+    name: Variable
     children:
     - "inline"
   S:
+    name: Inaccurate
     children:
     - "inline"
   B:
+    name: Bold
     children:
     - "inline"
   U:
+    name: Underline
     children:
     - "inline"
   ABBR:
+    name: Abbrevation
     children:
     - "inline"
     attributes:
     - "title"
   BR:
+    name: Line break
     empty: "true"
     attributes:
     - "clear"
+  WBR:
+    name: Word break
+    empty: "true"
   SUP:
+    name: Superscript
     children:
     - "inline"
   SMALL:
+    name: Small
     children:
     - "inline"
   STRONG:
+    name: Important
     children:
     - "inline"
-  MAP:
-    children:
-    - "AREA"
-    - "block"
-    attributes:
-    - "name"
   FONT:
     children:
     - "inline"
@@ -129,47 +142,62 @@ inline:
     - "target"
     - "type"
   ACRONYM:
-    children:
-    - "inline"
-  BIG:
-    children:
-    - "inline"
-  TT:
+    name: Acronym
     children:
     - "inline"
   KBD:
+    name: Keyboard input
     children:
     - "inline"
   I:
+    name: Italic
     children:
     - "inline"
   DFN:
+    name: Definition instance
     children:
     - "inline"
     attributes:
     - "title"
   STRIKE:
+    name: Strikethrough
     children:
     - "inline"
   SAMP:
+    name: Computer output
     children:
     - "inline"
   CITE:
+    name: Title of a work
     children:
     - "inline"
 block:
+  FIGURE:
+    name: Figure
+    children:
+    - "flow"
+    - "FIGCAPTION"
+  FIGCAPTION:
+    name: Figure caption
+    parents:
+    - "FIGURE"
+    children:
+    - "flow"
   DL:
+    name: Description list
     children:
     - "DT"
     - "DD"
     attributes:
     - "compact"
   BLOCKQUOTE:
+    name: Quote
     children:
     - "flow"
     attributes:
     - "cite"
   TH:
+    name: Header Cell
     parents:
     - "TR"
     children:
@@ -189,22 +217,8 @@ block:
     - "scope"
     - "valign"
     - "width"
-  FORM:
-    exclude:
-    - "FORM"
-    children:
-    - "flow"
-    attributes:
-    - "accept"
-    - "accept-charset"
-    - "action"
-    - "autocomplete"
-    - "enctype"
-    - "method"
-    - "name"
-    - "novalidate"
-    - "target"
   HR:
+    name: Separator
     empty: "true"
     attributes:
     - "align"
@@ -212,16 +226,19 @@ block:
     - "size"
     - "width"
   H6:
+    name: Heading 6
     children:
     - "inline"
     attributes:
     - "align"
   DD:
+    name: Term description
     parents:
     - "DL"
     children:
     - "flow"
   TBODY:
+    name: Table body
     parents:
     - "TABLE"
     children:
@@ -232,11 +249,13 @@ block:
     - "charoff"
     - "valign"
   P:
+    name: Paragraph
     children:
     - "inline"
     attributes:
     - "align"
   CAPTION:
+    name: Table caption
     parents:
     - "TABLE"
     children:
@@ -256,6 +275,7 @@ block:
     - "valign"
     - "width"
   TFOOT:
+    name: Table footer
     parents:
     - "TABLE"
     children:
@@ -266,21 +286,25 @@ block:
     - "charoff"
     - "valign"
   DT:
+    name: Term
     parents:
     - "DL"
     children:
     - "inline"
   H5:
+    name: Heading 5
     children:
     - "inline"
     attributes:
     - "align"
   DIV:
+    name: Division
     children:
     - "flow"
     attributes:
     - "align"
   THEAD:
+    name: Table head
     parents:
     - "TABLE"
     children:
@@ -291,6 +315,7 @@ block:
     - "charoff"
     - "valign"
   PRE:
+    name: Preformatted text
     excludeChildren:
     - "IMG"
     - "OBJECT"
@@ -306,6 +331,7 @@ block:
     attributes:
     - "width"
   OL:
+    name: Ordered List
     children:
     - "LI"
     attributes:
@@ -329,21 +355,25 @@ block:
     - "valign"
     - "width"
   H2:
+    name: Heading 2
     children:
     - "inline"
     attributes:
     - "align"
   H3:
+    name: Heading 3
     children:
     - "inline"
     attributes:
     - "align"
   H1:
+    name: Heading 1
     children:
     - "inline"
     attributes:
     - "align"
   TR:
+    name: Row
     parents:
     - "TBODY"
     - "THEAD"
@@ -358,11 +388,13 @@ block:
     - "charoff"
     - "valign"
   H4:
+    name: Heading 4
     children:
     - "inline"
     attributes:
     - "align"
   LI:
+    name: List item
     parents:
     - "UL"
     - "OL"
@@ -372,36 +404,19 @@ block:
     - "type"
     - "value"
   UL:
+    name: Unordered List
     children:
     - "LI"
     attributes:
     - "compact"
     - "type"
-  IFRAME:
-    children:
-    - "flow"
-    attributes:
-    - "align"
-    - "allowfullscreen"
-    - "allowpaymentrequest"
-    - "allowusermedia"
-    - "frameborder"
-    - "height"
-    - "longdesc"
-    - "marginheight"
-    - "marginwidth"
-    - "name"
-    - "referrerpolicy"
-    - "sandbox"
-    - "scrolling"
-    - "src"
-    - "srcdoc"
-    - "width"
   ADDRESS:
+    name: Address
     children:
     - "inline"
     - "P"
   TABLE:
+    name: Table
     children:
     - "CAPTION"
     - "COLGROUP"
@@ -420,6 +435,7 @@ block:
     - "summary"
     - "width"
   TD:
+    name: Cell
     parents:
     - "TR"
     children:
