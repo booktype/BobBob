@@ -193,7 +193,6 @@ const DefaultDraftBlockRenderMap = Map({
   "ol": {
     "name": "Ordered List",
     toggle: (controller)=>{
-      console.log("ol")
       return controller.insertElementAfter("ol")
       .appendChild("li").getCurrentContent()
     },
@@ -329,6 +328,7 @@ const DefaultDraftBlockRenderMap = Map({
     "name": "Cell",
     toggle: (controller)=>{
         const at_index = controller.getChildIndex()
+
         return controller.queryParent("tbody")
           .queryAndAppend("tr","td", at_index).getCurrentContent()
     },
