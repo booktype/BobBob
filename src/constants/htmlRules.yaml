@@ -2,335 +2,440 @@
 inline:
   A:
     excludeChildren:
-    - A
+    - "A"
     children:
-    - inline
+    - "inline"
     attributes:
-    - download
-    - href
-    - hreflang
-    - media
-    - ping
-    - rel
-    - shape
-    - target
+    - "accesskey"
+    - "charset"
+    - "coords"
+    - "download"
+    - "href"
+    - "hreflang"
+    - "name"
+    - "ping"
+    - "referrerpolicy"
+    - "rel"
+    - "rev"
+    - "shape"
+    - "tabindex"
+    - "target"
+    - "type"
   EM:
     children:
-    - inline
+    - "inline"
   CODE:
     children:
-    - inline
+    - "inline"
   SUB:
     children:
-    - inline
+    - "inline"
   IMG:
-    empty: true
+    empty: "true"
     attributes:
-    - align
-    - alt
-    - border
-    - crossorigin
-    - height
-    - ismap
-    - sizes
-    - src
-    - srcset
-    - usemap
-    - width
+    - "align"
+    - "alt"
+    - "border"
+    - "crossorigin"
+    - "height"
+    - "hspace"
+    - "ismap"
+    - "longdesc"
+    - "name"
+    - "referrerpolicy"
+    - "sizes"
+    - "src"
+    - "srcset"
+    - "usemap"
+    - "vspace"
+    - "width"
   BASEFONT:
-    empty: true
+    empty: "true"
     attributes:
-    - color
+    - "color"
+    - "face"
+    - "size"
   BDO:
     children:
-    - inline
+    - "inline"
+    attributes:
+    - "dir"
   Q:
     children:
-    - inline
+    - "inline"
     attributes:
-    - cite
+    - "cite"
   VAR:
     children:
-    - inline
+    - "inline"
   S:
     children:
-    - inline
+    - "inline"
   B:
     children:
-    - inline
+    - "inline"
   U:
     children:
-    - inline
+    - "inline"
   ABBR:
     children:
-    - inline
+    - "inline"
+    attributes:
+    - "title"
   BR:
-    empty: true
+    empty: "true"
+    attributes:
+    - "clear"
   SUP:
     children:
-    - inline
+    - "inline"
   SMALL:
     children:
-    - inline
+    - "inline"
   STRONG:
     children:
-    - inline
+    - "inline"
   MAP:
     children:
-    - AREA
-    - block
+    - "AREA"
+    - "block"
     attributes:
-    - name
+    - "name"
   FONT:
     children:
-    - inline
+    - "inline"
     attributes:
-    - color
+    - "color"
+    - "face"
+    - "size"
   SPAN:
     children:
-    - inline
+    - "inline"
   AREA:
-    empty: true
+    empty: "true"
     attributes:
-    - alt
-    - coords
-    - download
-    - href
-    - hreflang
-    - media
-    - ping
-    - rel
-    - shape
-    - target
+    - "accesskey"
+    - "alt"
+    - "coords"
+    - "download"
+    - "href"
+    - "hreflang"
+    - "nohref"
+    - "ping"
+    - "referrerpolicy"
+    - "rel"
+    - "shape"
+    - "tabindex"
+    - "target"
+    - "type"
   ACRONYM:
     children:
-    - inline
+    - "inline"
   BIG:
     children:
-    - inline
+    - "inline"
   TT:
     children:
-    - inline
+    - "inline"
   KBD:
     children:
-    - inline
+    - "inline"
   I:
     children:
-    - inline
+    - "inline"
   DFN:
     children:
-    - inline
+    - "inline"
+    attributes:
+    - "title"
   STRIKE:
     children:
-    - inline
+    - "inline"
   SAMP:
     children:
-    - inline
+    - "inline"
   CITE:
     children:
-    - inline
+    - "inline"
 block:
   DL:
     children:
-    - DT
-    - DD
+    - "DT"
+    - "DD"
+    attributes:
+    - "compact"
   BLOCKQUOTE:
     children:
-    - flow
+    - "flow"
     attributes:
-    - cite
+    - "cite"
   TH:
     parents:
-    - TR
+    - "TR"
     children:
-    - flow
+    - "flow"
     attributes:
-    - align
-    - bgcolor
-    - colspan
-    - headers
-    - rowspan
-    - scope
+    - "abbr"
+    - "align"
+    - "axis"
+    - "bgcolor"
+    - "char"
+    - "charoff"
+    - "colspan"
+    - "headers"
+    - "height"
+    - "nowrap"
+    - "rowspan"
+    - "scope"
+    - "valign"
+    - "width"
   FORM:
     exclude:
-    - FORM
+    - "FORM"
     children:
-    - flow
+    - "flow"
     attributes:
-    - accept
-    - accept-charset
-    - action
-    - autocomplete
-    - enctype
-    - method
-    - name
-    - novalidate
-    - target
+    - "accept"
+    - "accept-charset"
+    - "action"
+    - "autocomplete"
+    - "enctype"
+    - "method"
+    - "name"
+    - "novalidate"
+    - "target"
   HR:
-    empty: true
+    empty: "true"
     attributes:
-    - color
+    - "align"
+    - "noshade"
+    - "size"
+    - "width"
   H6:
     children:
-    - inline
+    - "inline"
+    attributes:
+    - "align"
   DD:
     parents:
-    - DL
+    - "DL"
     children:
-    - flow
+    - "flow"
   TBODY:
     parents:
-    - TABLE
+    - "TABLE"
     children:
-    - TR
+    - "TR"
     attributes:
-    - align
-    - bgcolor
+    - "align"
+    - "char"
+    - "charoff"
+    - "valign"
   P:
     children:
-    - inline
+    - "inline"
+    attributes:
+    - "align"
   CAPTION:
     parents:
-    - TABLE
+    - "TABLE"
     children:
-    - inline
+    - "inline"
     attributes:
-    - align
+    - "align"
   COL:
     parents:
-    - COLGROUP
-    - TABLE
-    empty: true
+    - "COLGROUP"
+    - "TABLE"
+    empty: "true"
     attributes:
-    - align
-    - bgcolor
-    - span
+    - "align"
+    - "char"
+    - "charoff"
+    - "span"
+    - "valign"
+    - "width"
   TFOOT:
     parents:
-    - TABLE
+    - "TABLE"
     children:
-    - TR
+    - "TR"
     attributes:
-    - bgcolor
+    - "align"
+    - "char"
+    - "charoff"
+    - "valign"
   DT:
     parents:
-    - DL
+    - "DL"
     children:
-    - inline
+    - "inline"
   H5:
     children:
-    - inline
+    - "inline"
+    attributes:
+    - "align"
   DIV:
     children:
-    - flow
+    - "flow"
+    attributes:
+    - "align"
   THEAD:
     parents:
-    - TABLE
+    - "TABLE"
     children:
-    - TR
+    - "TR"
     attributes:
-    - align
+    - "align"
+    - "char"
+    - "charoff"
+    - "valign"
   PRE:
     excludeChildren:
-    - IMG
-    - OBJECT
-    - APPLET
-    - BIG
-    - SMALL
-    - SUB
-    - SUP
-    - FONT
-    - BASEFONT
+    - "IMG"
+    - "OBJECT"
+    - "APPLET"
+    - "BIG"
+    - "SMALL"
+    - "SUB"
+    - "SUP"
+    - "FONT"
+    - "BASEFONT"
     children:
-    - inline
+    - "inline"
+    attributes:
+    - "width"
   OL:
     children:
-    - LI
+    - "LI"
     attributes:
-    - reversed
-    - start
+    - "compact"
+    - "reversed"
+    - "start"
+    - "type"
   CENTER:
     children:
-    - flow
+    - "flow"
   COLGROUP:
     parents:
-    - TABLE
+    - "TABLE"
     children:
-    - COL
+    - "COL"
     attributes:
-    - align
-    - bgcolor
-    - span
+    - "align"
+    - "char"
+    - "charoff"
+    - "span"
+    - "valign"
+    - "width"
   H2:
     children:
-    - inline
+    - "inline"
+    attributes:
+    - "align"
   H3:
     children:
-    - inline
+    - "inline"
+    attributes:
+    - "align"
   H1:
     children:
-    - inline
+    - "inline"
+    attributes:
+    - "align"
   TR:
     parents:
-    - TBODY
-    - THEAD
-    - TFOOT
+    - "TBODY"
+    - "THEAD"
+    - "TFOOT"
     children:
-    - TD
-    - TH
+    - "TD"
+    - "TH"
     attributes:
-    - align
-    - bgcolor
+    - "align"
+    - "bgcolor"
+    - "char"
+    - "charoff"
+    - "valign"
   H4:
     children:
-    - inline
+    - "inline"
+    attributes:
+    - "align"
   LI:
     parents:
-    - UL
-    - OL
+    - "UL"
+    - "OL"
     children:
-    - flow
+    - "flow"
     attributes:
-    - value
+    - "type"
+    - "value"
   UL:
     children:
-    - LI
+    - "LI"
+    attributes:
+    - "compact"
+    - "type"
   IFRAME:
     children:
-    - flow
+    - "flow"
     attributes:
-    - align
-    - height
-    - name
-    - sandbox
-    - seamless
-    - src
-    - srcdoc
-    - width
+    - "align"
+    - "allowfullscreen"
+    - "allowpaymentrequest"
+    - "allowusermedia"
+    - "frameborder"
+    - "height"
+    - "longdesc"
+    - "marginheight"
+    - "marginwidth"
+    - "name"
+    - "referrerpolicy"
+    - "sandbox"
+    - "scrolling"
+    - "src"
+    - "srcdoc"
+    - "width"
   ADDRESS:
     children:
-    - inline
-    - P
+    - "inline"
+    - "P"
   TABLE:
     children:
-    - CAPTION
-    - COLGROUP
-    - COL
-    - THEAD
-    - TBODY
-    - TFOOT
+    - "CAPTION"
+    - "COLGROUP"
+    - "COL"
+    - "THEAD"
+    - "TBODY"
+    - "TFOOT"
     attributes:
-    - align
-    - bgcolor
-    - border
-    - summary
+    - "align"
+    - "bgcolor"
+    - "border"
+    - "cellpadding"
+    - "cellspacing"
+    - "frame"
+    - "rules"
+    - "summary"
+    - "width"
   TD:
     parents:
-    - TR
+    - "TR"
     children:
-    - flow
+    - "flow"
     attributes:
-    - bgcolor
-    - colspan
-    - headers
-    - rowspan
+    - "abbr"
+    - "align"
+    - "axis"
+    - "bgcolor"
+    - "char"
+    - "charoff"
+    - "colspan"
+    - "headers"
+    - "height"
+    - "nowrap"
+    - "rowspan"
+    - "scope"
+    - "valign"
+    - "width"
