@@ -36,7 +36,6 @@ class ChainModifier {
     const index = head.reverse().findIndex((block)=>{
       return block.getType()=== type
     }) + 1
-    console.log(type, index )
   }
   queryParent = (type)=>{
     const head = this.blocksArray.slice(0, this.index)
@@ -53,75 +52,38 @@ class ChainModifier {
     this.updateEditorState(this.currentContent, selection)
     return this
   }
-  queryAndAppend = (query, type, at_index) => {
-    this.currentContent.getBlockMap()
-    const head = this.blocksArray.slice(0, this.index+1)
-    const tail = this.blocksArray.slice(this.index+1)
+  queryAndAppend = (query, type, at_index=0) => {
+    let counter=-1;
     let selection;
-    let last_insert = -1
-    for (let i=0;i<tail.length;i++){
-      let block = tail[i]
-      let insert = -1
-      if(block.getType() === query){
-        if(!at_index){
-          console.log(tail[i-1])
+    const afterKey = this.currentContent.getKeyAfter(this.currentBlock.getKey())
+    this.currentContent
+      .getBlockMap()
+      .skipUntil(block=>block.getKey()===afterKey)
+      .takeUntil(block=>block.getDepth()===this.currentBlock.getDepth())
+      .filter(block=>block.getDepth()<=this.currentBlock.getDepth()+2)
+      .forEach((block,key)=>{
+        if(block.getType()===query){
+          counter = -1
+        }
+        if(counter === at_index){
           selection = new SelectionState({
-            focusKey:tail[i].getKey(),
-            anchorKey:tail[i].getKey(),
+            focusKey:block.getKey(),
+            anchorKey:block.getKey(),
             focusOffset:0,
             anchorOffset:0
           })
           this.updateEditorState(this.currentContent, selection)
-          this.appendChild(type)
-          // tail.splice(i-1,0,
-          //   new ContentBlock({
-          //     key: genKey(),
-          //     type,
-          //     depth:block.getDepth()+1,
-          //   })
-          // )
-          last_insert = i
-          i++
-        }else{
-          insert = i+at_index
+          this.insertElementAfter(type)
         }
-        if(i==insert){
-
-          selection = new SelectionState({
-            focusKey:tail[i].getKey(),
-            anchorKey:tail[i].getKey(),
-            focusOffset:0,
-            anchorOffset:0
-          })
-          this.updateEditorState(this.currentContent, selection)
-          this.appendChild(type)
-          // tail.splice(i-1,0,
-          //   new ContentBlock({
-          //     key: genKey(),
-          //     type,
-          //     depth:block.getDepth()+1,
-          //   })
-          // )
-          last_insert = i
-          i++
-        }
-      }
-      if(block.getDepth()===this.currentDepth){
-        break
-      }
-    }
-    this.blocksArray = head.concat(tail)
-    this.index = head.length+last_insert
-    this.currentBlock = this.blocksArray[this.index]
-    this.currentDepth = this.currentBlock.getDepth()
-
+        counter++
+      })
     return this
 
   }
-  appendChild = (type, text=" ") => {
+  appendChild = (type, text="") => {
     return this.appendChildren(type, 1, text)
   }
-  appendChildren = (type, size, text=" ") => {
+  appendChildren = (type, size, text="") => {
     const currentBlock = this.currentContent.getBlockForKey(this.selection.getFocusKey())
     let newBlockMap = [
       currentBlock
@@ -207,7 +169,6 @@ class ChainModifier {
       anchorOffset: 0,
       focusOffset: 0
     })
-    console.log(withNewBlock.getBlocksAsArray(), this.currentContent.getBlocksAsArray())
     this.updateEditorState(withNewBlock, newSelection)
     return this
   }
@@ -245,7 +206,6 @@ class ChainModifier {
       anchorOffset: 0,
       focusOffset: 0
     })
-    console.log(withNewBlock.getBlocksAsArray(), this.currentContent.getBlocksAsArray())
     this.updateEditorState(withNewBlock, newSelection)
     return this
   }
