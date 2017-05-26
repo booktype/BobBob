@@ -1,0 +1,326 @@
+
+@font-face {
+  font-family: 'roboto';
+  src: url('fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'roboto';
+  src: url('fonts/Roboto-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'roboto';
+  src: url('fonts/Roboto-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'roboto';
+  src: url('fonts/Roboto-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'texgyrecursor';
+  src: url('fonts/TeXGyreCursor-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'texgyrecursor';
+  src: url('fonts/TeXGyreCursor-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'texgyrecursor';
+  src: url('fonts/TeXGyreCursor-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'texgyrecursor';
+  src: url('fonts/TeXGyreCursor-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'roboto-condensed';
+  src: url('fonts/RobotoCondensed-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'roboto-condensed';
+  src: url('fonts/RobotoCondensed-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'roboto-condensed';
+  src: url('fonts/RobotoCondensed-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'roboto-condensed';
+  src: url('fonts/RobotoCondensed-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+    font-family: 'freemono';
+    src: url('fonts/FreeMono.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'freemono';
+    src: url('fonts/FreeMonoBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'freemono';
+    src: url('fonts/FreeMonoOblique.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+  }
+  @font-face {
+    font-family: 'freemono';
+    src: url('fonts/FreeMonoBoldOblique.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+  }
+  @font-face {
+    font-family: 'dejavusans';
+    src: url('fonts/DejaVuSans.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'dejavusans';
+    src: url('fonts/DejaVuSans-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'dejavusans';
+    src: url('fonts/DejaVuSans-Oblique.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+  }
+  @font-face {
+    font-family: 'dejavusans';
+    src: url('fonts/DejaVuSans-BoldOblique.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+  }
+  @font-face {
+    font-family: 'ubuntu-mono';
+    src: url('fonts/UbuntuMono-R.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'ubuntu-mono';
+    src: url('fonts/UbuntuMono-B.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'ubuntu-mono';
+    src: url('fonts/UbuntuMono-RI.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+  }
+  @font-face {
+    font-family: 'ubuntu-mono';
+    src: url('fonts/UbuntuMono-BI.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+  }
+  @font-face {
+    font-family: 'roboto-light';
+    src: url('fonts/Roboto-Light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'roboto-light';
+    src: url('fonts/Roboto-Regular.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'roboto-light';
+    src: url('fonts/Roboto-LightItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+  }
+  @font-face {
+    font-family: 'roboto-light';
+    src: url('fonts/Roboto-Italic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+  }
+  @font-face {
+  font-family: 'texgyreadventor';
+  src: url('fonts/TeXGyreAdventor-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'texgyreadventor';
+  src: url('fonts/TeXGyreAdventor-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'texgyreadventor';
+  src: url('fonts/TeXGyreAdventor-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'texgyreadventor';
+  src: url('fonts/TeXGyreAdventor-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'texgyrecursor';
+  src: url('fonts/TeXGyreCursor-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'texgyrecursor';
+  src: url('fonts/TeXGyreCursor-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'texgyrecursor';
+  src: url('fonts/TeXGyreCursor-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'texgyrecursor';
+  src: url('fonts/TeXGyreCursor-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'ubuntu';
+  src: url('fonts/Ubuntu-R.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ubuntu';
+  src: url('fonts/Ubuntu-B.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ubuntu';
+  src: url('fonts/Ubuntu-RI.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'ubuntu';
+  src: url('fonts/Ubuntu-BI.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'ubuntu-light';
+  src: url('fonts/Ubuntu-L.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ubuntu-light';
+  src: url('fonts/Ubuntu-M.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ubuntu-light';
+  src: url('fonts/Ubuntu-LI.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'ubuntu-light';
+  src: url('fonts/Ubuntu-MI.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'texgyrepagella';
+  src: url('fonts/TeXGyrePagella-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'texgyrepagella';
+  src: url('fonts/TeXGyrePagella-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'texgyrepagella';
+  src: url('fonts/TeXGyrePagella-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'texgyrepagella';
+  src: url('fonts/TeXGyrePagella-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'im_fell_dw_pica_pro';
+  src: url('fonts/IM_FELL_DW_Pica_PRO_Roman.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'im_fell_dw_pica_pro';
+  src: url('fonts/IM_FELL_DW_Pica_PRO_Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'texgyreschola';
+  src: url('fonts/TeXGyreSchola-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'texgyreschola';
+  src: url('fonts/TeXGyreSchola-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'texgyreschola';
+  src: url('fonts/TeXGyreSchola-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'texgyreschola';
+  src: url('fonts/TeXGyreSchola-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
