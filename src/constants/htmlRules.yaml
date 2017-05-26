@@ -319,14 +319,11 @@ block:
     name: Preformatted text
     excludeChildren:
     - "IMG"
-    - "OBJECT"
-    - "APPLET"
     - "BIG"
     - "SMALL"
     - "SUB"
     - "SUP"
     - "FONT"
-    - "BASEFONT"
     children:
     - "inline"
     attributes:
@@ -419,11 +416,11 @@ block:
   TABLE:
     name: Table
     children:
+    - "TBODY"
     - "CAPTION"
     - "COLGROUP"
     - "COL"
     - "THEAD"
-    - "TBODY"
     - "TFOOT"
     attributes:
     - "align"
