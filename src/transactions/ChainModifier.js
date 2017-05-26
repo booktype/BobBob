@@ -30,6 +30,7 @@ class ChainModifier {
     }
     return counter
   }
+
   getChildIndex = () => {
     const head = this.blocksArray.slice(0, this.index+1)
     const type = this.currentBlock.getType()
@@ -255,6 +256,9 @@ class ChainModifier {
     )
     this.updateEditorState(withStyle)
     return this
+  }
+  getStyleType = (styleType)=>{
+    return this.currentInlineStyle.find((style)=>style.startsWith(styleType))
   }
   updateEditorState = (currentContent, selection) => {
     this.editorState = EditorState.set(this.editorState, {
