@@ -5,6 +5,12 @@ import InlineStyleControls from './InlineStyleControls';
 import EntityStyleControls from './EntityStyleControls';
 import SideContent from './SideContent'
 import BlockTree from './BlockTree'
+import FontColorPicker from './EditorBar/Home/FontColorPicker'
+import HighlightColorPicker from './EditorBar/Home/HighlightColorPicker'
+import FontSizePicker from './EditorBar/Home/FontSizePicker'
+import FontPicker from './EditorBar/Home/FontPicker'
+import FontStyle from './EditorBar/Home/FontStyle'
+
 const styles = {
   controller: {
     position: "fixed",
@@ -29,6 +35,11 @@ class ControllerContainer extends React.Component {
         <Tabs>
           <Tab label="Inline">
             <InlineStyleControls controller={this.props.controller} onChange={this.onChange}/>
+            <FontColorPicker controller={this.props.controller} onChange={this.onChange}/>
+            <HighlightColorPicker controller={this.props.controller} onChange={this.onChange}/>
+            <FontSizePicker controller={this.props.controller} onChange={this.onChange}/>
+            <FontPicker controller={this.props.controller} onChange={this.onChange}/>
+            <FontStyle controller={this.props.controller} onChange={this.onChange}/>
           </Tab>
           <Tab label="Block">
             <BlockStyleControls controller={this.props.controller} onChange={this.onChange}/>
