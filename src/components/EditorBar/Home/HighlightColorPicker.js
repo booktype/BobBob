@@ -85,7 +85,7 @@ export default class HighlightColorPicker extends React.Component {
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
             onRequestClose={this.handleRequestClose}
             >
-              <ColorPicker onChange={this.handleColorChange}/>
+              <ColorPicker color={{hex: this.state.color}} onChange={this.handleColorChange} disableAlpha={true}/>
           </Popover>
       </div>
     )
