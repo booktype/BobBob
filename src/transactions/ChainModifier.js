@@ -245,16 +245,29 @@ class ChainModifier {
     return this
   }
   setStyleAttr = (attr, value) => {
+    const style = this.currentBlock.getData().get("style") || {}
+    style[attr] = value
     const withStyle = Modifier.mergeBlockData(
       this.currentContent,
       this.selection,
       new Map({
-        style:{
-          [attr]: value
-        }
+        style
       })
     )
     this.updateEditorState(withStyle)
+    return this
+  }
+  setAttr = (attr, value) => {
+    const attributes = this.currentBlock.getData().get("attributes") || {}
+    attributes[attr] = value
+    const withAttr = Modifier.mergeBlockData(
+      this.currentContent,
+      this.selection,
+      new Map({
+        attributes
+      })
+    )
+    this.updateEditorState(withAttr)
     return this
   }
   getStyleType = (styleType)=>{
