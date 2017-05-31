@@ -22,9 +22,10 @@ import onPaste from '../../handlers/onPaste';
 import client from '../../feathers';
 import transit from 'transit-immutable-js';
 import '../../styles/app.scss';
-
-const DraftTransit = transit.withRecords([SelectionState, ContentBlock, CharacterMetadata])
-
+// const DraftTransit = transit.withRecords([SelectionState, ContentBlock, CharacterMetadata])
+let DraftTransit = transit.withRecords([SelectionState])
+DraftTransit = DraftTransit.withRecords([ContentBlock])
+DraftTransit = DraftTransit.withRecords([CharacterMetadata])
 const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
   (decorator)=>{
     return {
@@ -158,7 +159,7 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="App" style={{width: "50%", margin: "auto"}}>
+      <div className="App" style={{width: "80%", margin: "auto"}}>
         {this.state.editorState?
         <div className={`editor-${this.state.themename}`}>
           <ControllerContainer
