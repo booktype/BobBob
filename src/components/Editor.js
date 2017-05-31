@@ -19,7 +19,6 @@ import ContentController from '../transactions/ContentController';
 import './RichEditor.css';
 function getBlockStyle(block) {
   switch (block.getType()) {
-    case 'blockquote': return 'RichEditor-blockquote';
     default: return null;
   }
 }
