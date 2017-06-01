@@ -39,11 +39,11 @@ class ChainModifier {
     }) + 1
   }
   queryParent = (type)=>{
-    const head = this.blocksArray.slice(0, this.index)
-    const block = head.reverse().find((block)=>{
-      return block.getType()===type
-    })
-
+    const block = this.location.reverse().find(block=>block.getType()===type)
+    this.location.reverse()
+    if(!block){
+      return false
+    }
     const selection = new SelectionState({
       focusKey: block.getKey(),
       anchorKey: block.getKey(),
@@ -280,6 +280,29 @@ class ChainModifier {
     })
     this.currentContent = currentContent
     this.selection = selection || this.selection
+    this.blockKey = this.selection.getFocusKey()
+    let reachedRoot = false
+    this.location = this
+     .currentContent
+     .getBlockMap()
+     .reverse()
+     .skipUntil((block)=>block.getKey()===this.blockKey)
+     .takeUntil(block=>{
+       if(reachedRoot){
+         return reachedRoot
+       }
+       if(block.getDepth()===0){
+         reachedRoot = true
+         return false
+       }
+       return reachedRoot
+     })
+     .reduce((tree, block)=>{
+       if(!tree[block.getDepth()]){
+         tree[block.getDepth()] = block
+       }
+       return tree
+     },[])
     this.blocksArray = currentContent.getBlocksAsArray()
     this.currentBlock = this.currentContent.getBlockForKey(this.selection.getAnchorKey())
     this.currentDepth = this.currentBlock.getDepth()

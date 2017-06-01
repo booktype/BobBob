@@ -11,31 +11,8 @@ class BlockTree extends React.Component {
     }
   }
   componentWillReceiveProps(nextProps){
-    this.blockKey = nextProps.controller.selection.getFocusKey()
-    let reachedRoot = false
-    const location = nextProps
-     .controller
-     .currentContent
-     .getBlockMap()
-     .reverse()
-     .skipUntil((block)=>block.getKey()===this.blockKey)
-     .takeUntil(block=>{
-       if(reachedRoot){
-         return reachedRoot
-       }
-       if(block.getDepth()===0){
-         reachedRoot = true
-         return false
-       }
-       return reachedRoot
-     })
-     .reduce((tree, block)=>{
-       if(!tree[block.getDepth()]){
-         tree[block.getDepth()] = block
-       }
-       return tree
-     },[])
-     this.setState({location})
+
+     this.setState({location:nextProps.controller.location})
 
   }
   render() {
