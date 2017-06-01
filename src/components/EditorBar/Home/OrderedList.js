@@ -28,9 +28,41 @@ export default class OrderedList extends React.Component {
 
     this.state = {
       open: false,
+
     };
   }
-
+  componentWillReceiveProps(nextProps){
+    if(this.props.controller.queryParent("ol")){
+      const style = this.props.controller.currentBlock.getData().get('style')
+      let listStyleType;
+      if(style){
+        listStyleType = style.listStyleType || "decimal"
+      }else{
+        listStyleType = "decimal"
+      }
+      if(listStyleType!==this.state.listStyleType)
+      this.setState({
+        listStyleType
+      })
+    }else if(this.state.listStyleType){
+      this.setState({listStyleType:null})
+    }
+  }
+  handleToggleList=(listStyleType)=>{
+    if(this.state.listStyleType){
+      this.props.onChange(
+        this.props.controller
+        .setStyleAttr("listStyleType", listStyleType)
+        .editorState
+      )
+    }else{
+      this.props.onChange(
+        this.props.controller.insertElementAfter("ol")
+        .setStyleAttr("listStyleType", listStyleType)
+        .appendChild("li").editorState
+      )
+    }
+  }
   handleTouchTap = (event) => {
     // This prevents ghost click.
     event.preventDefault();
@@ -51,8 +83,12 @@ export default class OrderedList extends React.Component {
     return (
       <div style={{display: "inline"}}>
         <span style={{display: "flex"}}>
-          <IconButton style={{float: "left", padding: 2, display: "block"}} tooltip="Bulleted List">
-            <FormatListNumbers />
+          <IconButton
+            onTouchTap={()=>this.handleToggleList("decimal")}
+            style={{float: "left", padding: 2, display: "block"}}
+            tooltip="Bulleted List"
+          >
+            <FormatListNumbers color={this.state.listStyleType?"orange":null} />
           </IconButton>
           <IconButton
             style={{float: "left", padding: 2, display: "block"}}
@@ -70,42 +106,63 @@ export default class OrderedList extends React.Component {
           onRequestClose={this.handleRequestClose}
         >
           <Menu style={{width: 100}}>
-            <MenuItem style={{backgroundColor: "orange"}}>
+            <MenuItem
+              onTouchTap={()=>this.handleToggleList("decimal")}
+              style={{backgroundColor: this.state.listStyleType==="decimal"?"orange":null}}>
               <ol style={{listStyleType: "decimal" ,marginLeft: 8}}>
                 <ListEmptyLine />
                 <ListEmptyLine />
                 <ListEmptyLine />
               </ol>
             </MenuItem>
-            <MenuItem >
+            <MenuItem
+              onTouchTap={()=>this.handleToggleList("lower-roman")}
+              style={{backgroundColor: this.state.listStyleType==="lower-roman"?"orange":null}}
+
+              >
               <ol style={{listStyleType: "lower-roman",marginLeft: 8}}>
                 <ListEmptyLine />
                 <ListEmptyLine />
                 <ListEmptyLine />
               </ol>
             </MenuItem>
-            <MenuItem >
+            <MenuItem
+              onTouchTap={()=>this.handleToggleList("upper-roman")}
+              style={{backgroundColor: this.state.listStyleType==="upper-roman"?"orange":null}}
+
+              >
               <ol style={{listStyleType: "upper-roman",marginLeft: 8}}>
                 <ListEmptyLine />
                 <ListEmptyLine />
                 <ListEmptyLine />
               </ol>
             </MenuItem>
-            <MenuItem >
+            <MenuItem
+              onTouchTap={()=>this.handleToggleList("upper-latin")}
+              style={{backgroundColor: this.state.listStyleType==="upper-latin"?"orange":null}}
+
+              >
               <ol style={{listStyleType: "upper-latin",marginLeft: 8}}>
                 <ListEmptyLine />
                 <ListEmptyLine />
                 <ListEmptyLine />
               </ol>
             </MenuItem>
-            <MenuItem >
+            <MenuItem
+              onTouchTap={()=>this.handleToggleList("lower-latin")}
+              style={{backgroundColor: this.state.listStyleType==="lower-latin"?"orange":null}}
+
+              >
               <ol style={{listStyleType: "lower-latin",marginLeft: 8}}>
                 <ListEmptyLine />
                 <ListEmptyLine />
                 <ListEmptyLine />
               </ol>
             </MenuItem>
-            <MenuItem >
+            <MenuItem
+              onTouchTap={()=>this.handleToggleList("lower-greek")}
+              style={{backgroundColor: this.state.listStyleType==="lower-greek"?"orange":null}}
+              >
               <ol style={{listStyleType: "lower-greek",marginLeft: 8}}>
                 <ListEmptyLine />
                 <ListEmptyLine />

@@ -30,7 +30,38 @@ export default class PopoverExampleSimple extends React.Component {
       open: false,
     };
   }
-
+  componentWillReceiveProps(nextProps){
+    if(this.props.controller.queryParent("ul")){
+      const style = this.props.controller.currentBlock.getData().get('style')
+      let listStyleType;
+      if(style){
+        listStyleType = style.listStyleType || "disc"
+      }else{
+        listStyleType = "disc"
+      }
+      if(listStyleType!==this.state.listStyleType)
+      this.setState({
+        listStyleType
+      })
+    }else if(this.state.listStyleType){
+      this.setState({listStyleType:null})
+    }
+  }
+  handleToggleList=(listStyleType)=>{
+    if(this.state.listStyleType){
+      this.props.onChange(
+        this.props.controller
+        .setStyleAttr("listStyleType", listStyleType)
+        .editorState
+      )
+    }else{
+      this.props.onChange(
+        this.props.controller.insertElementAfter("ul")
+        .setStyleAttr("listStyleType", listStyleType)
+        .appendChild("li").editorState
+      )
+    }
+  }
   handleTouchTap = (event) => {
     // This prevents ghost click.
     event.preventDefault();
@@ -51,8 +82,13 @@ export default class PopoverExampleSimple extends React.Component {
     return (
       <div style={{display: "inline"}}>
         <span style={{display: "flex"}}>
-          <IconButton style={{float: "left", padding: 2, display: "block"}} tooltip="Bulleted List">
-            <FormatListBulletedType />
+          <IconButton
+            onTouchTap={()=>this.handleToggleList("disc")}
+            style={{float: "left", padding: 2, display: "block"}}
+            tooltip="Bulleted List">
+            <FormatListBulletedType
+              color={this.state.listStyleType?"orange":null}
+            />
           </IconButton>
           <IconButton
             style={{float: "left", padding: 2, display: "block"}}
@@ -70,21 +106,30 @@ export default class PopoverExampleSimple extends React.Component {
           onRequestClose={this.handleRequestClose}
         >
           <Menu style={{width: 100}}>
-            <MenuItem >
+            <MenuItem
+              onTouchTap={()=>this.handleToggleList("disc")}
+              style={{backgroundColor: this.state.listStyleType==="disc"?"orange":null}}
+            >
               <ul style={{listStyleType: "disc" ,marginLeft: 8}}>
                 <ListEmptyLine />
                 <ListEmptyLine />
                 <ListEmptyLine />
               </ul>
             </MenuItem>
-            <MenuItem >
+            <MenuItem
+              onTouchTap={()=>this.handleToggleList("circle")}
+              style={{backgroundColor: this.state.listStyleType==="circle"?"orange":null}}
+             >
               <ul style={{listStyleType: "circle",marginLeft: 8}}>
                 <ListEmptyLine />
                 <ListEmptyLine />
                 <ListEmptyLine />
               </ul>
             </MenuItem>
-            <MenuItem >
+            <MenuItem
+              onTouchTap={()=>this.handleToggleList("square")}
+              style={{backgroundColor: this.state.listStyleType==="square"?"orange":null}}
+            >
               <ul style={{listStyleType: "square",marginLeft: 8}}>
                 <ListEmptyLine />
                 <ListEmptyLine />
