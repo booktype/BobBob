@@ -76,8 +76,8 @@ class App extends Component {
           })
           this.otService.on("operation", (ot)=>{
             if(!this.state.operations.includes(ot.data.contentHash)){
+
               content = this.state.editorState.getCurrentContent()
-              console.log(ot.data.userId)
               const args = DraftTransit.fromJSON(ot.data.operationArgs)
               content = Modifier[ot.data.operationName](content, ...args)
               content = Modifier.clearOperations(content)
@@ -116,9 +116,9 @@ class App extends Component {
     let currentContent = editorState.getCurrentContent()
     // console.log(convertToRaw(currentContent))
     const operations = currentContent.getOperations()
-
+    const hashes = []
     operations.forEach((operation, contentHash)=>{
-      this.setState({operations: [...this.state.operations, contentHash]})
+      hashes.push(contentHash)
       const operationName = operation[0]
       const operationArgs = DraftTransit.toJSON(operation[1])
 
@@ -127,8 +127,10 @@ class App extends Component {
         , contentHash
       })
     })
+    this.setState({operations: this.state.operations.concat(hashes)})
     currentContent = Modifier.clearOperations(currentContent)
     editorState = EditorState.set(editorState, {currentContent})
+    this.controller.updateEditorState(editorState.getCurrentContent(), editorState.getSelection())
     const previousBlocksArray = this.controller.blocksArray
     this.controller.editorState = editorState
     this.controller.currentContent = editorState.getCurrentContent()
