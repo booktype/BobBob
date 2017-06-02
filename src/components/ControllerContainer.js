@@ -18,6 +18,10 @@ import ParagraphAlign from './EditorBar/Home/ParagraphAlign'
 import TextDirection from './EditorBar/Home/TextDirection'
 import LineSpacing from './EditorBar/Home/ParagraphLineSpacing'
 import ParagraphStyles from './EditorBar/Home/ParagraphStyles'
+import TablePicker from './EditorBar/Insert/Table'
+import LinkForm from './EditorBar/Insert/Link'
+import PictureForm from './EditorBar/Insert/Picture'
+import CommentButton from './EditorBar/Insert/Comment'
 const styles = {
   controller: {
     position: "fixed",
@@ -52,7 +56,7 @@ const styles = {
     // "left": "50",
     "bottom": "0",
     // "textAlign": "center",
-    "width": "100%",
+    "width": "130%",
     "lineHeight": "15px",
   },
   "ribbon_toolbar": {
@@ -130,6 +134,45 @@ class ControllerContainer extends React.Component {
             </Toolbar>
           </Tab>
           <Tab label="Insert">
+            <Toolbar style={{height: 130}}>
+              {/* <InlineStyleControls controller={this.props.controller} onChange={this.onChange}/> */}
+              <ToolbarGroup firstChild={true}
+                // style={styles.ribbon_group}
+                >
+                <div >
+                  <TablePicker controller={this.props.controller} onChange={this.onChange} />
+
+                </div>
+
+                <ToolbarTitle text="Table" style={styles.ribbon_group_title} />
+              </ToolbarGroup>
+              <ToolbarGroup>
+                <div>
+                  <LinkForm controller={this.props.controller} onChange={this.onChange} />
+                </div>
+
+                <ToolbarTitle text="Link" style={styles.ribbon_group_title} />
+              </ToolbarGroup>
+              <ToolbarGroup style={{width: 100}}>
+                <div>
+                  <PictureForm controller={this.props.controller} onChange={this.onChange} />
+                </div>
+
+                <ToolbarTitle text="Picture" style={styles.ribbon_group_title} />
+              </ToolbarGroup>
+              <ToolbarGroup style={{width: 100}}>
+                <div>
+                  <CommentButton controller={this.props.controller} onChange={this.onChange} />
+                </div>
+
+                <ToolbarTitle text="Comment" style={styles.ribbon_group_title} />
+              </ToolbarGroup>
+              <ToolbarGroup style={{width: 500}}>
+              </ToolbarGroup>
+
+
+            </Toolbar>
+
             <BlockStyleControls controller={this.props.controller} onChange={this.onChange}/>
           </Tab>
           <Tab label="Review">
