@@ -30,7 +30,31 @@ class ChainModifier {
     }
     return counter
   }
+  getCurrentMetaData = (styleType) => {
+    const metaKey = this.editorState.getCurrentMeta().get(styleType)
+    if(metaKey){
+      return this.currentContent.getMeta(metaKey).getData()
+    }
+    return false
+  }
 
+  replaceStyleMetaData = (styleType, data) => {
+    const metaKey = this.editorState.getCurrentMeta().get(styleType)
+    const changedContent = Modifier.mergeMetaData(this.currentContent, metaKey, data)
+    this.updateEditorState(changedContent)
+    return this
+  }
+  insertEntity = (type, data) => {
+    const contentWithEntity = this.currentContent.createEntity(
+      type,
+      "IMMUTABLE",
+      data
+    );
+    const entityKey = contentWithEntity.getLastCreatedEntityKey();
+    this.updateEditorState(contentWithEntity)
+    this.insertCharacterAtSelectionEndWithEntity(" ", entityKey)
+    return this
+  }
   getChildIndex = () => {
     const head = this.blocksArray.slice(0, this.index+1)
     const type = this.currentBlock.getType()
