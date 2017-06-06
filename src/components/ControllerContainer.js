@@ -22,6 +22,7 @@ import TablePicker from './EditorBar/Insert/Table'
 import LinkForm from './EditorBar/Insert/Link'
 import PictureForm from './EditorBar/Insert/Picture'
 import CommentButton from './EditorBar/Insert/Comment'
+import TableTab from './EditorBar/Table/Layout'
 const styles = {
   controller: {
     position: "fixed",
@@ -182,6 +183,11 @@ class ControllerContainer extends React.Component {
               clickTarget={this.props.clickTarget}/>
 
           </Tab>
+          {this.props.controller.location.find(block=>block.getType()==="table")?
+            <Tab label="Table Layout" >
+              <TableTab controller={this.props.controller} onChange={this.onChange}/>
+            </Tab>
+          :null}
         </Tabs>
         <BlockTree controller={this.props.controller} onChange={this.onChange}/>
         <SideContent query={"comment"} controller={this.props.controller} onChange={this.onChange}/>
