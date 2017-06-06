@@ -71,6 +71,7 @@ class Login extends Component {
               onChange={this.handleEmailChange}
             />
             <TextField
+              type="password"
               floatingLabelText="Password"
               onChange={this.handlePasswordChange}
             />
