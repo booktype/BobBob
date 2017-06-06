@@ -56,11 +56,13 @@ class ChainModifier {
     return this
   }
   getChildIndex = () => {
-    const head = this.blocksArray.slice(0, this.index+1)
-    const type = this.currentBlock.getType()
-    const index = head.reverse().findIndex((block)=>{
-      return block.getType()=== type
-    }) + 1
+    const currentKey = this.currentBlock.getKey()
+    const currentDepth = this.currentBlock.getDepth()
+    const parentBlock = this.location.find(block=>block.getDepth()===currentDepth-1)
+    return this.currentContent.getBlockMap()
+      .skipUntil(block=>parentBlock===block)
+      .takeUntil(block=>this.currentBlock===block)
+      .count(block=>currentDepth===block.getDepth())
   }
   queryParent = (type)=>{
     const block = this.location.reverse().find(block=>block.getType()===type)
@@ -75,6 +77,62 @@ class ChainModifier {
       anchorOffset:0,
     })
     this.updateEditorState(this.currentContent, selection)
+    return this
+  }
+  removeElement = () => {
+    let lastBlock = this.currentContent.getBlockMap()
+      .skipUntil(block=>block===this.currentBlock)
+      .find(block=>block.getDepth()<=this.currentBlock.getDepth()&&block!==this.currentBlock)
+    if(!lastBlock){
+      lastBlock = this.currentContent.getLastBlock()
+    }else{
+      lastBlock = this.currentContent.getBlockBefore(lastBlock.getKey())
+    }
+    console.log(lastBlock.toJSON())
+    const previousBlock = this.currentContent.getBlockBefore(this.currentBlock.getKey())
+    const newContent = Modifier.removeRange(
+      this.currentContent,
+      this.selection.merge({
+        anchorKey: previousBlock.getKey(),
+        anchorOffset: previousBlock.getText().length,
+        focusKey: lastBlock.getKey(),
+        focusOffset: lastBlock.getText().length
+      }),
+      "backward"
+    )
+    this.updateEditorState(newContent, new SelectionState({
+      anchorKey: previousBlock.getKey(),
+      anchorOffset: 0,
+      focusKey: previousBlock.getKey(),
+      focusOffset: 0
+    }))
+    return this
+  }
+  queryAndRemove = (query, type, at_index) => {
+    let counter=-1;
+    let selection;
+    const afterKey = this.currentContent.getKeyAfter(this.currentBlock.getKey())
+    this.currentContent
+      .getBlockMap()
+      .skipUntil(block=>block.getKey()===afterKey)
+      .takeUntil(block=>block.getDepth()===this.currentBlock.getDepth())
+      .filter(block=>block.getDepth()<=this.currentBlock.getDepth()+2)
+      .forEach((block,key)=>{
+        if(block.getType()===query){
+          counter = -1
+        }
+        if(counter === at_index){
+          selection = new SelectionState({
+            focusKey:block.getKey(),
+            anchorKey:block.getKey(),
+            focusOffset:0,
+            anchorOffset:0
+          })
+          this.updateEditorState(this.currentContent, selection)
+          this.removeElement()
+        }
+        counter++
+      })
     return this
   }
   queryAndAppend = (query, type, at_index=0) => {
@@ -173,16 +231,32 @@ class ChainModifier {
       text:" ",
       characterList: List([charData])
     })
+    let inBlock = false
+    let lastNestedBlock = this.currentContent.getBlockMap().find(block=>{
+      if(inBlock && block.getDepth()<= this.currentBlock.getDepth()){
+        return true
+      }
+      if(this.currentBlock.getKey() === block.getKey()){
+        inBlock = true
+      }
+    })
+    if(!lastNestedBlock){
+      lastNestedBlock = this.currentBlock
+    }else{
+      lastNestedBlock = this.currentContent.getBlockBefore(lastNestedBlock.getKey())
+    }
     const newBlockMap = BlockMapBuilder.createFromArray(
       [
-        this.currentBlock,
+        lastNestedBlock,
         newBlock,
       ]
     )
     const withNewBlock = Modifier.replaceWithFragment(
       this.currentContent,
       this.selection.merge({
-        focusOffset: this.currentBlock.getText().length,
+        focusKey: lastNestedBlock.getKey(),
+        anchorKey: lastNestedBlock.getKey(),
+        focusOffset: lastNestedBlock.getText().length,
         anchorOffset: 0
       }),
       newBlockMap
