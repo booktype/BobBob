@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://vkefallinos.github.io/",
   "dependencies": {
+    "axios": "^0.16.2",
     "bindings": "^1.2.1",
     "body-parser": "^1.17.1",
     "classnames": "^2.2.5",
