@@ -27,6 +27,7 @@ const styles = {
   controller: {
     position: "fixed",
     backgroundColor: "white",
+    marginLeft: -400,
     width: 1350,
     zIndex: 1000
   },
