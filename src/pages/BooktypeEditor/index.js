@@ -19,13 +19,9 @@ import editorStateToJSON from '../../encoding/editorStateToJSON';
 import editorStateFromRaw from '../../encoding/editorStateFromRaw';
 import editorContentsToHTML from '../../encoding/editorContentsToHTML';
 import onPaste from '../../handlers/onPaste';
-import client from '../../feathers';
-import transit from 'transit-immutable-js';
 import '../../styles/app.scss';
-// const DraftTransit = transit.withRecords([SelectionState, ContentBlock, CharacterMetadata])
-let DraftTransit = transit.withRecords([SelectionState])
-DraftTransit = DraftTransit.withRecords([ContentBlock])
-DraftTransit = DraftTransit.withRecords([CharacterMetadata])
+import axios from "axios";
+
 const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
   (decorator)=>{
     return {
@@ -35,68 +31,49 @@ const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
   }
 ))
 
-class App extends Component {
+class BooktypeEditor extends Component {
   constructor(props){
     super(props)
+
     this.state = {
-      collection_id: this.props.match.params.collection,
-      document_id: this.props.match.params.document,
       editorState:"",
       readOnly: false,
       operations: []
     };
-    this.documentsService = client.service('documents')
-    this.otService = client.service('ot')
+    setTimeout(()=>{
+      const chapter_url = `/_api/books/${window.booktype.currentBookID}/chapters/${window.document.location.hash.replace("#edit/","")}/`
+      axios
+      .get(chapter_url)
+      .then((response)=>{
+        // const editorState = onPaste(EditorState.createEmpty(), response.data.content)
+        const editorState = editorStateFromRaw(JSON.parse(response.data.content_json))
+
+        this.controller = new ContentController(editorState)
+
+        this.setState({
+            editorState: EditorState.set(editorState, {decorator:decorators})
+        })
+      })
+      let csrftoken = window.booktype.getCookie('csrftoken');
+      window.booktype.editor.edit.saveContent = () => {
+        const editorState = editorStateToJSON(this.state.editorState)
+        axios.patch(chapter_url,{content_json:editorState, content: this.toHtml()},{headers:{
+          "X-CSRFToken": csrftoken
+        }})
+      }
+      const defaultSetTheme = window.booktype.editor.themes.setTheme
+      window.booktype.editor.themes.setTheme = (themename) => {
+        this.setTheme(themename)
+        defaultSetTheme(themename)
+      }
+
+    },9000)
   }
   onSave = ()=>{
-    this.documentsService.patch(this.state.document_id, {
-      contentState: convertToRaw(this.state.editorState.getCurrentContent())
-    })
+    window.booktype.editor.edit.saveContent()
   }
   setReadOnly=(readOnly)=>{
     this.setState({readOnly})
-  }
-  componentDidMount(){
-    // Try to authenticate with the JWT stored in localStorage
-    client.authenticate().then((login)=>{
-      client.passport.verifyJWT(login.accessToken).then((decoded)=>{
-        this.documentsService.get(this.props.match.params.document).then(doc=>{
-          let content;
-          if(!doc.contentState){
-            content = ContentState.createFromText("")
-          }else{
-             content = convertFromRaw(doc.contentState)
-          }
-          content = Modifier.enableOT(content)
-          this.otService.on("join", (ot)=>{
-            console.log("join",ot)
-
-            // this.setState({socketId: ot.socketId})
-          })
-          this.otService.on("operation", (ot)=>{
-            if(!this.state.operations.includes(ot.data.contentHash)){
-
-              content = this.state.editorState.getCurrentContent()
-              const args = DraftTransit.fromJSON(ot.data.operationArgs)
-              content = Modifier[ot.data.operationName](content, ...args)
-              content = Modifier.clearOperations(content)
-              this.onChange(EditorState.set(this.state.editorState,
-                {currentContent: content}
-              ))
-            }
-          })
-          this.otService.create({
-            collection: this.state.collection_id,
-            document: this.state.document_id,
-          })
-          let editorState = EditorState.createWithContent(content, decorators)
-          this.controller = new ContentController(editorState)
-          this.controller.userId = decoded.userId
-          this.setState({document: doc, editorState})
-        })
-      })
-
-    }).catch(() => this.setState({ login: null }));
   }
 
   handleKeyCommand = (command)=>{
@@ -116,16 +93,6 @@ class App extends Component {
     // console.log(convertToRaw(currentContent))
     const operations = currentContent.getOperations()
     const hashes = []
-    operations.forEach((operation, contentHash)=>{
-      hashes.push(contentHash)
-      const operationName = operation[0]
-      const operationArgs = DraftTransit.toJSON(operation[1])
-
-      this.otService.update(this.state.document_id, {
-        operationName, operationArgs
-        , contentHash
-      })
-    })
     this.setState({operations: this.state.operations.concat(hashes)})
     currentContent = Modifier.clearOperations(currentContent)
     editorState = EditorState.set(editorState, {currentContent})
@@ -188,4 +155,4 @@ class App extends Component {
     );
   }
 }
-export default App;
+export default BooktypeEditor;

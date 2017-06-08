@@ -10,9 +10,9 @@ export default function editorContentsToHTML(editorContents){
   })
 
   elements = mainEditor.querySelectorAll("[contenteditable]")
-  elements.forEach((element)=>{
-    element.outerHTML = element.innerHTML
-  })
+  // elements.forEach((element)=>{
+  //   element.outerHTML = element.innerHTML
+  // })
   elements = mainEditor.querySelectorAll(".public-DraftStyleDefault-block")
   elements.forEach((element)=>{
     element.classList.remove("public-DraftStyleDefault-ltr")

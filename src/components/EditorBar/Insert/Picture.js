@@ -5,20 +5,32 @@ import ImageIcon from '../../../icons/imageArea';
 import TextField from 'material-ui/TextField';
 import Upload from 'material-ui-upload/Upload';
 import {RichUtils} from 'draft-js'
-import client from '../../../feathers'
+// import client from '../../../feathers'
 export default class LinkButton extends React.PureComponent {
   constructor(props){
     super(props)
     this.state = {
       open: false,
-      url: ""
+      url: "",
+      images: []
+
     };
+
   }
 
   handleTouchTap = (event) => {
     // This prevents ghost click.
     event.preventDefault();
+    if(window.booktype){
+      window.booktype.sendToCurrentBook(
+        {'command': 'attachments_list'},
+        (data) => {
+          console.log(data)
+          this.setState({images: data.attachments})
+        }
+      );
 
+    }
     this.setState({
       open: true,
       anchorEl: event.currentTarget,
@@ -47,14 +59,14 @@ export default class LinkButton extends React.PureComponent {
     console.log(e.target.result)
     this.setState({src: e.target.result})
 
-    client.service("/upload").create({uri: e.target.result}).then((res)=>{
-      console.log(res)
-    })
+    // client.service("/upload").create({uri: e.target.result}).then((res)=>{
+    //   console.log(res)
+    // })
     this.handlePictureSubmit()
   }
   handlePictureSubmit = () => {
     this.handleRequestClose()
-    if(this.props.controller.currentInlineStyle.has("LINK")){
+    if(this.props.controller.currentInlineStyle.has("IMAGE")){
       this.props.onChange(
         this.props.controller.replaceStyleMetaData(
           "IMAGE",
@@ -67,14 +79,23 @@ export default class LinkButton extends React.PureComponent {
       )
     }else{
       this.props.onChange(
-        this.props.controller.insertEntity(
+        this.props.controller
+         .insertElementAfter("div")
+         .setAttr("className", "group_img")
+         .appendChild("div")
+         .setAttr("className", "image bk-image-editor")
+         .insertEntity(
           "IMAGE",
           {
               width: "100%",
               height: "100%",
               src: this.state.src
           }
-        ).editorState
+        )
+        // .queryParent("div").queryParent("div")
+        //  .appendChild("div")
+        //  .setAttr("className", "caption_small")
+         .editorState
       );
     }
   }
@@ -97,6 +118,9 @@ export default class LinkButton extends React.PureComponent {
           onRequestClose={this.handleRequestClose}
           style={{overflowY: "hidden"}}
         >
+          {this.state.images.map(image=>{
+            return <img key={image.preview} src={image.preview}></img>
+          })}
           <div >
             <TextField
               hintText="Url"

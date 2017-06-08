@@ -34,12 +34,74 @@ class SideContent extends React.Component {
     this.styleSheet = styleEl.sheet;
 
     this.items= []
+    if(window.booktype){
+
+      window.booktype.sendToCurrentBook({
+        'command': 'get_comments',
+        'resolved': false,
+        'chapter_id': window.booktype.editor.edit.getChapterID()
+      },
+      function (data) {
+        console.log(data)
+      }
+    );
+
+    }
   }
+
+
   componentWillReceiveProps(nextProps){
+//     const comments = [
+//     {
+//       "local": true,
+//       "cid": "01033682-c964-4821-9ad0-c5b0625d83ea",
+//       "content": "hello",
+//       "text": "d sd sd s s s",
+//       "date": 1496920730,
+//       "chapter_id": "10981",
+//       "author": {
+//         "name": "Vasilis kefallinos",
+//         "username": "vkefallinos",
+//         "avatar": "/_utils/profilethumb/vkefallinos/thumbnail.jpg?width=35"
+//       },
+//       "replies": []
+//     }
+//   ],
+//   "channel" : "/booktype/book/1669/1.0/",
+//   "uid" : 2451
+// }
+// ]
     const items = document.querySelectorAll(`[data-${this.props.query}]`)
     this.items = []
     const existing =[]
     const submitComment = (comments, key)=>{
+      console.log(comments)
+      if(window.booktype){
+        comments[0].local=true
+        comments[0].cid = key
+        comments[0].chapter_id = window.booktype.editor.edit.getChapterID()
+        comments[0].author.name = window.booktype.username
+        comments[0].author.username = window.booktype.username
+        comments[0].author.avatar=`/_utils/profilethumb/${window.booktype.username}/thumbnail.jpg?width=35`
+        comments[0].replies = []
+        window.booktype.sendToCurrentBook({
+              'command': 'save_bulk_comments',
+              'chapter_id': window.booktype.editor.edit.getChapterID(),
+              'local_comments': comments
+            },
+            function (data) {
+              if (data.result === false) {
+                var noPermissions = window.booktype._('no_permissions', 'You do not have permissions for this.')
+                window.booktype.utils.alert(noPermissions);
+                return;
+              }
+
+
+              // pull latest comments from server
+              // PubSub.pub('booktype-pull-latest-comments');
+            }
+          );
+      }
       const currentContent = nextProps.controller.currentContent
       let editorState = EditorState.set(
         nextProps.controller.editorState,

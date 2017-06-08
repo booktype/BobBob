@@ -35,8 +35,11 @@ export default class TableButton extends React.PureComponent {
   }
   handleChosenSize = () => {
     this.handleRequestClose()
-    this.props.controller.insertElementAfter("table")
-    .appendChild("tbody")
+    this.props.controller
+      .insertElementAfter("div")
+      .setAttr("className", "group_table")
+      .appendChild("table")
+      .appendChild("tbody")
     for(let x = 0; x<this.state.sizeX;x++){
       this.props.controller.appendChild("tr")
       .appendChildren("td", this.state.sizeY).queryParent("tbody")

@@ -343,8 +343,9 @@ class ChainModifier {
     return this
   }
   setStyleAttr = (attr, value) => {
-    const style = this.currentBlock.getData().get("style") || {}
-    style[attr] = value
+    let style = this.currentBlock.getData().get("style") || {}
+
+    style = {...style, [attr]: value}
     const withStyle = Modifier.mergeBlockData(
       this.currentContent,
       this.selection,
