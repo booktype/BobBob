@@ -34,6 +34,9 @@ class SideContent extends React.Component {
     this.styleSheet = styleEl.sheet;
 
     this.items= []
+    this.refreshComments()
+  }
+  refreshComments = () => {
     if(window.booktype){
 
       window.booktype.sendToCurrentBook({
@@ -41,79 +44,79 @@ class SideContent extends React.Component {
         'resolved': false,
         'chapter_id': window.booktype.editor.edit.getChapterID()
       },
-      function (data) {
-        console.log(data)
-      }
-    );
+      (data) => {
+        this.setState({comments: data.comments})
+      });
+    }
+  }
+  submitReply = (content, comment_id, key) => {
+    window.booktype.sendToCurrentBook({
+          'command': 'reply_comment',
+          'chapter_id': window.booktype.editor.edit.getChapterID(),
+          'content': content,
+          'text': key,
+          comment_id
+        },
+        (data) => {
+          console.log(data)
 
+          if (data.result === false) {
+            var noPermissions = window.booktype._('no_permissions', 'You do not have permissions for this.')
+            window.booktype.utils.alert(noPermissions);
+            return;
+          }
+          const currentContent = this.props.controller.currentContent
+          let editorState = EditorState.set(
+            this.props.controller.editorState,
+            {
+              currentContent: Modifier.mergeMetaData(currentContent, key, {
+                comment: data.new_comment
+              })
+            }
+          )
+          this.props.onChange(editorState)
+        }
+      );
+  }
+  submitComment = (comment, key)=>{
+
+    if(window.booktype){
+      window.booktype.sendToCurrentBook({
+            'command': 'add_comment',
+            'chapter_id': window.booktype.editor.edit.getChapterID(),
+            'content': comment,
+            'text': key
+          },
+          (data) => {
+            console.log(data)
+
+            if (data.result === false) {
+              var noPermissions = window.booktype._('no_permissions', 'You do not have permissions for this.')
+              window.booktype.utils.alert(noPermissions);
+              return;
+            }
+            const currentContent = this.props.controller.currentContent
+            let editorState = EditorState.set(
+              this.props.controller.editorState,
+              {
+                currentContent: Modifier.mergeMetaData(currentContent, key, {
+                  comment: data.new_comment
+                })
+              }
+            )
+            this.props.onChange(editorState)
+          }
+        );
     }
   }
 
 
   componentWillReceiveProps(nextProps){
-//     const comments = [
-//     {
-//       "local": true,
-//       "cid": "01033682-c964-4821-9ad0-c5b0625d83ea",
-//       "content": "hello",
-//       "text": "d sd sd s s s",
-//       "date": 1496920730,
-//       "chapter_id": "10981",
-//       "author": {
-//         "name": "Vasilis kefallinos",
-//         "username": "vkefallinos",
-//         "avatar": "/_utils/profilethumb/vkefallinos/thumbnail.jpg?width=35"
-//       },
-//       "replies": []
-//     }
-//   ],
-//   "channel" : "/booktype/book/1669/1.0/",
-//   "uid" : 2451
-// }
-// ]
+
     const items = document.querySelectorAll(`[data-${this.props.query}]`)
     this.items = []
     const existing =[]
-    const submitComment = (comments, key)=>{
-      console.log(comments)
-      if(window.booktype){
-        comments[0].local=true
-        comments[0].cid = key
-        comments[0].chapter_id = window.booktype.editor.edit.getChapterID()
-        comments[0].author.name = window.booktype.username
-        comments[0].author.username = window.booktype.username
-        comments[0].author.avatar=`/_utils/profilethumb/${window.booktype.username}/thumbnail.jpg?width=35`
-        comments[0].replies = []
-        window.booktype.sendToCurrentBook({
-              'command': 'save_bulk_comments',
-              'chapter_id': window.booktype.editor.edit.getChapterID(),
-              'local_comments': comments
-            },
-            function (data) {
-              if (data.result === false) {
-                var noPermissions = window.booktype._('no_permissions', 'You do not have permissions for this.')
-                window.booktype.utils.alert(noPermissions);
-                return;
-              }
 
-
-              // pull latest comments from server
-              // PubSub.pub('booktype-pull-latest-comments');
-            }
-          );
-      }
-      const currentContent = nextProps.controller.currentContent
-      let editorState = EditorState.set(
-        nextProps.controller.editorState,
-        {
-          currentContent: Modifier.mergeMetaData(currentContent, key, {
-            comments
-          })
-        }
-      )
-      nextProps.onChange(editorState)
-      nextProps.controller.userId
-    }
     items.forEach((item)=>{
       if(!existing.includes(item.dataset[this.props.query])){
         const metaKey = item.dataset[this.props.query]
@@ -123,11 +126,18 @@ class SideContent extends React.Component {
                      .getMetaMap()
                      .get(metaKey)
                      .getData()
+        console.log(data)
         this.items.push({
           key: metaKey,
           top: item.getBoundingClientRect().top-60-window.scrollY,
           header: ()=><CommentBoxSummary comments={data.comments}/>,
-          body: ()=><CommentBody userId={nextProps.controller.userId} metaKey={metaKey} comments={data.comments} onSubmit={submitComment}/>
+          body: ()=><CommentBody
+             userId={nextProps.controller.userId}
+             metaKey={metaKey}
+             comment={data.comment}
+             onSubmit={this.submitComment}
+             onReply={this.submitReply}
+           />
         })
         existing.push(item.dataset[this.props.query])
       }

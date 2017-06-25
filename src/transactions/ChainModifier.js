@@ -8,14 +8,20 @@ import {
     CharacterMetadata
 } from "draft-js"
 import {OrderedMap,List,Repeat, Map} from 'immutable';
+import Chapter from '../booktypeChapter'
 
 
 class ChainModifier {
   constructor(editorState){
+    this.chapter = new Chapter()
     this.currentContent = editorState.getCurrentContent()
     this.selection = editorState.getSelection()
     this.editorState = editorState
     this.updateEditorState(this.currentContent)
+  }
+  getSelectedText = () => {
+    return this.currentBlock.getText()
+      .slice(this.selection.getAnchorOffset(), this.selection.getFocusOffset())
   }
   countChildren = ()=>{
     const tail = this.blocksArray.slice(this.index+1)

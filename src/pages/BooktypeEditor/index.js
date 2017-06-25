@@ -45,11 +45,18 @@ class BooktypeEditor extends Component {
       axios
       .get(chapter_url)
       .then((response)=>{
-        // const editorState = onPaste(EditorState.createEmpty(), response.data.content)
-        const editorState = editorStateFromRaw(JSON.parse(response.data.content_json))
+        let editorState;
+        console.log(response.data)
+        if(!response.data.content_json){
+          editorState = onPaste(EditorState.createEmpty(), response.data.content)
+          console.log(editorState)
+        }else{
+          editorState = editorStateFromRaw(JSON.parse(response.data.content_json))
+
+        }
 
         this.controller = new ContentController(editorState)
-
+        this.controller.onSave = this.onSave
         this.setState({
             editorState: EditorState.set(editorState, {decorator:decorators})
         })
@@ -67,7 +74,7 @@ class BooktypeEditor extends Component {
         defaultSetTheme(themename)
       }
 
-    },9000)
+    },3000)
   }
   onSave = ()=>{
     window.booktype.editor.edit.saveContent()

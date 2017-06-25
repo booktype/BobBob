@@ -3,7 +3,8 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import BlockStyleControls from './BlockStyleControls';
 import InlineStyleControls from './InlineStyleControls';
 import EntityStyleControls from './EntityStyleControls';
-import SideContent from './SideContent'
+// import SideContent from './SideContent'
+import SideContent from './BooktypeCommentsBar';
 import BlockTree from './BlockTree'
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import FontColorPicker from './EditorBar/Home/FontColorPicker'

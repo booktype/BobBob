@@ -1,96 +1,5 @@
 import React from 'react';
-const styles = {
-  circleImage: {
-    "position": "absolute",
-    "width": "30px",
-    "height": "30px",
-    "overflow": "hidden",
-    "left": "15px",
-    "display": "inline-block",
-    "verticalAlign": "middle",
-    "borderRadius": "50%"
-  },
-  commentImage: {
-    width: "100%"
-  },
-  inlineCommentImage:{
-    "position": "absolute",
-    "width": "30px",
-    "height": "30px",
-    "overflow": "hidden",
-    "display": "inline-block",
-    "verticalAlign": "middle",
-    "borderRadius": "50%",
-    "left": "-35px"
-  },
-  comment: {
-    "position": "relative",
-    "display": "block",
-    // "padding": "0.75rem 1.25rem",
-    "marginBottom": "0",
-    "border": "none",
-    "borderRadius": "0",
-    "backgroundColor": "white"
-  },
-  commentUser: {
-    "fontSize": "14px",
-    "fontWeight": "500",
-    "color": "rgba(0,0,0,.8)",
-    "textDecoration": "none"
-  },
-  commentTime: {
-    "fontSize": "12px",
-    "color": "rgba(0,0,0,.5)",
-    "fontWeight": "400",
-    "marginLeft": "6px"
-  },
-  commentContent: {
-    "marginBottom": "0",
-    "whiteSpace": "normal",
-    "color": "rgba(0,0,0,.8)",
-    "fontSize": "14px",
-    "marginTop": "0.215em"
-  },
-  commentForm: {
-    "textAlign": "center",
-    "width": "50%",
-    "margin": "0 auto"
-  },
-  commentInput: {
-    "display": "block",
-    "width": "100%",
-    "border": "0",
-    "padding": "10px 5px",
-    "background": "white no-repeat",
-    "backgroundImage": "linear-gradient(to bottom, #1abc9c, #1abc9c), linear-gradient(to bottom, silver, silver)",
-    "backgroundSize": "0 2px, 100% 1px",
-    "backgroundPosition": "50% 100%, 50% 100%",
-    "transition": "background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1)"
-  },
-  commentButton: {
-    "padding": "0.5rem 1rem",
-    "fontSize": "1rem",
-    "lineHeight": "1.25",
-    "borderRadius": "0.25rem",
-    "color": "#fff",
-    "backgroundColor": "#5cb85c",
-    "borderColor": "#5cb85c",
-    "display": "inline-block",
-    "fontWeight": "normal",
-    "textAlign": "center",
-    "whiteSpace": "nowrap",
-    "verticalAlign": "middle",
-    "WebkitUserSelect": "none",
-    "MozUserSelect": "none",
-    "MsUserSelect": "none",
-    "userSelect": "none",
-    "border": "1px solid transparent",
-    "WebkitTransition": "all 0.2s ease-in-out",
-    "OTransition": "all 0.2s ease-in-out",
-    "transition": "all 0.2s ease-in-out"
-  }
-}
-
+import styles from './commentStyle'
 const CommentBoxSummary = (props) => {
   return (
     <div>
@@ -131,27 +40,38 @@ const CommentForm = (props) => {
 }
 
 const CommentBody = (props) => {
-  return (
-    <div>
-      <ul>
-        {
-          props.comments.map((comment, idx) => {
-            return (<Comment {...comment} key={idx}/>)
-          })
-        }
-      </ul>
+  console.log(props)
+  if(props.comment){
+    return (
+      <div>
+        <ul>
+          <Comment {...props.comment} />
+          {
+            props.comment.replies?props.comment.replies.map((comment, idx) => {
+              return (<Comment {...comment} key={idx}/>)
+            }):null
+          }
+        </ul>
+        <CommentForm onSubmit={(e)=>{
+          e.preventDefault()
+          const content = e.target.previousElementSibling.value
+          props.onReply(
+            content, props.comment.cid
+            , props.metaKey)
+          }}/>
+        </div>
+      )
+  }else{
+    return (
       <CommentForm onSubmit={(e)=>{
         e.preventDefault()
         const content = e.target.previousElementSibling.value
-        props.onSubmit([...props.comments, {
-          content,
-          author: {
-            name: props.userId
-          },
-          "date": "1493832941",
-        }], props.metaKey)
-      }}/>
-    </div>
-  )
+        props.onSubmit(
+          content
+          , props.metaKey)
+        }}/>
+
+    )
+  }
 }
 export {CommentBody ,CommentBoxSummary}
