@@ -43,9 +43,9 @@ export default class BooktypeCommentBar extends React.PureComponent {
     })
   }
   shouldComponentUpdate(){
-    const currentComment = this.props.controller.getCurrentMetaData("COMMENT")
+    const currentComment = this.props.controller.getCurrentMetaKey("COMMENT")
+    console.log(currentComment)
     if(currentComment){
-      console.log(currentComment)
       if(currentComment === this.state.currentComment){
         return false
       }
@@ -56,10 +56,6 @@ export default class BooktypeCommentBar extends React.PureComponent {
       this.setState({currentComment})
       return true
     }
-    // const commentsLength = document.querySelectorAll("[data-comment]").length
-    // if( commentsLength !== this.state.commentsLength){
-    //   return true
-    // }
     return false
   }
   componentWillUpdate(){
@@ -70,14 +66,16 @@ export default class BooktypeCommentBar extends React.PureComponent {
   }
   refreshComments = () => {
     this.props.controller.chapter.getComments().then((data)=>{
-      this.setState({comments: data.comments})
+      this.setState({comments: data.comments.reverse().map(comment=>{
+        return {...comment, replies: comment.replies.reverse()}
+      })})
     })
   }
   render(){
     let top = 0
     return (
       <Drawer
-        open={this.state.open}
+        open={this.state.currentComment}
         openSecondary={true}
         >
         <List
@@ -85,6 +83,7 @@ export default class BooktypeCommentBar extends React.PureComponent {
         {this.state.comments.map(comment=>{
           return (
               <ListItem
+                style={{background: this.state.currentComment===comment.text?"yellow":null}}
                 leftAvatar={<Avatar src={comment.author.avatar} />}
                 rightIconButton={
                   <IconMenu iconButtonElement={iconButtonElement}>
@@ -113,7 +112,7 @@ export default class BooktypeCommentBar extends React.PureComponent {
                 secondaryTextLines={2}
                 primaryTogglesNestedList={true}
                 nestedItems={
-                  comment.replies.reverse().map(reply=>{
+                  comment.replies.map(reply=>{
                     return (
                       <ListItem
                         leftAvatar={<Avatar src={reply.author.avatar}/>}

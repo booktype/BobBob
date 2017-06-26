@@ -10,12 +10,33 @@ reactTapPlugin();
 
 
 if(window.booktype){
-  ReactDOM.render(
-    <MuiThemeProvider>
-      <BooktypeEditor />
-    </MuiThemeProvider>,
-    document.getElementById('content')
-  )
+  const notify = window.booktype.ui.notify
+  window.$("#content").show()
+  window.booktype.ui.notify=function(type, more){
+    console.log(type,more, "notify")
+    notify(type, more)
+
+  }
+  const editChapter = window.booktype.editor.editChapter
+  window.booktype.editor.editChapter = function(id, forced){
+    console.log(id)
+    ReactDOM.render(
+      <MuiThemeProvider>
+        <BooktypeEditor chapterId={id} />
+      </MuiThemeProvider>,
+      document.getElementById('content')
+    )
+    editChapter(id,forced)
+  }
+  if(window.document.location.hash.includes("#edit/")){
+    console.log("ion aca-ta")
+    ReactDOM.render(
+      <MuiThemeProvider>
+        <BooktypeEditor chapterId={window.document.location.hash.replace("#edit/","")}/>
+      </MuiThemeProvider>,
+      document.getElementById('content')
+    )
+  }
 
 }else{
   ReactDOM.render(

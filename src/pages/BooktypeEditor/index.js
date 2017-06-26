@@ -21,6 +21,7 @@ import editorContentsToHTML from '../../encoding/editorContentsToHTML';
 import onPaste from '../../handlers/onPaste';
 import '../../styles/app.scss';
 import axios from "axios";
+import Chapter from '../../booktypeChapter'
 
 const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
   (decorator)=>{
@@ -40,41 +41,74 @@ class BooktypeEditor extends Component {
       readOnly: false,
       operations: []
     };
-    setTimeout(()=>{
-      const chapter_url = `/_api/books/${window.booktype.currentBookID}/chapters/${window.document.location.hash.replace("#edit/","")}/`
-      axios
-      .get(chapter_url)
-      .then((response)=>{
-        let editorState;
-        console.log(response.data)
-        if(!response.data.content_json){
-          editorState = onPaste(EditorState.createEmpty(), response.data.content)
-          console.log(editorState)
-        }else{
-          editorState = editorStateFromRaw(JSON.parse(response.data.content_json))
+    const that = this
+    window.booktype.editor.setCurrentChapterID(this.props.chapterId)
+    window.booktype.sendToCurrentBook({
+      'command': 'get_chapter',
+      'chapterID': that.props.chapterId,
+      'edit_lock': true
+    },
+    (response) => {
+      // console.log(data)
+      let editorState;
+      console.log(response)
+      if(!response.content_json){
+        editorState = onPaste(EditorState.createEmpty(), response.content)
+        console.log(editorState)
+      }else{
+        editorState = editorStateFromRaw(JSON.parse(response.content_json))
 
-        }
+      }
 
-        this.controller = new ContentController(editorState)
-        this.controller.onSave = this.onSave
-        this.setState({
-            editorState: EditorState.set(editorState, {decorator:decorators})
-        })
+      that.controller = new ContentController(editorState)
+      that.controller.onSave = this.onSave
+      that.controller.chapter = new Chapter(that.props.chapterId)
+      that.setState({
+        editorState: EditorState.set(editorState, {decorator:decorators})
       })
-      let csrftoken = window.booktype.getCookie('csrftoken');
-      window.booktype.editor.edit.saveContent = () => {
-        const editorState = editorStateToJSON(this.state.editorState)
-        axios.patch(chapter_url,{content_json:editorState, content: this.toHtml()},{headers:{
-          "X-CSRFToken": csrftoken
-        }})
-      }
-      const defaultSetTheme = window.booktype.editor.themes.setTheme
-      window.booktype.editor.themes.setTheme = (themename) => {
-        this.setTheme(themename)
-        defaultSetTheme(themename)
-      }
+      // oldInit(settings)
 
-    },3000)
+    });
+
+    // setTimeout(()=>{
+    //   const chapter_url = `/_api/books/${window.booktype.currentBookID}/chapters/${window.document.location.hash.replace("#edit/","")}/`
+    //   axios
+    //   .get(chapter_url)
+    //   .then((response)=>{
+    //     let editorState;
+    //     console.log(response.data)
+    //     if(!response.data.content_json){
+    //       editorState = onPaste(EditorState.createEmpty(), response.data.content)
+    //       console.log(editorState)
+    //     }else{
+    //       editorState = editorStateFromRaw(JSON.parse(response.data.content_json))
+    //
+    //     }
+    //
+    //     this.controller = new ContentController(editorState)
+    //     this.controller.onSave = this.onSave
+    //     this.setState({
+    //         editorState: EditorState.set(editorState, {decorator:decorators})
+    //     })
+    //   })
+    //   let csrftoken = window.booktype.getCookie('csrftoken');
+    //   window.booktype.editor.edit.saveContent = () => {
+    //     const editorState = editorStateToJSON(this.state.editorState)
+    //     axios.patch(chapter_url,{content_json:editorState, content: this.toHtml()},{headers:{
+    //       "X-CSRFToken": csrftoken
+    //     }})
+    //   }
+    //   const defaultSetTheme = window.booktype.editor.themes.setTheme
+    //   window.booktype.editor.themes.setTheme = (themename) => {
+    //     this.setTheme(themename)
+    //     defaultSetTheme(themename)
+    //   }
+    //
+    // },3000)
+  }
+  componentWillReceiveProps(nextProps){
+    console.log(nextProps)
+    console.log("hallelera")
   }
   onSave = ()=>{
     window.booktype.editor.edit.saveContent()
