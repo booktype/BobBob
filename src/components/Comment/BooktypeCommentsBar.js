@@ -11,59 +11,64 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import Popover from 'material-ui/Popover';
 import Drawer from 'material-ui/Drawer';
+
+
 const iconButtonElement = (
   <IconButton
     touch={true}
     tooltip="more"
     tooltipPosition="bottom-left"
   >
-    <MoreVertIcon color={grey400} />
+    <MoreVertIcon color={grey400}/>
   </IconButton>
 );
 
 
-
 export default class BooktypeCommentBar extends React.PureComponent {
-  constructor(props){
+  constructor(props) {
     super(props)
     // get comments
     // loop through comments and find comment key
     // get the absolute position of the comments
     // populate comments
     this.state = {
-      comments:[],
+      comments: [],
       open: true
     }
     this.refreshComments()
 
   }
+
   replyToComment = (cid, content) => {
-    this.props.controller.chapter.replyComment(cid, content).then((res)=>{
+    this.props.controller.chapter.replyComment(cid, content).then((res) => {
       this.refreshComments()
     })
   }
-  shouldComponentUpdate(){
+
+  shouldComponentUpdate() {
     const currentComment = this.props.controller.getCurrentMetaKey("COMMENT")
     console.log(currentComment)
-    if(currentComment){
-      if(currentComment === this.state.currentComment){
+    if (currentComment) {
+      if (currentComment === this.state.currentComment) {
         return false
       }
       this.setState({currentComment})
       return true
     }
-    if(this.state.currentComment){
+    if (this.state.currentComment) {
       this.setState({currentComment})
       return true
     }
     return false
   }
-  componentWillUpdate(){
+
+  componentWillUpdate() {
     // const commentsLength = document.querySelectorAll("[data-comment]").length
     // this.setState({commentsLength})
     this.refreshComments()
 
   }
+
   refreshComments = () => {
     // this.props.controller.chapter.getComments().then((data)=>{
     //   this.setState({comments: data.comments.reverse().map(comment=>{
@@ -71,31 +76,32 @@ export default class BooktypeCommentBar extends React.PureComponent {
     //   })})
     // })
   }
-  render(){
+
+  render() {
     let top = 0
     return (
       <Drawer
         open={this.state.currentComment}
         openSecondary={true}
-        >
+      >
         <List
-          >
-        {this.state.comments.map(comment=>{
-          return (
+        >
+          {this.state.comments.map(comment => {
+            return (
               <ListItem
-                style={{background: this.state.currentComment===comment.text?"yellow":null}}
-                leftAvatar={<Avatar src={comment.author.avatar} />}
+                style={{background: this.state.currentComment === comment.text ? "yellow" : null}}
+                leftAvatar={<Avatar src={comment.author.avatar}/>}
                 rightIconButton={
                   <IconMenu iconButtonElement={iconButtonElement}>
                     <MenuItem
-                      onTouchTap={()=>{
+                      onTouchTap={() => {
                         this.props.controller.chapter.resolveComment(comment.cid)
                         this.refreshComments()
                       }}>
                       Resolve
                     </MenuItem>
                     <MenuItem
-                      onTouchTap={()=>{
+                      onTouchTap={() => {
                         this.props.controller.chapter.deleteComment(comment.cid)
                         this.refreshComments()
 
@@ -106,13 +112,13 @@ export default class BooktypeCommentBar extends React.PureComponent {
                 key={comment.cid}
                 secondaryText={
                   <p>
-                    <span style={{color: darkBlack}}>{comment.content}</span><br />
+                    <span style={{color: darkBlack}}>{comment.content}</span><br/>
                   </p>
                 }
                 secondaryTextLines={2}
                 primaryTogglesNestedList={true}
                 nestedItems={
-                  comment.replies.map(reply=>{
+                  comment.replies.map(reply => {
                     return (
                       <ListItem
                         leftAvatar={<Avatar src={reply.author.avatar}/>}
@@ -120,7 +126,7 @@ export default class BooktypeCommentBar extends React.PureComponent {
                         key={reply.cid}
                         secondaryText={
                           <p>
-                            <span style={{color: darkBlack}}>{reply.content}</span><br />
+                            <span style={{color: darkBlack}}>{reply.content}</span><br/>
                           </p>
                         }
                       />
@@ -128,11 +134,11 @@ export default class BooktypeCommentBar extends React.PureComponent {
                   }).concat([
                     <ListItem
                       key={"reply"}
-                      >
+                    >
                       <TextField
                         hintText="Reply"
-                        onKeyDown={(e)=>{
-                          if(e.key === "Enter"){
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
                             this.replyToComment(comment.cid, e.target.value)
                           }
                         }}
@@ -141,9 +147,9 @@ export default class BooktypeCommentBar extends React.PureComponent {
                   ])
                 }
               />
-          )
-        })}
-      </List>
+            )
+          })}
+        </List>
       </Drawer>
     )
   }

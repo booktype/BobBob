@@ -17,7 +17,7 @@
     "react-addons-shallow-compare": "^15.5.2",
     "react-addons-update": "^15.5.2",
     "react-dom": "^15.5.4",
-    "react-jsonschema-form": "^0.47.0",
+    "react-jsonschema-form": "^0.50.1",
     "react-tap-event-plugin": "^2.0.1",
     "reactcss": "^1.2.0"
   },

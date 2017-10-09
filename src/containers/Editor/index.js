@@ -117,7 +117,7 @@ class BobbobEditor extends Component {
 
   render() {
     return (
-      <div className="App" style={{width: "80%", margin: "auto"}}>
+      <div className="App" style={{margin: "auto"}}>
         {this.state.editorState ?
           <div className={`editor-${this.state.themename}`}>
             <ControllerContainer

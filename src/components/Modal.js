@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const styles = {
   overlayStyles: {
     position: 'fixed',
@@ -52,7 +53,7 @@ export default class SkyLightStateless extends React.Component {
 
   render() {
     const mergeStyles = key => Object.assign({}, styles[key], this.props[key]);
-    const { isVisible } = this.props;
+    const {isVisible} = this.props;
     const dialogStyles = mergeStyles('dialogStyles');
     const overlayStyles = mergeStyles('overlayStyles');
     const closeButtonStyle = mergeStyles('closeButtonStyle');
@@ -63,27 +64,27 @@ export default class SkyLightStateless extends React.Component {
     if (this.props.showOverlay) {
       overlay = (
         <div className="skylight-overlay"
-          onClick={() => this.onOverlayClicked()}
-          style={overlayStyles}
+             onClick={() => this.onOverlayClicked()}
+             style={overlayStyles}
         />
       );
     }
 
     return isVisible ? (
-        <section className="skylight-wrapper">
-            {overlay}
-            <div className="skylight-dialog" style={dialogStyles}>
-              <a role="button" className="skylight-close-button"
-                onClick={() => this.onCloseClicked()}
-                style={closeButtonStyle}
-              >
-                &times;
-               </a>
-              <h2 style={titleStyle}>{this.props.title}</h2>
-              {this.props.children}
-            </div>
-        </section>
-    ) : <div />;
+      <section className="skylight-wrapper">
+        {overlay}
+        <div className="skylight-dialog" style={dialogStyles}>
+          <a role="button" className="skylight-close-button"
+             onClick={() => this.onCloseClicked()}
+             style={closeButtonStyle}
+          >
+            &times;
+          </a>
+          <h2 style={titleStyle}>{this.props.title}</h2>
+          {this.props.children}
+        </div>
+      </section>
+    ) : <div/>;
   }
 }
 

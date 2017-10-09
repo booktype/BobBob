@@ -1,9 +1,7 @@
-
 import {
-  convertToRaw,
   convertFromRaw,
-  EditorState,
-  getVisibleSelectionRect} from "draft-js";
+  EditorState
+} from "draft-js";
 
 
 export default function editorStateFromRaw(rawContent) {

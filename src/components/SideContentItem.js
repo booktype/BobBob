@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const styles = {
   activeItem: {
     "boxShadow": "0 5px 11px 0 rgba(0,0,0,0.18), 0 4px 15px 0 rgba(0,0,0,0.15)",
@@ -32,28 +33,36 @@ const styles = {
     // "padding": "2rem",
     "backgroundColor": "white"
   },
-  inactiveItemBody:{
+  inactiveItemBody: {
     "display": "none"
   }
-}
+};
 
 const SideContentItem = (props) => {
   if (!props.active) {
     return (
-      <li onClick={props.onClick} style={{...styles.inactiveItem, marginTop: props.position, position: "absolute"}}>
+      <li onClick={props.onClick} style={{
+        ...styles.inactiveItem,
+        marginTop: props.position,
+        position: "absolute"
+      }}>
         <div style={styles.itemHeader}>
-          <props.header active={false} />
+          <props.header active={false}/>
         </div>
       </li>
     )
-  }else{
+  } else {
     return (
-      <li style={{...styles.activeItem, top: props.position+40, position: "absolute"}}>
+      <li style={{
+        ...styles.activeItem,
+        top: props.position + 40,
+        position: "absolute"
+      }}>
         <div onClick={props.onClick} style={styles.itemHeader}>
-          <props.header active={true} />
+          <props.header active={true}/>
         </div>
         <div style={styles.activeItemBody}>
-          <props.body active={true} />
+          <props.body active={true}/>
         </div>
       </li>
     )
