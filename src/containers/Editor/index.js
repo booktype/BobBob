@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
-import '../../App.css';
-import RichEditor from '../../components/Editor'
-import ControllerContainer from '../../components/ControllerContainer'
-import { convertToRaw,
+import React, {Component} from 'react';
+import axios from "axios";
+import {
+  Modifier,
+  BlockMapBuilder,
+  convertToRaw,
   convertFromRaw,
   getDefaultKeyBinding,
   Editor, EditorState, RichUtils,
   SelectionState, CompositeDecorator,
   ContentBlock, CharacterMetadata,
-  ContentState} from 'draft-js';
-import {BlockMapBuilder, Modifier} from 'draft-js'
+  ContentState
+} from 'draft-js';
 import ContentController from '../../transactions/ChainModifier';
 import DefaultDraftEntityArray from '../../immutables/DefaultDraftEntityArray';
 import createEntityStrategy from '../../utils/createEntityStrategy';
@@ -18,24 +19,28 @@ import editorStateToJSON from '../../encoding/editorStateToJSON';
 import editorStateFromRaw from '../../encoding/editorStateFromRaw';
 import editorContentsToHTML from '../../encoding/editorContentsToHTML';
 import onPaste from '../../handlers/onPaste';
+import ControllerContainer from '../../components/ControllerContainer'
+import RichEditor from '../../components/Editor'
+import '../../App.css';
 import '../../styles/app.scss';
-import axios from "axios";
+
 
 const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
-  (decorator)=>{
+  (decorator) => {
     return {
       strategy: createEntityStrategy(decorator.name),
       component: decorator.component
     }
   }
-))
+));
+
 
 class BobbobEditor extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
 
     this.state = {
-      editorState: EditorState.set(EditorState.createEmpty(), {decorator:decorators}),
+      editorState: EditorState.set(EditorState.createEmpty(), {decorator: decorators}),
       readOnly: false,
       operations: []
     };
@@ -43,32 +48,37 @@ class BobbobEditor extends Component {
     this.controller = new ContentController(this.state.editorState)
     this.controller.onSave = this.onSave
   }
-  componentWillReceiveProps(nextProps){
+
+  componentWillReceiveProps(nextProps) {
     console.log(nextProps)
   }
-  onSave = ()=>{
-    console.log('save')
-  }
-  setReadOnly=(readOnly)=>{
-    this.setState({readOnly})
-  }
 
-  handleKeyCommand = (command)=>{
-    if(command==="ctrl-s"){
+  onSave = () => {
+    console.log('save')
+  };
+
+  setReadOnly = (readOnly) => {
+    this.setState({readOnly})
+  };
+
+  handleKeyCommand = (command) => {
+    if (command === "ctrl-s") {
       this.onSave()
     }
-  }
-  toggleSync = ()=>{
-    this.setState({sync:!this.state.sync})
-  }
-  onChange= (editorState) =>{
-    if(editorState===this.state.editorState){
+  };
+
+  toggleSync = () => {
+    this.setState({sync: !this.state.sync})
+  };
+
+  onChange = (editorState) => {
+    if (editorState === this.state.editorState) {
       return
     }
-    const prevContent = this.state.editorState.getCurrentContent()
-    let currentContent = editorState.getCurrentContent()
+    const prevContent = this.state.editorState.getCurrentContent();
+    let currentContent = editorState.getCurrentContent();
     // console.log(convertToRaw(currentContent))
-    const operations = currentContent.getOperations()
+    const operations = currentContent.getOperations();
     const hashes = []
     this.setState({operations: this.state.operations.concat(hashes)})
     currentContent = Modifier.clearOperations(currentContent)
@@ -82,53 +92,62 @@ class BobbobEditor extends Component {
     this.controller.selection = editorState.getSelection()
     this.controller.currentBlock = this.controller.currentContent.getBlockForKey(this.controller.selection.getAnchorKey())
     this.controller.currentDepth = this.controller.currentBlock.getDepth()
-    this.controller.index = this.controller.blocksArray.findIndex((block)=>{
-      return block.getKey()===this.controller.selection.getFocusKey()
+    this.controller.index = this.controller.blocksArray.findIndex((block) => {
+      return block.getKey() === this.controller.selection.getFocusKey()
     })
 
     this.setState({editorState})
   }
-  onClick=(e)=>{
-    this.setState({clickTarget:e.target})
+
+  onClick = (e) => {
+    this.setState({clickTarget: e.target})
   }
-  onHover=(e)=>{
-    if(e.target.dataset.entity){
-      this.setState({hoverTarget:e.target})
+
+  onHover = (e) => {
+    if (e.target.dataset.entity) {
+      this.setState({hoverTarget: e.target})
     }
   }
+
   toHtml = () => {
     let mainEditor = document.querySelector("[data-contents]")
     mainEditor = mainEditor.cloneNode(true)
     return editorContentsToHTML(mainEditor)
   }
+
   render() {
     return (
       <div className="App" style={{width: "80%", margin: "auto"}}>
-        {this.state.editorState?
-        <div className={`editor-${this.state.themename}`}>
-          <ControllerContainer
-            controller={this.controller}
-            onChange={this.onChange}
-            setReadOnly={this.setReadOnly}
-            hoverTarget={this.state.hoverTarget}
-            clickTarget={this.state.clickTarget}
-          />
-            <button onClick={()=>{console.log(editorStateToJSON(this.state.editorState))}}>logJSON</button>
-            <RichEditor ref="editor"
-              readOnly={this.state.readOnly}
-              onClick={this.onClick}
-              onMouseOver={this.onHover}
-              onSave={this.onSave}
-              handleKeyCommand={this.handleKeyCommand}
-              handleBeforeInput={this.handleBeforeInput}
+        {this.state.editorState ?
+          <div className={`editor-${this.state.themename}`}>
+            <ControllerContainer
+              controller={this.controller}
               onChange={this.onChange}
-              editorState={this.state.editorState}
+              setReadOnly={this.setReadOnly}
+              hoverTarget={this.state.hoverTarget}
+              clickTarget={this.state.clickTarget}
+            />
+            <button onClick={() => {
+              console.log(editorStateToJSON(this.state.editorState))
+            }}>logJSON
+            </button>
+            <RichEditor ref="editor"
+                        readOnly={this.state.readOnly}
+                        onClick={this.onClick}
+                        onMouseOver={this.onHover}
+                        onSave={this.onSave}
+                        handleKeyCommand={this.handleKeyCommand}
+                        handleBeforeInput={this.handleBeforeInput}
+                        onChange={this.onChange}
+                        editorState={this.state.editorState}
             />
 
-        </div>:null}
+          </div> : null}
 
       </div>
     );
   }
 }
+
+
 export default BobbobEditor;
