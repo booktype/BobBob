@@ -65,11 +65,11 @@ export default class BooktypeCommentBar extends React.PureComponent {
 
   }
   refreshComments = () => {
-    this.props.controller.chapter.getComments().then((data)=>{
-      this.setState({comments: data.comments.reverse().map(comment=>{
-        return {...comment, replies: comment.replies.reverse()}
-      })})
-    })
+    // this.props.controller.chapter.getComments().then((data)=>{
+    //   this.setState({comments: data.comments.reverse().map(comment=>{
+    //     return {...comment, replies: comment.replies.reverse()}
+    //   })})
+    // })
   }
   render(){
     let top = 0
