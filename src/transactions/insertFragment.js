@@ -1,10 +1,10 @@
 import {EditorState, Modifier} from 'draft-js';
-export default function insertFragment(
-  editorState: EditorState,
-  fragment: BlockMap,
-  entityMap: ?EntityMap,
-): EditorState {
-  var newContent = Modifier.replaceWithFragment(
+
+
+export default function insertFragment(editorState: EditorState,
+                                       fragment: BlockMap,
+                                       entityMap: ?EntityMap,): EditorState {
+  let newContent = Modifier.replaceWithFragment(
     editorState.getCurrentContent(),
     editorState.getSelection(),
     fragment,

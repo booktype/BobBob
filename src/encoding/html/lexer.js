@@ -5,13 +5,14 @@ import {
   arrayIncludes
 } from './compat'
 
-export default function lexer (str, options) {
+
+export default function lexer(str, options) {
   const state = {str, options, cursor: 0, tokens: []}
   lex(state)
   return state.tokens
 }
 
-export function lex (state) {
+export function lex(state) {
   const {str} = state
   const len = str.length
   while (state.cursor < len) {
@@ -38,7 +39,7 @@ export function lex (state) {
   }
 }
 
-export function lexText (state) {
+export function lexText(state) {
   const {str, cursor} = state
   const textEnd = str.indexOf('<', cursor)
   const type = 'text'
@@ -57,7 +58,7 @@ export function lexText (state) {
   state.tokens.push({type, content})
 }
 
-export function lexComment (state) {
+export function lexComment(state) {
   state.cursor += 4 // "<!--".length
   const {str, cursor} = state
   const commentEnd = str.indexOf('-->', cursor)
@@ -75,7 +76,7 @@ export function lexComment (state) {
   state.tokens.push({type, content})
 }
 
-export function lexTag (state) {
+export function lexTag(state) {
   const {str} = state
   {
     const secondChar = str.charAt(state.cursor + 1)
@@ -94,7 +95,7 @@ export function lexTag (state) {
   return tagName
 }
 
-export function lexTagName (state) {
+export function lexTagName(state) {
   const {str, cursor} = state
   const len = str.length
   let start = cursor
@@ -119,7 +120,7 @@ export function lexTagName (state) {
   return tagName
 }
 
-export function lexTagAttributes (state) {
+export function lexTagAttributes(state) {
   const {str, tokens} = state
   let cursor = state.cursor
   let quote = null // null, single-, or double-quote
@@ -209,7 +210,7 @@ export function lexTagAttributes (state) {
   }
 }
 
-export function lexSkipTag (tagName, state) {
+export function lexSkipTag(tagName, state) {
   const {str, cursor, tokens} = state
   const len = str.length
   let index = cursor

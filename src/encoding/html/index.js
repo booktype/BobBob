@@ -33,7 +33,8 @@ export const parseDefaults = {
   childlessTags,
   format // transform for v0 spec
 }
-export function parse (str, options = parseDefaults) {
+
+export function parse(str, options = parseDefaults) {
   const tokens = lexer(str, options)
   const nodes = parser(tokens, options)
   const [formatted, blocks] = format(nodes, options, [], [])

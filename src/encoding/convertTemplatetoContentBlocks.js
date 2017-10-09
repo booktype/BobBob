@@ -1,6 +1,8 @@
 import ContentBlock from 'draft-js/lib/ContentBlock';
 import {OrderedMap, OrderedSet, List, Map} from 'immutable'
 import {genKey} from 'draft-js';
+
+
 function createEntry(element, entity, entityKey, content) {
   var children = element.parentElement.querySelectorAll("*")
   for (var child of children) {
@@ -53,7 +55,7 @@ function convertTemplatetoContentBlocks(html, entities) {
       break;
     } else {
       var key = genKey()
-      content.blockMap = content.blockMap.set(key,new ContentBlock({
+      content.blockMap = content.blockMap.set(key, new ContentBlock({
         key,
         type: child.tagName.toLowerCase(),
         text: "",
@@ -67,41 +69,13 @@ function convertTemplatetoContentBlocks(html, entities) {
     }
   }
   console.log(entities)
-  entities.forEach((entity, key)=>{
-    console.log(entity,key)
+  entities.forEach((entity, key) => {
+    console.log(entity, key)
     content = createEntry(entry, entity, key, content)
   })
   console.log(content)
   return content
 
 }
-const testHTML = `
-  <ul>
-    <li data-entry=true>
-      <div>
-        <p data-text=true>
-        </p>
-      </div>
-    </li>
-  </ul>
-`
-var entities = [
-  {
-    entities: {
-      "1": {
-        type: "LINK",
-        data: {
-          href: "alink.com"
-        }
-      }
-    },
-    text: "a",
-    characterList: [
-      {
-        entity: "1",
-        style: ["BOLD"]
-      }
-    ]
-  }
-]
+
 export default convertTemplatetoContentBlocks;

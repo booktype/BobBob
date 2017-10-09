@@ -1,13 +1,14 @@
 import {arrayIncludes} from './compat'
 
-export default function parser (tokens, options) {
+
+export default function parser(tokens, options) {
   const root = {tagName: null, children: []}
   const state = {tokens, options, cursor: 0, stack: [root]}
   parse(state)
   return root.children
 }
 
-export function parse (state) {
+export function parse(state) {
   const {tokens, options} = state
   let {stack} = state
   let nodes = stack[stack.length - 1].children

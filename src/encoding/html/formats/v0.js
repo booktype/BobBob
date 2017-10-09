@@ -1,12 +1,14 @@
 /*
   This format adheres to the v0 ASP spec.
 */
-import {startsWith} from '../compat'
 import {CharacterMetadata, ContentBlock, genKey} from 'draft-js';
+import DraftMetaInstance from 'draft-js/lib/DraftMetaInstance';
 import Immutable from 'immutable';
 import DefaultDraftBlockRenderMap from '../../../immutables/DefaultDraftBlockRenderMap';
 import reactAttributes from '../../../constants/reactAttributes';
-import DraftMetaInstance from 'draft-js/lib/DraftMetaInstance';
+import {startsWith} from '../compat'
+
+
 var inlineElements = {
   "span": "DEFAULT",
   "b": "BOLD",
@@ -33,19 +35,20 @@ var metaElements = {
   "img": "IMAGE"
 }
 var metaKey = 0
-function formatText(styledText, text="", characterList=Immutable.List(), metaMap=Immutable.OrderedMap(), parentStyles=[], parentMeta=null,depth=0){
-  for(let style of styledText){
-    if(style.attributes && style.attributes.constructor === Array){
+
+function formatText(styledText, text = "", characterList = Immutable.List(), metaMap = Immutable.OrderedMap(), parentStyles = [], parentMeta = null, depth = 0) {
+  for (let style of styledText) {
+    if (style.attributes && style.attributes.constructor === Array) {
       style.attributes = formatAttributes(style.attributes)
     }
-    parentStyles=parentStyles.slice(0,depth+1)
-    if(depth==0){
-      parentMeta=Immutable.Map()
+    parentStyles = parentStyles.slice(0, depth + 1)
+    if (depth == 0) {
+      parentMeta = Immutable.Map()
     }
-    if(style.content){
+    if (style.content) {
       text += style.content
-      for(var i in style.content.split("")){
-        characterList = characterList.withMutations((list)=>{
+      for (var i in style.content.split("")) {
+        characterList = characterList.withMutations((list) => {
           list.push(
             new CharacterMetadata({
               meta: parentMeta,
@@ -55,30 +58,30 @@ function formatText(styledText, text="", characterList=Immutable.List(), metaMap
         })
       }
       // parentStyles = []
-    }else{
-      if(metaElements[style.tagName]){
-        metaMap = metaMap.set(`${metaMap.size+1}`,new DraftMetaInstance({
+    } else {
+      if (metaElements[style.tagName]) {
+        metaMap = metaMap.set(`${metaMap.size + 1}`, new DraftMetaInstance({
           type: metaElements[style.tagName],
           data: {attributes: style.attributes}
         }))
-        parentMeta = parentMeta.set(metaElements[style.tagName],`${metaMap.size+1}`)
-      }else{
-        if(!parentStyles.includes(inlineElements[style.tagName])){
+        parentMeta = parentMeta.set(metaElements[style.tagName], `${metaMap.size + 1}`)
+      } else {
+        if (!parentStyles.includes(inlineElements[style.tagName])) {
           parentStyles.push(inlineElements[style.tagName])
         }
-        if(style.attributes){
+        if (style.attributes) {
           // style.attributes = formatAttributes(style.attributes)
-          for(var prop in style.attributes.style){
+          for (var prop in style.attributes.style) {
             var cssName = `${prop}__${style.attributes.style[prop]}`
             var styleName = inlineElements[cssName] || cssName
-            if(!parentStyles.includes(styleName))
-            parentStyles.push(styleName)
+            if (!parentStyles.includes(styleName))
+              parentStyles.push(styleName)
           }
         }
       }
-      if(!style.children && !style.content){
-        text = text +""
-        characterList = characterList.withMutations((list)=>{
+      if (!style.children && !style.content) {
+        text = text + ""
+        characterList = characterList.withMutations((list) => {
           list.push(new CharacterMetadata({
             meta: parentMeta,
             style: Immutable.OrderedSet(inlineElements[style.tagName])
@@ -86,7 +89,7 @@ function formatText(styledText, text="", characterList=Immutable.List(), metaMap
         })
 
       }
-      const data = formatText(style.children, text,characterList, metaMap, parentStyles, parentMeta, depth+1)
+      const data = formatText(style.children, text, characterList, metaMap, parentStyles, parentMeta, depth + 1)
       characterList = data.characterList
       text = data.text
       metaMap = data.metaMap
@@ -95,19 +98,19 @@ function formatText(styledText, text="", characterList=Immutable.List(), metaMap
   return {text, characterList, metaMap}
 }
 
-export default function format(nodes, options, parents, blocks, entities=Immutable.OrderedMap()) {
+export default function format(nodes, options, parents, blocks, entities = Immutable.OrderedMap()) {
   nodes = nodes.map(node => {
     const type = capitialize(node.type)
     if (type === 'Element') {
-      const tagName = node.tagName.toLowerCase()
-      if(!DefaultDraftBlockRenderMap.get(tagName)){
+      let tagName = node.tagName.toLowerCase()
+      if (!DefaultDraftBlockRenderMap.get(tagName)) {
         tagName = "div"
       }
       const attributes = formatAttributes(node.attributes)
       const style = attributes.style
       delete attributes.style
       node.text = node.text || ""
-      characterList = Immutable.List(node.text.split("").map(()=>{
+      characterList = Immutable.List(node.text.split("").map(() => {
         return new CharacterMetadata({
           meta: Immutable.Map(),
           style: Immutable.OrderedSet()
@@ -119,9 +122,12 @@ export default function format(nodes, options, parents, blocks, entities=Immutab
         type: tagName,
         depth: parents.length,
         text: node.text,
-        characterList: Immutable.List(node.text.split("").map(()=>{
-          return new CharacterMetadata({meta: Immutable.Map(),
-            style: Immutable.OrderedSet()})})),
+        characterList: Immutable.List(node.text.split("").map(() => {
+          return new CharacterMetadata({
+            meta: Immutable.Map(),
+            style: Immutable.OrderedSet()
+          })
+        })),
         data: Immutable.Map({
           attributes,
           style
@@ -131,39 +137,45 @@ export default function format(nodes, options, parents, blocks, entities=Immutab
       var text = []
       for (var idx in node.children) {
         var child = node.children[idx]
-        if (child.type === "text"){
-          if(child.content.match(/\S/)){
+        if (child.type === "text") {
+          if (child.content.match(/\S/)) {
             text.push(child)
           }
-        } else if(inlineElements[child.tagName] || metaElements[child.tagName]) {
+        } else if (inlineElements[child.tagName] || metaElements[child.tagName]) {
           child.attributes = formatAttributes(child.attributes)
           text.push(child)
-        } else{
+        } else {
           if (text.length) {
-            var {text: alltext , characterList} = formatText(text)
-            children.push({tagName: "div", attributes: [], type: "element", text: alltext, characterList})
+            var {text: alltext, characterList} = formatText(text)
+            children.push({
+              tagName: "div",
+              attributes: [],
+              type: "element",
+              text: alltext,
+              characterList
+            })
             text = []
           }
           children.push(child)
         }
       }
-      if(text.length){
+      if (text.length) {
         // children.push({tagName: "div", attributes: [], type: "element", text})
         var {text: alltext, characterList, metaMap} = formatText(text, "", Immutable.List(), entities)
-        blocks[blocks.length-1] = blocks[blocks.length-1].set("text", alltext).set("characterList", characterList )
+        blocks[blocks.length - 1] = blocks[blocks.length - 1].set("text", alltext).set("characterList", characterList)
         // blocks[blocks.length-1].characterList = characterList
         entities = metaMap
 
       }
       if (children.length) {
-        const arr = format(children, options, parents.concat([node.tagName]), blocks , entities)
+        const arr = format(children, options, parents.concat([node.tagName]), blocks, entities)
         children = arr[0];
         blocks = arr[1].blocks
         entities = arr[1].metaMap
-      }else{
-        if(!blocks[blocks.length-1].getText()){
+      } else {
+        if (!blocks[blocks.length - 1].getText()) {
           let {text: alltext, characterList, metaMap} = formatText(text, "", Immutable.List(), entities)
-          blocks[blocks.length-1] = blocks[blocks.length-1].set("text",alltext).set("characterList",characterList)
+          blocks[blocks.length - 1] = blocks[blocks.length - 1].set("text", alltext).set("characterList", characterList)
 
         }
       }
@@ -179,20 +191,23 @@ export default function format(nodes, options, parents, blocks, entities=Immutab
         }),
         children
       }
-    }else{
+    } else {
 
-      if(node.content.match(/\S/)){
+      if (node.content.match(/\S/)) {
         blocks.push(new ContentBlock({
           key: genKey(),
           type: "div",
           depth: parents.length,
           text: node.content,
-          characterList: Immutable.List(node.content.split("").map((char)=>{
-            return new CharacterMetadata({meta:Immutable.Map(), style: Immutable.OrderedSet()})
+          characterList: Immutable.List(node.content.split("").map((char) => {
+            return new CharacterMetadata({
+              meta: Immutable.Map(),
+              style: Immutable.OrderedSet()
+            })
           })),
           data: Immutable.Map({
-            attributes:{},
-            style:{}
+            attributes: {},
+            style: {}
           })
         }))
 
@@ -202,7 +217,7 @@ export default function format(nodes, options, parents, blocks, entities=Immutab
 
     return {type, depth: parents.length, content: node.content}
   })
-  return [nodes, {metaMap:entities, blocks}]
+  return [nodes, {metaMap: entities, blocks}]
 }
 
 export function capitialize(str) {
@@ -253,7 +268,7 @@ export function formatAttributes(attributes) {
     value = value
       ? unquote(value)
       : key
-    if(!reactAttributes[key]){
+    if (!reactAttributes[key]) {
       return attrs
     }
     if (key === 'class') {

@@ -1,24 +1,14 @@
 import React, {Component} from 'react';
-import axios from "axios";
 import {
   Modifier,
-  BlockMapBuilder,
-  convertToRaw,
-  convertFromRaw,
-  getDefaultKeyBinding,
-  Editor, EditorState, RichUtils,
-  SelectionState, CompositeDecorator,
-  ContentBlock, CharacterMetadata,
-  ContentState
+  EditorState,
+  CompositeDecorator,
 } from 'draft-js';
-import ContentController from '../../transactions/ChainModifier';
+import ContentController from '../../transactions/ContentController';
 import DefaultDraftEntityArray from '../../immutables/DefaultDraftEntityArray';
 import createEntityStrategy from '../../utils/createEntityStrategy';
-import convertRawToDraftState from '../../encoding/convertRawToDraftState'
 import editorStateToJSON from '../../encoding/editorStateToJSON';
-import editorStateFromRaw from '../../encoding/editorStateFromRaw';
 import editorContentsToHTML from '../../encoding/editorContentsToHTML';
-import onPaste from '../../handlers/onPaste';
 import ControllerContainer from '../../components/ControllerContainer'
 import RichEditor from '../../components/Editor'
 import '../../App.css';
@@ -79,7 +69,7 @@ class BobbobEditor extends Component {
     let currentContent = editorState.getCurrentContent();
     // console.log(convertToRaw(currentContent))
     const operations = currentContent.getOperations();
-    const hashes = []
+    const hashes = [];
     this.setState({operations: this.state.operations.concat(hashes)})
     currentContent = Modifier.clearOperations(currentContent)
     editorState = EditorState.set(editorState, {currentContent})

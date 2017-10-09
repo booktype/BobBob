@@ -1,13 +1,13 @@
 import React from 'react';
 import {EditorBlock} from 'draft-js';
 import nullthrows from 'fbjs/lib/nullthrows';
-import invariant from 'fbjs/lib/nullthrows';
 import DraftOffsetKey from 'draft-js/lib/DraftOffsetKey';
-export default function contentRendererFn(props){
+
+
+export default function contentRendererFn(props) {
   const {
     blockRenderMap,
     blockRendererFn,
-    contentRendererFn,
     leafRendererFn,
     customStyleMap,
     customStyleFn,
@@ -107,13 +107,13 @@ export default function contentRendererFn(props){
 
     const data = block.getData().toJSON()
     const attributes = data.attributes || {}
-    if(attributes.dataset){
-      for(var prop in attributes.dataset){
+    if (attributes.dataset) {
+      for (var prop in attributes.dataset) {
         attributes[`data-${prop}`] = attributes.dataset[prop]
       }
       delete attributes.dataset
     }
-    if(attributes.className && attributes.className.constructor === Array){
+    if (attributes.className && attributes.className.constructor === Array) {
       attributes.className = attributes.className.join(" ")
     }
     const style = data.style || {}
@@ -138,52 +138,52 @@ export default function contentRendererFn(props){
 
   // Group contiguous runs of blocks that have the same wrapperTemplate
 
-  function nestBlocks(blocks, depth){
+  function nestBlocks(blocks, depth) {
     const outputBlocks = []
-    return blocks.reduce((acc,item)=>{
-      if(item.depth==depth){
+    return blocks.reduce((acc, item) => {
+      if (item.depth == depth) {
         acc.push([item])
-      }else if(item.depth> depth){
-        acc[acc.length-1].push(item)
+      } else if (item.depth > depth) {
+        acc[acc.length - 1].push(item)
       }
       return acc
-    },[]).map((block)=>{
+    }, []).map((block) => {
       const currentBlock = block[0]
-      if(block.length!=1){
+      if (block.length != 1) {
         currentBlock.children = nestBlocks(block.slice(1), block[1].depth)
       }
       return currentBlock
     })
   }
 
-  var createChildren = function(node) {
-    if(!node.children){
+  var createChildren = function (node) {
+    if (!node.children) {
       return node.block.props.children
     }
     return node.children.map(createElement);
   };
 
-  var createElement = function(node) {
+  var createElement = function (node) {
     if (!node || !node.block) {
       return false;
     }
-    if(node.voidElement){
+    if (node.voidElement) {
       return React.cloneElement(node.block, {
         key: node.key + '-wrap',
         'data-offset-key': node.offsetKey,
         ...node.attributes,
         style: node.style,
-      } , null);
+      }, null);
     }
     return React.cloneElement(node.block, {
       key: node.key + '-wrap',
       'data-offset-key': node.offsetKey,
       ...node.attributes,
       style: node.style,
-      } , createChildren(node));
+    }, createChildren(node));
   };
-  const blocks = nestBlocks(processedBlocks,0)
-  const outputBlocks = blocks.map((block)=>{
+  const blocks = nestBlocks(processedBlocks, 0)
+  const outputBlocks = blocks.map((block) => {
     return createElement(block)
   })
   return outputBlocks

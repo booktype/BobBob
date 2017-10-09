@@ -11,7 +11,7 @@ const voidTags = [
   'meta', 'param', 'source', 'track', 'wbr'
 ]
 
-function serializeAttr (attr, value, isXml) {
+function serializeAttr(attr, value, isXml) {
   if (!isXml && attr === value) return attr
   const text = value.toString()
   const quoteEscape = text.indexOf('\'') !== -1
@@ -20,14 +20,14 @@ function serializeAttr (attr, value, isXml) {
 }
 
 // stolen from underscore.string
-function dasherize (str) {
+function dasherize(str) {
   return str.trim()
     .replace(/([A-Z])/g, '-$1')
     .replace(/[-_\s]+/g, '-')
     .toLowerCase()
 }
 
-function inlineStyle (style) {
+function inlineStyle(style) {
   return Object.keys(style).reduce((css, key) => {
     return `${css}; ${dasherize(key)}: ${style[key]}`
   }, '').slice(2)
@@ -35,7 +35,7 @@ function inlineStyle (style) {
 
 const htmlDefaults = {}
 
-function toHTML (tree, options = htmlDefaults) {
+function toHTML(tree, options = htmlDefaults) {
   const {doctype} = options
   const isXml = doctype === 'xml'
   const html = paul.walk(tree, (node, walk) => {
@@ -82,11 +82,11 @@ const jadeDefaults = {
   indentation: '  '
 }
 
-function isWhitespaceNode (node) {
+function isWhitespaceNode(node) {
   return !(node.type === 'Text' && !node.content.trim())
 }
 
-function toJade (tree, options = jadeDefaults) {
+function toJade(tree, options = jadeDefaults) {
   let {doctype} = options
   const multi = multilineText(options.indentation)
 
@@ -155,14 +155,14 @@ function toJade (tree, options = jadeDefaults) {
   return jade
 }
 
-function multilineText (indentation) {
+function multilineText(indentation) {
   let format = line => line
   const hasTab = stringIncludes(indentation, '\t')
   if (hasTab) {
     format = line => line.replace(/\t/g, indentation)
   }
 
-  function indent (depth, str) {
+  function indent(depth, str) {
     while (depth--) {
       str = indentation + str
     }
@@ -182,14 +182,14 @@ function multilineText (indentation) {
   }
 }
 
-function maxSharedIndent (lines) {
+function maxSharedIndent(lines) {
   return lines.reduce(function (num, line) {
     return Math.min(num, line.length - line.trimLeft().length)
   }, Infinity)
 }
 
 // see http://jade-lang.com/reference/doctype/
-function doctypeShortcut (str) {
+function doctypeShortcut(str) {
   if (stringIncludes(str, 'Transitional')) return 'transitional'
   if (stringIncludes(str, 'strict')) return 'strict'
   if (stringIncludes(str, 'Frameset')) return 'frameset'
