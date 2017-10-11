@@ -64,36 +64,30 @@ class Dummy extends ApiInterface {
   }
 
   getContent = () => {
-    return {
-      "id": 63,
-      "url_title": "three",
-      "title": "three",
-      "created": "2017-09-21T10:26:44.722889",
-      "modified": "2017-09-21T10:48:52.847752",
-      "revision": 3,
-      "content": {
-        "entityMap": {},
-        "blocks": [
-          {
-            "key": "ctvc0",
-            "text": "Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Curabitur aliquet quam id dui posuere blandit. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Proin eget tortor risus. Proin eget tortor risus. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.",
-            "type": "unstyled",
-            "depth": 0,
-            "inlineStyleRanges": [],
-            "entityRanges": [],
-            "data": {}
-          }
-        ],
-        "metaMap": {}
-      },
-      "version": 6,
-      "book": 6,
-      "status": 21
-    }
+
+    return new Promise((resolve, reject)=>{
+
+      resolve(
+        {
+          "entityMap": {},
+          "blocks": [
+            {
+              "key": "ctvc0",
+              "text": "Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Curabitur aliquet quam id dui posuere blandit. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Proin eget tortor risus. Proin eget tortor risus. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.",
+              "type": "unstyled",
+              "depth": 0,
+              "inlineStyleRanges": [],
+              "entityRanges": [],
+              "data": {}
+            }
+          ],
+          "metaMap": {}
+        }
+      )
+    })
   }
 
-  saveContent = (content) => {
-    console.log(content)
+  saveContent = () => {
     return true
     throw 'Not Implemented Error'
 
@@ -164,4 +158,4 @@ class Dummy extends ApiInterface {
     throw 'Not Implemented Error'
   }
 }
-export default Dummy;
+export default Dummy

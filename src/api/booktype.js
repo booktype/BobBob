@@ -113,3 +113,4 @@ class BooktypeApi extends ApiInterface {
     return this._sputnikSend("delete_comment", {comment_id})
   }
 }
+export default BooktypeApi
