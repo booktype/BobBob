@@ -1,14 +1,17 @@
 import axios from 'axios';
+import {EditorState} from 'draft-js';
 import ApiInterface from './interface';
 import editorContentsToHTML from '../encoding/editorContentsToHTML';
+import onPaste from '../handlers/onPaste';
+import editorStateToJSON from '../encoding/editorStateToJSON';
 
 
 class BooktypeApi extends ApiInterface {
   constructor(props) {
     super(props);
-    this.bookID = this.props.bookID;
-    this.booktypeURL = this.props.booktypeURL;
-    this.apiToken = this.props.apiToken;
+    this.bookID = props.bookID;
+    this.booktypeURL = props.booktypeURL;
+    this.apiToken = props.apiToken;
 
     // init axios instance
     this.axios = axios.create({
@@ -24,7 +27,7 @@ class BooktypeApi extends ApiInterface {
     return new Promise((resolve, reject) => {
       window.booktype.sendToCurrentBook({
           command,
-          chapter_id: this.props.documentID,
+          chapter_id: this.documentID,
           ...args
         },
         (data) => {
@@ -43,7 +46,10 @@ class BooktypeApi extends ApiInterface {
   }
 
   _get(url) {
-    return this.axios.get(url)
+    return new Promise(
+      (resolve, reject) => {
+        this.axios.get(url).then(response => resolve(response.data))
+      })
   };
 
   _patch(url, data) {
@@ -63,7 +69,23 @@ class BooktypeApi extends ApiInterface {
   };
 
   getContent = () => {
-    return this._get(`/_api/v1/books/${this.bookID}/chapters/${this.documentID}/`)
+    return new Promise(
+      (resolve, reject) => {
+        this._get(`/_api/v1/books/${this.bookID}/chapters/${this.documentID}/`)
+          .then(data => {
+              let content;
+
+              if (!data.content_json) {
+                content = editorStateToJSON(
+                  onPaste(EditorState.createEmpty(), data.content)
+                )
+              } else {
+                content = data.content_json
+              }
+              resolve(JSON.parse(content))
+            }
+          )
+      })
   };
 
   saveContent = (content) => {
@@ -97,13 +119,13 @@ class BooktypeApi extends ApiInterface {
   };
 
   getThemes = () => {
-
+    return this._get(`_api/v1/themes`);
   };
 
   getFonts = () => {
     return new Promise((resolve, reject) => {
-      this._get(`_api/v1/themes`).then((response) => {
-        resolve(response.reduce((fonts, theme) => {
+      this._get(`_api/v1/themes`).then(({data}) => {
+        resolve(data.reduce((fonts, theme) => {
           return fonts.concat(theme.fonts)
         }, []))
       })
@@ -132,4 +154,6 @@ class BooktypeApi extends ApiInterface {
     return this._sputnikSend("delete_comment", {comment_id})
   };
 }
+
+
 export default BooktypeApi

@@ -14,11 +14,11 @@ export default function onPaste(editorState, html) {
       "lt": "<",
       "gt": ">"
     };
-    console.log(html)
+
     html = html.replace(translate_re, function (match, entity) {
       return translate[entity];
-    })
-    let htmlFragment = parse(html)
+    });
+    let htmlFragment = parse(html);
     if (htmlFragment) {
       const {blocks, metaMap} = htmlFragment;
       if (blocks) {

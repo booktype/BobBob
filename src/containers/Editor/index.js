@@ -12,7 +12,6 @@ import editorStateFromRaw from '../../encoding/editorStateFromRaw';
 import editorContentsToHTML from '../../encoding/editorContentsToHTML';
 import ControllerContainer from '../../components/ControllerContainer'
 import RichEditor from '../../components/Editor'
-import '../../App.css';
 import '../../styles/app.scss';
 
 
@@ -34,14 +33,14 @@ class BobbobEditor extends Component {
       readOnly: false,
       operations: []
     };
-    this.loadContent()
-    this.controller = new ContentController(this.state.editorState)
-    this.controller.onSave = this.onSave
+    this.loadContent();
+    this.controller = new ContentController(this.state.editorState);
+    this.controller.onSave = this.onSave;
     this.controller.api = this.props.api
   }
-  async loadContent () {
-    const content = await this.props.api.getContent()
-    console.log(content)
+
+  async loadContent() {
+    const content = await this.props.api.getContent();
     this.setState({
       editorState: editorStateFromRaw(content)
     })
@@ -52,7 +51,7 @@ class BobbobEditor extends Component {
   }
 
   onSave = () => {
-    this.props.saveContent(editorStateToJSON(this.state.editorState))
+    this.props.api.saveContent(editorStateToJSON(this.state.editorState));
     console.log('save')
   };
 
@@ -79,40 +78,40 @@ class BobbobEditor extends Component {
     // console.log(convertToRaw(currentContent))
     const operations = currentContent.getOperations();
     const hashes = [];
-    this.setState({operations: this.state.operations.concat(hashes)})
-    currentContent = Modifier.clearOperations(currentContent)
-    editorState = EditorState.set(editorState, {currentContent})
-    this.controller.updateEditorState(editorState.getCurrentContent(), editorState.getSelection())
-    const previousBlocksArray = this.controller.blocksArray
-    this.controller.editorState = editorState
-    this.controller.currentContent = editorState.getCurrentContent()
-    this.controller.currentInlineStyle = editorState.getCurrentInlineStyle()
-    this.controller.blocksArray = this.controller.currentContent.getBlocksAsArray()
-    this.controller.selection = editorState.getSelection()
-    this.controller.currentBlock = this.controller.currentContent.getBlockForKey(this.controller.selection.getAnchorKey())
-    this.controller.currentDepth = this.controller.currentBlock.getDepth()
+    this.setState({operations: this.state.operations.concat(hashes)});
+    currentContent = Modifier.clearOperations(currentContent);
+    editorState = EditorState.set(editorState, {currentContent});
+    this.controller.updateEditorState(editorState.getCurrentContent(), editorState.getSelection());
+    const previousBlocksArray = this.controller.blocksArray;
+    this.controller.editorState = editorState;
+    this.controller.currentContent = editorState.getCurrentContent();
+    this.controller.currentInlineStyle = editorState.getCurrentInlineStyle();
+    this.controller.blocksArray = this.controller.currentContent.getBlocksAsArray();
+    this.controller.selection = editorState.getSelection();
+    this.controller.currentBlock = this.controller.currentContent.getBlockForKey(this.controller.selection.getAnchorKey());
+    this.controller.currentDepth = this.controller.currentBlock.getDepth();
     this.controller.index = this.controller.blocksArray.findIndex((block) => {
       return block.getKey() === this.controller.selection.getFocusKey()
-    })
+    });
 
     this.setState({editorState})
-  }
+  };
 
   onClick = (e) => {
     this.setState({clickTarget: e.target})
-  }
+  };
 
   onHover = (e) => {
     if (e.target.dataset.entity) {
       this.setState({hoverTarget: e.target})
     }
-  }
+  };
 
   toHtml = () => {
-    let mainEditor = document.querySelector("[data-contents]")
-    mainEditor = mainEditor.cloneNode(true)
+    let mainEditor = document.querySelector("[data-contents]");
+    mainEditor = mainEditor.cloneNode(true);
     return editorContentsToHTML(mainEditor)
-  }
+  };
 
   render() {
     return (
