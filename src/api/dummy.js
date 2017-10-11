@@ -1,9 +1,11 @@
 import ApiInterface from './interface';
 
+
 class Dummy extends ApiInterface {
   constructor(props) {
     super(props)
   }
+
   getCurrentUser = () => {
     return {
       "id": 1,
@@ -158,4 +160,5 @@ class Dummy extends ApiInterface {
     throw 'Not Implemented Error'
   }
 }
-export default Dummy
+
+export default Dummy;
