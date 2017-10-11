@@ -67,9 +67,9 @@ class BooktypeApi extends ApiInterface {
   };
 
   saveContent = (content) => {
-    let mainEditor = document.querySelector("[data-contents]")
-    mainEditor = mainEditor.cloneNode(true)
-    const content_html = editorContentsToHTML(mainEditor)
+    let mainEditor = document.querySelector("[data-contents]");
+    mainEditor = mainEditor.cloneNode(true);
+    const content_html = editorContentsToHTML(mainEditor);
     return this._patch(
       `/_api/v1/books/${this.bookID}/chapters/${this.documentID}/`,
       {
