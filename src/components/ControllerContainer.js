@@ -28,7 +28,6 @@ import TableTab from './EditorBar/Table/Layout'
 
 const styles = {
   controller: {
-    position: "fixed",
     backgroundColor: "white",
     marginLeft: 0,
     width: "100%",
