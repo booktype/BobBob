@@ -8,6 +8,7 @@ import ContentController from '../../transactions/ContentController';
 import DefaultDraftEntityArray from '../../immutables/DefaultDraftEntityArray';
 import createEntityStrategy from '../../utils/createEntityStrategy';
 import editorStateToJSON from '../../encoding/editorStateToJSON';
+import editorStateFromRaw from '../../encoding/editorStateFromRaw';
 import editorContentsToHTML from '../../encoding/editorContentsToHTML';
 import ControllerContainer from '../../components/ControllerContainer'
 import RichEditor from '../../components/Editor'
@@ -28,15 +29,22 @@ const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
 class BobbobEditor extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       editorState: EditorState.set(EditorState.createEmpty(), {decorator: decorators}),
       readOnly: false,
       operations: []
     };
-
+    this.loadContent()
     this.controller = new ContentController(this.state.editorState)
     this.controller.onSave = this.onSave
+    this.controller.api = this.props.api
+  }
+  async loadContent () {
+    const content = await this.props.api.getContent()
+    console.log(content)
+    this.setState({
+      editorState: editorStateFromRaw(content)
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -44,6 +52,7 @@ class BobbobEditor extends Component {
   }
 
   onSave = () => {
+    this.props.saveContent(editorStateToJSON(this.state.editorState))
     console.log('save')
   };
 
@@ -117,10 +126,6 @@ class BobbobEditor extends Component {
               hoverTarget={this.state.hoverTarget}
               clickTarget={this.state.clickTarget}
             />
-            <button onClick={() => {
-              console.log(editorStateToJSON(this.state.editorState))
-            }}>logJSON
-            </button>
             <RichEditor ref="editor"
                         readOnly={this.state.readOnly}
                         onClick={this.onClick}
