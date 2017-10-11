@@ -5,10 +5,11 @@ import BobbobEditor from './containers/Editor';
 import reactTapPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
+
 reactTapPlugin();
 ReactDOM.render(
   <MuiThemeProvider>
-    <BobbobEditor />
+    <BobbobEditor/>
   </MuiThemeProvider>,
   document.getElementById('app')
-)
+);
