@@ -34,7 +34,11 @@ window.EditorController = class {
 
   destroyEditor() {
     this._api.documentID = null;
-    ReactDOM.unmountComponentAtNode(this._container);
+    return ReactDOM.unmountComponentAtNode(this._container);
+  }
+
+  getDocumentID () {
+    return this._api.documentID
   }
 };
 
