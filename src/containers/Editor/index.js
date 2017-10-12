@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import {
   Modifier,
   EditorState,
   CompositeDecorator,
 } from 'draft-js';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
 import ContentController from '../../transactions/ContentController';
 import DefaultDraftEntityArray from '../../immutables/DefaultDraftEntityArray';
 import createEntityStrategy from '../../utils/createEntityStrategy';
@@ -39,13 +43,36 @@ class BobbobEditor extends Component {
     this.controller.api = this.props.api
   }
 
+  componentDidMount(){
+    const muiTheme = getMuiTheme({
+      palette: {
+        textColor: '#333',
+        primary1Color: '#E55B00'
+      },
+      appBar: {
+        height: 50,
+      },
+    });
+    ReactDOM.render(
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <ControllerContainer
+          controller={this.controller}
+          onChange={this.onChange}
+          setReadOnly={this.setReadOnly}
+          hoverTarget={this.state.hoverTarget}
+          clickTarget={this.state.clickTarget}
+        />
+      </MuiThemeProvider>
+      ,
+      this.props.toolbarContainer
+    )
+  }
   async loadContent() {
     const content = await this.props.api.getContent();
     this.setState({
       editorState: editorStateFromRaw(content)
     })
   }
-
   componentWillReceiveProps(nextProps) {
     console.log(nextProps)
   }
@@ -75,7 +102,6 @@ class BobbobEditor extends Component {
     }
     const prevContent = this.state.editorState.getCurrentContent();
     let currentContent = editorState.getCurrentContent();
-    // console.log(convertToRaw(currentContent))
     const operations = currentContent.getOperations();
     const hashes = [];
     this.setState({operations: this.state.operations.concat(hashes)});
@@ -115,16 +141,10 @@ class BobbobEditor extends Component {
 
   render() {
     return (
-      <div className="App" style={{margin: "auto"}}>
+      <div  style={{margin: "auto"}}>
         {this.state.editorState ?
           <div className={`editor-${this.state.themename}`}>
-            <ControllerContainer
-              controller={this.controller}
-              onChange={this.onChange}
-              setReadOnly={this.setReadOnly}
-              hoverTarget={this.state.hoverTarget}
-              clickTarget={this.state.clickTarget}
-            />
+
             <RichEditor ref="editor"
                         readOnly={this.state.readOnly}
                         onClick={this.onClick}

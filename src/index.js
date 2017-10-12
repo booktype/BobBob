@@ -8,21 +8,21 @@ import BooktypeApi from './api/booktype'
 
 reactTapPlugin();
 
-const BobBob = ({api}) => (
+const BobBob = ({api, toolbarContainer}) => (
   <MuiThemeProvider>
-    <BobbobEditor api={api}/>
+    <BobbobEditor api={api} toolbarContainer={toolbarContainer}/>
   </MuiThemeProvider>
 );
 
 window.EditorController = class {
-  constructor(api, container) {
-    this._container = container;
+  constructor(api, contentContainer, toolbarContainer) {
+    this._container = contentContainer;
+    this._toolbar = toolbarContainer;
     this._api = api;
   }
-
   _render() {
     ReactDOM.render(
-      <BobBob api={this._api}/>,
+      <BobBob api={this._api} toolbarContainer={this._toolbar}/>,
       this._container
     );
   }
