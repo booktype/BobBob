@@ -5,8 +5,6 @@ import {
   EditorState,
   CompositeDecorator,
 } from 'draft-js';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import ContentController from '../../transactions/ContentController';
 import DefaultDraftEntityArray from '../../immutables/DefaultDraftEntityArray';
