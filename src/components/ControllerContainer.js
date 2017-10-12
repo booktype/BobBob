@@ -89,9 +89,9 @@ class ControllerContainer extends React.Component {
   render() {
     return (
       <div style={styles.controller}>
-        <Tabs>
-          <Tab label="Home">
-            <Toolbar style={{height: 130}}>
+        <Tabs tabItemContainerStyle={{height: 24}}>
+          <Tab buttonStyle={{height: 24}} label="Home">
+            <Toolbar style={{height: 90}}>
               <ToolbarGroup firstChild={true}>
                 <div style={styles.ribbon_row}>
                   <FontPicker controller={this.props.controller} onChange={this.onChange}/>
@@ -129,8 +129,8 @@ class ControllerContainer extends React.Component {
               </ToolbarGroup>
             </Toolbar>
           </Tab>
-          <Tab label="Insert">
-            <Toolbar style={{height: 130}}>
+          <Tab label="Insert" buttonStyle={{height: 24}}>
+            <Toolbar style={{height: 90}}>
               <ToolbarGroup firstChild={true}>
                 <div>
                   <TablePicker controller={this.props.controller} onChange={this.onChange}/>
@@ -166,7 +166,7 @@ class ControllerContainer extends React.Component {
 
             </Toolbar>
           </Tab>
-          <Tab label="Review">
+          <Tab label="Review" buttonStyle={{height: 24}}>
             <EntityStyleControls controller={this.props.controller} onChange={this.onChange}
                                  setReadOnly={this.props.setReadOnly}
                                  hoverTarget={this.props.hoverTarget}
@@ -174,7 +174,7 @@ class ControllerContainer extends React.Component {
 
           </Tab>
           {this.props.controller.location.find(block => block.getType() === "table") ?
-            <Tab label="Table Layout">
+            <Tab label="Table Layout" buttonStyle={{height: 24}}>
               <TableTab controller={this.props.controller} onChange={this.onChange}/>
             </Tab>
             : null}
