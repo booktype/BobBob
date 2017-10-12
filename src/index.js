@@ -7,22 +7,29 @@ import BooktypeApi from './api/booktype'
 
 
 reactTapPlugin();
-
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: 'rgb(224, 223, 225)',
+    accent1Color: 'rgb(255, 103, 0)'
+  },
+  appBar: {
+    height: 50,
+  },
+});
 const BobBob = ({api, toolbarContainer}) => (
-  <MuiThemeProvider>
+  <MuiThemeProvider muiTheme={muiTheme}>
     <BobbobEditor api={api} toolbarContainer={toolbarContainer}/>
   </MuiThemeProvider>
 );
 
 window.EditorController = class {
-  constructor(api, contentContainer, toolbarContainer) {
+  constructor(api, contentContainer) {
     this._container = contentContainer;
-    this._toolbar = toolbarContainer;
     this._api = api;
   }
   _render() {
     ReactDOM.render(
-      <BobBob api={this._api} toolbarContainer={this._toolbar}/>,
+      <BobBob api={this._api}/>,
       this._container
     );
   }

@@ -177,7 +177,10 @@ class ControllerContainer extends React.Component {
                                  clickTarget={this.props.clickTarget}/>
 
           </Tab>
-          {this.props.controller.location.find(block => block.getType() === "table") ?
+          {this.props.controller.location.find(block => {
+            return block.getType() === "table"
+          }
+          ) ?
             <Tab label="Table Layout" buttonStyle={styles.tabButton}>
               <TableTab controller={this.props.controller} onChange={this.onChange}/>
             </Tab>

@@ -42,41 +42,12 @@ class BobbobEditor extends Component {
     this.controller.onSave = this.onSave;
     this.controller.api = this.props.api
   }
-
-  componentDidMount(){
-    const muiTheme = getMuiTheme({
-      palette: {
-        primary1Color: 'rgb(224, 223, 225)',
-        accent1Color: 'rgb(255, 103, 0)'
-      },
-      appBar: {
-        height: 50,
-      },
-    });
-    ReactDOM.render(
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <ControllerContainer
-          controller={this.controller}
-          onChange={this.onChange}
-          setReadOnly={this.setReadOnly}
-          hoverTarget={this.state.hoverTarget}
-          clickTarget={this.state.clickTarget}
-        />
-      </MuiThemeProvider>
-      ,
-      this.props.toolbarContainer
-    )
-  }
   async loadContent() {
     const content = await this.props.api.getContent();
     this.setState({
       editorState: editorStateFromRaw(content)
     })
   }
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
-  }
-
   onSave = () => {
     this.props.api.saveContent(editorStateToJSON(this.state.editorState));
     console.log('save')
@@ -95,7 +66,9 @@ class BobbobEditor extends Component {
   toggleSync = () => {
     this.setState({sync: !this.state.sync})
   };
+  enableOT = () => {
 
+  }
   onChange = (editorState) => {
     if (editorState === this.state.editorState) {
       return
@@ -143,17 +116,26 @@ class BobbobEditor extends Component {
     return (
       <div  style={{margin: "auto"}}>
         {this.state.editorState ?
-          <div className={`editor-${this.state.themename}`}>
-
-            <RichEditor ref="editor"
-                        readOnly={this.state.readOnly}
-                        onClick={this.onClick}
-                        onMouseOver={this.onHover}
-                        onSave={this.onSave}
-                        handleKeyCommand={this.handleKeyCommand}
-                        handleBeforeInput={this.handleBeforeInput}
-                        onChange={this.onChange}
-                        editorState={this.state.editorState}
+          <div>
+            <div className={'contentHeader'}>
+              <ControllerContainer
+                controller={this.controller}
+                onChange={this.onChange}
+                setReadOnly={this.setReadOnly}
+                hoverTarget={this.state.hoverTarget}
+                clickTarget={this.state.clickTarget}
+              />
+            </div>
+            <RichEditor
+              ref="editor"
+              readOnly={this.state.readOnly}
+              onClick={this.onClick}
+              onMouseOver={this.onHover}
+              onSave={this.onSave}
+              handleKeyCommand={this.handleKeyCommand}
+              handleBeforeInput={this.handleBeforeInput}
+              onChange={this.onChange}
+              editorState={this.state.editorState}
             />
 
           </div> : null}
