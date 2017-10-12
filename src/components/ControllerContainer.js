@@ -27,6 +27,10 @@ import TableTab from './EditorBar/Table/Layout'
 
 
 const styles = {
+  tabButton: {
+    color: 'rgb(50, 60, 69)',
+    height: 24
+  },
   controller: {
     backgroundColor: "white",
     marginLeft: 0,
@@ -90,7 +94,7 @@ class ControllerContainer extends React.Component {
     return (
       <div style={styles.controller}>
         <Tabs tabItemContainerStyle={{height: 24}}>
-          <Tab buttonStyle={{height: 24}} label="Home">
+          <Tab buttonStyle={styles.tabButton} label="Home">
             <Toolbar style={{height: 90}}>
               <ToolbarGroup firstChild={true}>
                 <div style={styles.ribbon_row}>
@@ -129,7 +133,7 @@ class ControllerContainer extends React.Component {
               </ToolbarGroup>
             </Toolbar>
           </Tab>
-          <Tab label="Insert" buttonStyle={{height: 24}}>
+          <Tab label="Insert" buttonStyle={styles.tabButton}>
             <Toolbar style={{height: 90}}>
               <ToolbarGroup firstChild={true}>
                 <div>
@@ -166,7 +170,7 @@ class ControllerContainer extends React.Component {
 
             </Toolbar>
           </Tab>
-          <Tab label="Review" buttonStyle={{height: 24}}>
+          <Tab label="Review" buttonStyle={styles.tabButton}>
             <EntityStyleControls controller={this.props.controller} onChange={this.onChange}
                                  setReadOnly={this.props.setReadOnly}
                                  hoverTarget={this.props.hoverTarget}
@@ -174,7 +178,7 @@ class ControllerContainer extends React.Component {
 
           </Tab>
           {this.props.controller.location.find(block => block.getType() === "table") ?
-            <Tab label="Table Layout" buttonStyle={{height: 24}}>
+            <Tab label="Table Layout" buttonStyle={styles.tabButton}>
               <TableTab controller={this.props.controller} onChange={this.onChange}/>
             </Tab>
             : null}
