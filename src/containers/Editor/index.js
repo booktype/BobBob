@@ -46,8 +46,9 @@ class BobbobEditor extends Component {
   componentDidMount(){
     const muiTheme = getMuiTheme({
       palette: {
-        textColor: '#333',
-        primary1Color: '#E55B00'
+        textColor: 'black',
+        primary1Color: 'rgb(224, 223, 225)',
+        accent1Color: 'rgb(255, 103, 0)'
       },
       appBar: {
         height: 50,
