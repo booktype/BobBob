@@ -4,7 +4,7 @@ import ApiInterface from './interface';
 import editorContentsToHTML from '../encoding/editorContentsToHTML';
 import onPaste from '../handlers/onPaste';
 import editorStateToJSON from '../encoding/editorStateToJSON';
-
+import OT from './booktypeOT';
 
 class BooktypeApi extends ApiInterface {
   constructor(props) {
@@ -12,6 +12,7 @@ class BooktypeApi extends ApiInterface {
     this.bookID = props.bookID;
     this.booktypeURL = props.booktypeURL;
     this.apiToken = props.apiToken;
+    this.otEnabled = true
 
     // init axios instance
     this.axios = axios.create({
@@ -20,6 +21,17 @@ class BooktypeApi extends ApiInterface {
       xsrfHeaderName: 'X-CSRFToken',
       xsrfCookieName: 'csrftoken'
     });
+    if(this.otEnabled){
+      this.getCurrentUser().then((user)=>{
+        console.log(user)
+        this.ws = new OT({
+          wsUrl: 'ws://192.168.1.27:8765',
+          bookID: this.bookID,
+          documentID: null,
+          userID: user.id
+        })
+      })
+    }
 
   }
 
@@ -44,7 +56,16 @@ class BooktypeApi extends ApiInterface {
       );
     })
   }
-
+  set documentID(value){
+    console.log("setting docid")
+    if(this.otEnabled){
+      this.ws.updateDocumentID(value)
+    }
+    this._documentID = value
+  }
+  get documentID(){
+    return this._documentID
+  }
   _get(url) {
     return new Promise(
       (resolve, reject) => {
@@ -67,7 +88,6 @@ class BooktypeApi extends ApiInterface {
   getUsers = () => {
     return this._get(`/_api/v1/books/${this.bookID}/users`)
   };
-
   getContent = () => {
     return new Promise(
       (resolve, reject) => {

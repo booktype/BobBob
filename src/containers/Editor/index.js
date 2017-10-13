@@ -4,7 +4,11 @@ import {
   Modifier,
   EditorState,
   CompositeDecorator,
+  SelectionState,
+  ContentBlock,
+  CharacterMetadata
 } from 'draft-js';
+import transit from 'transit-immutable-js';
 
 import ContentController from '../../transactions/ContentController';
 import DefaultDraftEntityArray from '../../immutables/DefaultDraftEntityArray';
@@ -15,7 +19,10 @@ import editorContentsToHTML from '../../encoding/editorContentsToHTML';
 import ControllerContainer from '../../components/ControllerContainer'
 import RichEditor from '../../components/Editor'
 import '../../styles/app.scss';
-
+// let DraftTransit = transit.withRecords([SelectionState])
+// DraftTransit = DraftTransit.withRecords([ContentBlock])
+// DraftTransit = DraftTransit.withRecords([CharacterMetadata])
+const DraftTransit = transit.withRecords([SelectionState, ContentBlock, CharacterMetadata])
 
 const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
   (decorator) => {
@@ -31,19 +38,57 @@ class BobbobEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: EditorState.set(EditorState.createEmpty(), {decorator: decorators}),
+      editorState: null,
       readOnly: false,
       operations: []
     };
     this.loadContent();
-    this.controller = new ContentController(this.state.editorState);
-    this.controller.onSave = this.onSave;
-    this.controller.api = this.props.api
+
   }
   async loadContent() {
     const content = await this.props.api.getContent();
+    let editorState = editorStateFromRaw(content)
+    let currentContent = editorState.getCurrentContent()
+    if(this.props.api.otEnabled){
+      currentContent = Modifier.enableOT(currentContent)
+      this.props.api.ws.publish('init',{bookID: this.props.api.bookID, documentID: this.documentID, userID: this.props.api.userID})
+
+      this.props.api.ws.publish('ready',{documentID: this.props.api.documentID})
+
+      this.props.api.ws.subscribe = (message)=> {
+        let transformations = []
+        if(message.action === 'otChange'){
+          transformations.push(message.args)
+        }else if(message.action === 'syncChanges'){
+          transformations = transformations.concat(message.args)
+        }else{
+          return
+        }
+        let content = this.state.editorState.getCurrentContent()
+        for(let ot of transformations){
+          if(!this.state.operations.includes(ot.contentHash)){
+            const args = DraftTransit.fromJSON(ot.operationArgs)
+            content = Modifier[ot.operationName](content, ...args)
+            content = Modifier.clearOperations(content)
+          }
+        }
+        this.onChange(EditorState.set(this.state.editorState,
+          {currentContent: content}
+        ))
+      }
+    }
+
+    editorState = EditorState.set(
+      editorState,
+      {
+        currentContent: currentContent
+      }
+    )
+    this.controller = new ContentController(editorState);
+    this.controller.onSave = this.onSave;
+    this.controller.api = this.props.api
     this.setState({
-      editorState: editorStateFromRaw(content)
+      editorState
     })
   }
   onSave = () => {
@@ -64,9 +109,6 @@ class BobbobEditor extends Component {
   toggleSync = () => {
     this.setState({sync: !this.state.sync})
   };
-  enableOT = () => {
-
-  }
   onChange = (editorState) => {
     if (editorState === this.state.editorState) {
       return
@@ -75,6 +117,15 @@ class BobbobEditor extends Component {
     let currentContent = editorState.getCurrentContent();
     const operations = currentContent.getOperations();
     const hashes = [];
+    operations.forEach((operation, contentHash)=>{
+      hashes.push(contentHash)
+      const operationName = operation[0]
+      const operationArgs = DraftTransit.toJSON(operation[1])
+      this.props.api.ws.otChange({
+        operationName, operationArgs
+        , contentHash
+      })
+    })
     this.setState({operations: this.state.operations.concat(hashes)});
     currentContent = Modifier.clearOperations(currentContent);
     editorState = EditorState.set(editorState, {currentContent});
