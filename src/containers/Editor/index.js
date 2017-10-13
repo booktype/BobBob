@@ -19,9 +19,7 @@ import editorContentsToHTML from '../../encoding/editorContentsToHTML';
 import ControllerContainer from '../../components/ControllerContainer'
 import RichEditor from '../../components/Editor'
 import '../../styles/app.scss';
-// let DraftTransit = transit.withRecords([SelectionState])
-// DraftTransit = DraftTransit.withRecords([ContentBlock])
-// DraftTransit = DraftTransit.withRecords([CharacterMetadata])
+
 const DraftTransit = transit.withRecords([SelectionState, ContentBlock, CharacterMetadata])
 
 const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
