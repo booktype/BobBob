@@ -19,7 +19,9 @@
     "react-dom": "^15.5.4",
     "react-jsonschema-form": "^0.50.1",
     "react-tap-event-plugin": "^2.0.1",
-    "reactcss": "^1.2.0"
+    "reactcss": "^1.2.0",
+    "transit-immutable-js": "^0.7.0",
+    "transit-js": "^0.8.846"
   },
   "devDependencies": {
     "autoprefixer": "6.7.2",
@@ -71,6 +73,7 @@
     "webpack-manifest-plugin": "1.1.0",
     "websocket-stream": "^4.0.0",
     "whatwg-fetch": "2.0.2",
+    "worker-loader": "^1.0.0",
     "ws": "^1.0.0"
   },
   "scripts": {
