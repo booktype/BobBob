@@ -18,8 +18,8 @@ import PictureForm from './EditorBar/Insert/Picture'
 import CommentButton from './EditorBar/Insert/Comment'
 import TableTab from './EditorBar/Table/Layout'
 
-import ETabs from './Tabs/Tabs';
-import ETab from './Tabs/Tab';
+import Tabs from './Tabs/Tabs';
+import Tab from './Tabs/Tab';
 
 
 
