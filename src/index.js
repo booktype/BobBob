@@ -27,8 +27,8 @@ const BobBob = ({api}) => (
 
 window.EditorController = class {
   constructor(api, contentContainer) {
-    this._container = contentContainer;
     this._api = api;
+    this._container = contentContainer;
   }
   _render() {
     ReactDOM.render(
