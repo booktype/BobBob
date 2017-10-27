@@ -5,6 +5,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import BobbobEditor from './containers/Editor';
 import BooktypeApi from './api/booktype'
+import DummyApi from './api/dummy';
+
 
 
 reactTapPlugin();
@@ -17,9 +19,9 @@ const muiTheme = getMuiTheme({
     height: 50,
   },
 });
-const BobBob = ({api, toolbarContainer}) => (
+const BobBob = ({api}) => (
   <MuiThemeProvider muiTheme={muiTheme}>
-    <BobbobEditor api={api} toolbarContainer={toolbarContainer}/>
+    <BobbobEditor api={api}/>
   </MuiThemeProvider>
 );
 
@@ -51,3 +53,10 @@ window.EditorController = class {
 };
 
 window.BooktypeApi = BooktypeApi;
+
+const controller = new window.EditorController(new DummyApi({
+  documentID: 1,
+  direction: 'ltr'
+}), document.querySelector('#app'))
+controller.initEditor()
+export default BobBob
