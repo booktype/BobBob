@@ -1,43 +1,32 @@
-import React, {Component} from 'react';
+import React from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {RichUtils} from 'draft-js';
 
 const styles = {
   customWidth: {
-    width: 80,
+    width: 60,
   },
 };
 
-export default class FontSizePicker extends React.Component {
+export default class FontSizePicker extends React.PureComponent {
   constructor(props){
     super(props)
-    this.availableSizes = [8,9,10,11,12,14,16,18,20,24,26,28,36,48,72]
-    this.state = {
-      size: null
-    }
+    this.availableSizes = ['8px','9px','10px','11px','12px','14px','16px','18px','20px','24px','26px','28px','36px','48px','72px']
   }
-  componentWillReceiveProps(nextProps){
-    const currentFontSize = nextProps.controller.getStyleType("fontSize")
-    if(currentFontSize){
-      const size = Number(currentFontSize.split("__")[1])
-      if(size!==this.state.size)
-        this.setState({
-          size
-        })
-    }else{
-        this.setState({
-          size: null
-        })
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextProps.fontSize !== this.props.fontSize){
+      return true
     }
+    return false
   }
   handleSizeChange = (size) => {
-    if(this.state.size){
+    if(this.props.fontSize){
       this.props.onChange(
         RichUtils.toggleInlineStyle(
           RichUtils.toggleInlineStyle(
             this.props.controller.editorState,
-            `fontSize__${this.state.size}`,
+            `fontSize__${this.props.fontSize}`,
           ),
           `fontSize__${size}`,
         )
@@ -50,20 +39,18 @@ export default class FontSizePicker extends React.Component {
         )
       );
     }
-    this.setState({size: size})
-
   }
   render(){
     return (
       <SelectField
         floatingLabelText="Size"
-        value={this.state.size ||  11}
+        value={this.props.fontSize ||  '16px'}
         onChange={(e,i,value)=>this.handleSizeChange(value)}
         style={styles.customWidth}
       >
         {this.availableSizes.map(size=>{
           return (
-            <MenuItem key={size} value={size} primaryText={`${size}`} />
+            <MenuItem key={size} value={`${size}`} primaryText={`${size}`} />
           )
         }
       )}

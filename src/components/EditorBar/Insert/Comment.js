@@ -65,11 +65,9 @@ export default class CommentButton extends React.PureComponent {
       />,
     ];
     return (
-      <div>
+      <div style={{display:'inline-block'}}>
         <IconButton
           onTouchTap={this.handleOpen}
-          style={{height: "48px"}}
-          iconStyle={{width: "48px", height: "48px"}}
           label={"Insert Comment"}
         >
           <CommentIcon/>

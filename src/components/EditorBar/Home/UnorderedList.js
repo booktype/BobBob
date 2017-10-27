@@ -21,7 +21,7 @@ const styles = {
 const ListEmptyLine = () => (
   <li><span style={styles.listEmptyLine}></span></li>
 )
-export default class PopoverExampleSimple extends React.Component {
+export default class UnorderedList extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -30,25 +30,17 @@ export default class PopoverExampleSimple extends React.Component {
       open: false,
     };
   }
-  componentWillReceiveProps(nextProps){
-    if(this.props.controller.queryParent("ul")){
-      const style = this.props.controller.currentBlock.getData().get('style')
-      let listStyleType;
-      if(style){
-        listStyleType = style.listStyleType || "disc"
-      }else{
-        listStyleType = "disc"
-      }
-      if(listStyleType!==this.state.listStyleType)
-      this.setState({
-        listStyleType
-      })
-    }else if(this.state.listStyleType){
-      this.setState({listStyleType:null})
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextState.open !== this.state.open){
+      return true
     }
+    if(nextProps.ul === this.props.ul){
+      return false
+    }
+    return true
   }
   handleToggleList=(listStyleType)=>{
-    if(this.state.listStyleType){
+    if(this.props.ul){
       this.props.onChange(
         this.props.controller
         .setStyleAttr("listStyleType", listStyleType)
@@ -80,14 +72,14 @@ export default class PopoverExampleSimple extends React.Component {
 
   render() {
     return (
-      <div style={{display: "inline"}}>
+      <div style={{display: "inline-block", marginRight: '-40px'}}>
         <span style={{display: "flex"}}>
           <IconButton
             onTouchTap={()=>this.handleToggleList("disc")}
             style={{float: "left", padding: 2, display: "block"}}
             tooltip="Bulleted List">
             <FormatListBulletedType
-              color={this.state.listStyleType?"orange":null}
+              color={this.props.ul?"orange":null}
             />
           </IconButton>
           <IconButton
@@ -108,7 +100,7 @@ export default class PopoverExampleSimple extends React.Component {
           <Menu style={{width: 100}}>
             <MenuItem
               onTouchTap={()=>this.handleToggleList("disc")}
-              style={{backgroundColor: this.state.listStyleType==="disc"?"orange":null}}
+              style={{backgroundColor: this.props.ul && this.props.ul.listStyleType==="disc"?"orange":null}}
             >
               <ul style={{listStyleType: "disc" ,marginLeft: 8}}>
                 <ListEmptyLine />
@@ -118,7 +110,7 @@ export default class PopoverExampleSimple extends React.Component {
             </MenuItem>
             <MenuItem
               onTouchTap={()=>this.handleToggleList("circle")}
-              style={{backgroundColor: this.state.listStyleType==="circle"?"orange":null}}
+              style={{backgroundColor: this.props.ul && this.props.ul.listStyleType==="circle"?"orange":null}}
              >
               <ul style={{listStyleType: "circle",marginLeft: 8}}>
                 <ListEmptyLine />
@@ -128,7 +120,7 @@ export default class PopoverExampleSimple extends React.Component {
             </MenuItem>
             <MenuItem
               onTouchTap={()=>this.handleToggleList("square")}
-              style={{backgroundColor: this.state.listStyleType==="square"?"orange":null}}
+              style={{backgroundColor: this.props.ul && this.props.ul.listStyleType==="square"?"orange":null}}
             >
               <ul style={{listStyleType: "square",marginLeft: 8}}>
                 <ListEmptyLine />

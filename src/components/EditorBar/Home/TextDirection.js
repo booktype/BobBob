@@ -8,29 +8,24 @@ export default class TextDirection extends React.Component {
 
   constructor(props) {
     super(props);
+  }
+  shouldComponentUpdate(nextProps){
+    if(nextProps.direction === this.props.direction){
+      return false
+    }
+    return true
+  }
 
-    this.state = {
-      direction: "ltr"
-    };
-  }
-  componentWillReceiveProps(nextProps){
-    const attributes = this.props.controller.currentBlock.getData().get('attributes')
-    let direction;
-    if(attributes){
-      direction = attributes.dir || "ltr"
-    }else{
-      direction = "ltr"
-    }
-    if(this.state.direction !== direction){
-      this.setState({direction})
-    }
-  }
   handleDirectionLtoR = () => {
-    this.props.controller.setAttr("dir", "ltr")
+    // this.props.controller.setAttr("dir", "ltr")
+    this.props.controller.setStyleAttr("direction", "ltr")
+    this.props.controller.setStyleAttr("textAlign", "left")
     this.props.onChange(this.props.controller.editorState)
   };
   handleDirectionRtoL = () => {
-    this.props.controller.setAttr("dir", "rtl")
+    // this.props.controller.setAttr("dir", "rtl")
+    this.props.controller.setStyleAttr("direction", "rtl")
+    this.props.controller.setStyleAttr("textAlign", "right")
     this.props.onChange(this.props.controller.editorState)
   };
 
@@ -42,13 +37,13 @@ export default class TextDirection extends React.Component {
           onTouchTap={this.handleDirectionLtoR}
           tooltip="Left to Right Text Direction"
           >
-            <TextDirLtoR color={this.state.direction==="ltr"?"orange":"black"}/>
+            <TextDirLtoR color={!this.props.direction || this.props.direction==="ltr"?"orange":"black"}/>
         </IconButton>
         <IconButton
           onTouchTap={this.handleDirectionRtoL}
           tooltip="Right to Left Text Direction"
           >
-            <TextDirRtoL color={this.state.direction==="rtl"?"orange":"black"}/>
+            <TextDirRtoL color={this.props.direction==="rtl"?"orange":"black"}/>
         </IconButton>
       </div>
     )

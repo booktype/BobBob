@@ -21,35 +21,28 @@ const styles = {
 const ListEmptyLine = () => (
   <li><span style={styles.listEmptyLine}></span></li>
 )
-export default class OrderedList extends React.Component {
+export default class OrderedList extends React.PureComponent {
 
   constructor(props) {
     super(props);
 
     this.state = {
       open: false,
-
+      listStyleType: null
     };
   }
-  componentWillReceiveProps(nextProps){
-    if(this.props.controller.queryParent("ol")){
-      const style = this.props.controller.currentBlock.getData().get('style')
-      let listStyleType;
-      if(style){
-        listStyleType = style.listStyleType || "decimal"
-      }else{
-        listStyleType = "decimal"
-      }
-      if(listStyleType!==this.state.listStyleType)
-      this.setState({
-        listStyleType
-      })
-    }else if(this.state.listStyleType){
-      this.setState({listStyleType:null})
+
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextState.open !== this.state.open){
+      return true
     }
+    if(nextProps.ol === this.props.ol){
+      return false
+    }
+    return true
   }
   handleToggleList=(listStyleType)=>{
-    if(this.state.listStyleType){
+    if(this.props.ol){
       this.props.onChange(
         this.props.controller
         .setStyleAttr("listStyleType", listStyleType)
@@ -81,18 +74,18 @@ export default class OrderedList extends React.Component {
 
   render() {
     return (
-      <div style={{display: "inline"}}>
+      <div style={{display: "inline-block",  marginRight: '-40px'}}>
         <span style={{display: "flex"}}>
           <IconButton
             onTouchTap={()=>this.handleToggleList("decimal")}
             style={{float: "left", padding: 2, display: "block"}}
             tooltip="Bulleted List"
           >
-            <FormatListNumbers color={this.state.listStyleType?"orange":null} />
+            <FormatListNumbers color={this.props.ol?"orange":null} />
           </IconButton>
           <IconButton
             style={{float: "left", padding: 2, display: "block"}}
-            iconStyle={{widht: 16, height: 16, marginLeft: -50}}
+            iconStyle={{width: 16, height: 16, marginLeft: -50}}
             onTouchTap={this.handleTouchTap}
             tooltip="Number types">
             <ArrowDown />
@@ -108,7 +101,7 @@ export default class OrderedList extends React.Component {
           <Menu style={{width: 100}}>
             <MenuItem
               onTouchTap={()=>this.handleToggleList("decimal")}
-              style={{backgroundColor: this.state.listStyleType==="decimal"?"orange":null}}>
+              style={{backgroundColor: this.props.ol && this.props.ol.listStyleType==="decimal"?"orange":null}}>
               <ol style={{listStyleType: "decimal" ,marginLeft: 8}}>
                 <ListEmptyLine />
                 <ListEmptyLine />
@@ -117,7 +110,7 @@ export default class OrderedList extends React.Component {
             </MenuItem>
             <MenuItem
               onTouchTap={()=>this.handleToggleList("lower-roman")}
-              style={{backgroundColor: this.state.listStyleType==="lower-roman"?"orange":null}}
+              style={{backgroundColor: this.props.ol && this.props.ol.listStyleType==="lower-roman"?"orange":null}}
 
               >
               <ol style={{listStyleType: "lower-roman",marginLeft: 8}}>
@@ -128,7 +121,7 @@ export default class OrderedList extends React.Component {
             </MenuItem>
             <MenuItem
               onTouchTap={()=>this.handleToggleList("upper-roman")}
-              style={{backgroundColor: this.state.listStyleType==="upper-roman"?"orange":null}}
+              style={{backgroundColor: this.props.ol && this.props.ol.listStyleType==="upper-roman"?"orange":null}}
 
               >
               <ol style={{listStyleType: "upper-roman",marginLeft: 8}}>
@@ -139,7 +132,7 @@ export default class OrderedList extends React.Component {
             </MenuItem>
             <MenuItem
               onTouchTap={()=>this.handleToggleList("upper-latin")}
-              style={{backgroundColor: this.state.listStyleType==="upper-latin"?"orange":null}}
+              style={{backgroundColor: this.props.ol && this.props.ol.listStyleType==="upper-latin"?"orange":null}}
 
               >
               <ol style={{listStyleType: "upper-latin",marginLeft: 8}}>
@@ -150,7 +143,7 @@ export default class OrderedList extends React.Component {
             </MenuItem>
             <MenuItem
               onTouchTap={()=>this.handleToggleList("lower-latin")}
-              style={{backgroundColor: this.state.listStyleType==="lower-latin"?"orange":null}}
+              style={{backgroundColor: this.props.ol && this.props.ol.listStyleType==="lower-latin"?"orange":null}}
 
               >
               <ol style={{listStyleType: "lower-latin",marginLeft: 8}}>
@@ -161,7 +154,7 @@ export default class OrderedList extends React.Component {
             </MenuItem>
             <MenuItem
               onTouchTap={()=>this.handleToggleList("lower-greek")}
-              style={{backgroundColor: this.state.listStyleType==="lower-greek"?"orange":null}}
+              style={{backgroundColor: this.props.ol && this.props.ol.listStyleType==="lower-greek"?"orange":null}}
               >
               <ol style={{listStyleType: "lower-greek",marginLeft: 8}}>
                 <ListEmptyLine />

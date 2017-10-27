@@ -31,56 +31,48 @@ export default class FontSizePicker extends React.Component {
       "im_fell_dw_pica_pro",
     ]
     this.state = {
-      font: null
+      fontFamily: null
     }
   }
-  componentWillReceiveProps(nextProps){
-    const currentFont = nextProps.controller.getStyleType("fontFamily")
-    if(currentFont){
-      const font = currentFont.split("__")[1]
-      if(font!==this.state.font)
-        this.setState({
-          font
-        })
-    }else{
-        this.setState({
-          font: null
-        })
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextProps.fontFamily === this.props.fontFamily){
+      return false
     }
+    return true
   }
-  handleFontChange = (font) => {
-    if(this.state.font){
+  handleFontChange = (fontFamily) => {
+    if(this.state.fontFamily){
       this.props.onChange(
         RichUtils.toggleInlineStyle(
           RichUtils.toggleInlineStyle(
             this.props.controller.editorState,
-            `fontFamily__${this.state.font}`,
+            `fontFamily__${this.state.fontFamily}`,
           ),
-          `fontFamily__${font}`,
+          `fontFamily__${fontFamily}`,
         )
       );
     }else{
       this.props.onChange(
         RichUtils.toggleInlineStyle(
           this.props.controller.editorState,
-          `fontFamily__${font}`,
+          `fontFamily__${fontFamily}`,
         )
       );
     }
-    this.setState({font})
+    // this.setState({fontFamily})
 
   }
   render(){
     return (
       <SelectField
         floatingLabelText="Font"
-        value={this.state.font || "sans-serif"}
+        value={this.props.fontFamily || "sans-serif"}
         onChange={(e,i,value)=>this.handleFontChange(value)}
-        style={{width: 200, fontFamily: this.state.font || "sans-serif"}}
+        style={{width: 150, fontFamily: this.props.fontFamily || "sans-serif"}}
       >
-        {this.availableFonts.map(font=>{
+        {this.availableFonts.map(fontFamily=>{
           return (
-            <MenuItem key={font} style={{fontFamily: font}} value={font} primaryText={font} />
+            <MenuItem key={fontFamily} style={{fontFamily}} value={fontFamily} primaryText={fontFamily} />
           )
         }
       )}

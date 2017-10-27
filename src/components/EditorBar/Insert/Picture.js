@@ -66,6 +66,7 @@ export default class LinkButton extends React.PureComponent {
   }
   handlePictureSubmit = () => {
     this.handleRequestClose()
+    console.log(this.state.src)
     if(this.props.controller.currentInlineStyle.has("IMAGE")){
       this.props.onChange(
         this.props.controller.replaceStyleMetaData(
@@ -101,11 +102,9 @@ export default class LinkButton extends React.PureComponent {
   }
   render(){
     return (
-      <div>
+      <div style={{display:'inline-block'}}>
         <IconButton
           onTouchTap={this.handleTouchTap}
-          style={{height: "48px"}}
-          iconStyle={{width: "48px", height: "48px"}}
           label={"Insert Image"}
         >
           <ImageIcon color={this.state.url?"orange":null}/>
@@ -132,7 +131,7 @@ export default class LinkButton extends React.PureComponent {
             />
             <p>OR</p>
               <Upload label="Upload Picture"
-                // fileTypeRegex={/\.(gif|jpg|jpeg|tiff|png)$/i}
+                fileTypeRegex={/\.(gif|jpg|jpeg|png)$/i}
                 onFileLoad={this.onFileLoad}/>
           </div>
         </Popover>

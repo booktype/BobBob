@@ -4,6 +4,7 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import ArrowDown from '../../../icons/arrowDownDropCircleOutline';
 import FlatButton from 'material-ui/FlatButton';
 import Popover from 'material-ui/Popover';
+import SelectField from 'material-ui/SelectField';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 const AbcText = ()=>(
@@ -26,10 +27,24 @@ export default class ParagraphStyles extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      value: 1,
 
-    };
+    this.availableStyles = [
+      { element: 'h1', label: 'Title'},
+      { element: 'h2', label: 'Subtitle' },
+      { element: 'h3', label: 'Heading 3' },
+      { element: 'h4', label: 'Heading 4' },
+      { element: 'h5', label: 'Heading 5' },
+      { element: 'h6', label: 'Heading 6' },
+      { element: 'blockquote', label: 'Blockquote' },
+      { element: 'p', label: 'Unstyled' },
+      { element: 'pre', label: 'Preformatted' }
+    ]
+  }
+  shouldComponentUpdate(nextProps){
+    if(nextProps.style === this.props.style){
+      return true
+    }
+    return false
   }
   toggleStyle = (style) => {
     this.props.onChange(
@@ -39,114 +54,23 @@ export default class ParagraphStyles extends React.Component {
       )
     );
   }
-  handleTouchTap = (event) => {
-    event.preventDefault();
-    this.setState({
-      open: true,
-      anchorEl: this.refs.paragraphStyles,
-    });
-  };
-  handleRequestClose = () => {
-    this.setState({
-      open: false,
-    });
-  };
+
   render() {
     return (
-      <div style={{display: "flex"}}  ref="paragraphStyles">
-        <GridList
-          style={{width:420}}
-          cols={3}
-          cellHeight={80}
-          ref="paragraphStyles"
-        >
-          <GridTile
-            >
-              <ParagraphStyle label="Heading 1" element="h1" onToggle={()=>this.toggleStyle("h1")}/>
-            </GridTile>
-          <GridTile
-
-            >
-              <ParagraphStyle label="Heading 2" element="h2" onToggle={()=>this.toggleStyle("h2")}/>
-
-            </GridTile>
-          <GridTile
-            >
-              <ParagraphStyle label="Heading 3" element="h3" onToggle={()=>this.toggleStyle("h3")}/>
-
-            </GridTile>
-          <GridTile
-            cols={3}
-            rows={0.4}
-            >
-
-            <FlatButton
-              fullWidth={true}
-              label="Styles"
-              labelPosition="before"
-              primary={true}
-              icon={
-                <ArrowDown/>
-              }
-              onTouchTap={this.handleTouchTap}
-            />
-            </GridTile>
-        </GridList>
-        <Popover
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
-          targetOrigin={{horizontal: 'middle', vertical: 'top'}}
-          onRequestClose={this.handleRequestClose}
-          style={{overflowY: "inherit"}}
-          className={"RichEditor-editor"}
+      <div style={{display: "inline-block"}}>
+        <SelectField
+          floatingLabelText="Style"
+          value={this.props.style || "p"}
+          onChange={(e,i,value)=>this.toggleStyle(value)}
           >
-            <GridList
-              style={{width:500}}
-              cols={3}
-              cellHeight={100}
-            >
-              <GridTile
-                >
-                  <ParagraphStyle label="Heading 1" element="h1" onToggle={()=>this.toggleStyle("h1")}/>
-                </GridTile>
-              <GridTile
-                >
-                  <ParagraphStyle label="Heading 2" element="h2" onToggle={()=>this.toggleStyle("h2")}/>
-                </GridTile>
-              <GridTile
-                >
-                  <ParagraphStyle label="Heading 3" element="h3" onToggle={()=>this.toggleStyle("h3")}/>
-                </GridTile>
-              <GridTile
-                >
-                  <ParagraphStyle label="Heading 4" element="h4" onToggle={()=>this.toggleStyle("h4")}/>
-                </GridTile>
-              <GridTile
-
-                >
-                  <ParagraphStyle label="Heading 5" element="h5" onToggle={()=>this.toggleStyle("h5")}/>
-                </GridTile>
-              <GridTile
-                >
-                  <ParagraphStyle label="Heading 6" element="h6" onToggle={()=>this.toggleStyle("h6")}/>
-                </GridTile>
-              <GridTile
-                >
-                  <ParagraphStyle label="Blockquote" element="blockquote" onToggle={()=>this.toggleStyle("blockquote")}/>
-                </GridTile>
-              <GridTile
-                >
-                  <ParagraphStyle label="Paragraph" element="p" onToggle={()=>this.toggleStyle("p")}/>
-
-                </GridTile>
-              <GridTile
-                >
-                  <ParagraphStyle label="Preformatted" element="pre" onToggle={()=>this.toggleStyle("pre")}/>
-                </GridTile>
-
-            </GridList>
-          </Popover>
+            {this.availableStyles.map(style=>{
+              return (
+                <MenuItem key={style.element} value={style.element} primaryText={style.label} >
+                </MenuItem>
+              )
+            }
+          )}
+        </SelectField>
       </div>
     )
   }

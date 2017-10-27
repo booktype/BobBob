@@ -6,34 +6,21 @@ import AlignCenter from '../../../icons/formatAlignCenter';
 import AlignRight from '../../../icons/formatAlignRight';
 import AlignJustify from '../../../icons/formatAlignJustify';
 
-export default class ParagraphAlign extends React.Component {
+export default class ParagraphAlign extends React.PureComponent {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      textAlign: "left"
-    };
   }
-  componentWillReceiveProps(nextProps){
-    const style = this.props.controller.currentBlock.getData().get('style')
-    let textAlign;
-    if(style){
-      textAlign = style.textAlign || "left"
-    }else{
-      textAlign = "left"
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextProps.textAlign === this.props.textAlign){
+      return false
     }
-    if(textAlign!==this.state.textAlign)
-    this.setState({
-      textAlign
-    })
+    return true
   }
   handleToggleStyle = (align) => {
     this.props.controller.setStyleAttr("textAlign", align)
     this.props.onChange(this.props.controller.editorState)
   };
-
-
   render() {
     return (
       <div style={{display: "inline-block"}}>
@@ -41,25 +28,25 @@ export default class ParagraphAlign extends React.Component {
           onTouchTap={()=>this.handleToggleStyle("left")}
           tooltip="Align Text Left"
           >
-            <AlignLeft color={this.state.textAlign=="left"?"orange":"black"}/>
+            <AlignLeft color={this.props.textAlign === "left" || !this.props.textAlign?"orange":"black"}/>
         </IconButton>
         <IconButton
           onTouchTap={()=>this.handleToggleStyle("center")}
           tooltip="Align Text Center"
           >
-            <AlignCenter color={this.state.textAlign=="center"?"orange":"black"}/>
+            <AlignCenter color={this.props.textAlign=="center"?"orange":"black"}/>
         </IconButton>
         <IconButton
           onTouchTap={()=>this.handleToggleStyle("right")}
           tooltip="Align Text Right"
           >
-            <AlignRight color={this.state.textAlign=="right"?"orange":"black"}/>
+            <AlignRight color={this.props.textAlign=="right"?"orange":"black"}/>
         </IconButton>
         <IconButton
           onTouchTap={()=>this.handleToggleStyle("justify")}
           tooltip="Justify"
           >
-            <AlignJustify color={this.state.textAlign=="justify"?"orange":"black"}/>
+            <AlignJustify color={this.props.textAlign=="justify"?"orange":"black"}/>
         </IconButton>
       </div>
     )

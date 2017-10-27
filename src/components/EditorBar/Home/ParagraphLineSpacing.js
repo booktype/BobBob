@@ -5,44 +5,34 @@ import LineSpacing from '../../../icons/formatLineSpacing';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 
-export default class ParagraphLineSpacing extends React.Component {
+export default class ParagraphLineSpacing extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {value: 1};
   }
-
-  componentWillReceiveProps(nextProps){
-    const style = this.props.controller.currentBlock.getData().get('style')
-    let lineHeight;
-    if(style){
-      lineHeight = style.lineHeight || 1
-    }else{
-      lineHeight = 1
+  shouldComponentUpdate(nextProps){
+    if(nextProps.lineHeight === this.props.lineHeight){
+      return false
     }
-    if(lineHeight!==this.state.lineHeight)
-    this.setState({
-      lineHeight
-    })
+    return true
   }
 
   handleChange = (event, index, lineHeight) => {
     this.props.controller.setStyleAttr("lineHeight", lineHeight)
     this.props.onChange(this.props.controller.editorState)
-    this.setState({lineHeight})
   };
 
 
   render() {
     return (
-      <div style={{display: "flex"}}>
+      <div style={{display: "inline-block"}}>
 
         <DropDownMenu
           iconButton={
             <LineSpacing />
           }
           iconStyle={{fill:"#000000"}}
-          value={this.state.lineHeight} onChange={this.handleChange}>
+          value={this.props.lineHeight} onChange={this.handleChange}>
           <MenuItem value={1} primaryText="1" />
           <MenuItem value={1.15} primaryText="1,15" />
           <MenuItem value={1.5} primaryText="1,5" />

@@ -87,11 +87,9 @@ export default class LinkButton extends React.PureComponent {
   }
   render(){
     return (
-      <div>
+      <div style={{display:'inline-block'}}>
         <IconButton
           onTouchTap={this.handleTouchTap}
-          style={{height: "48px"}}
-          iconStyle={{width: "48px", height: "48px"}}
           label={"Insert Link"}
         >
           <LinkIcon color={this.state.url?"orange":null}/>

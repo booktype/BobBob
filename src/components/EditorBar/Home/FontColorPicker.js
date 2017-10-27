@@ -16,22 +16,15 @@ export default class FontColorPicker extends React.Component {
       color: null
     };
   }
-  componentWillReceiveProps(nextProps){
-    const currentColorStyle = nextProps.controller.getStyleType("color")
-    if(currentColorStyle){
-      console.log()
-      const color = currentColorStyle.split("__")[1]
-      if(color!==this.state.color)
-        this.setState({
-          color
-        })
-    }else{
-      if(this.state.color!=="#000000")
-        this.setState({
-          color: null
-        })
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextState.open!==this.state.open){
+      return true
     }
-
+    if(nextProps.color === this.props.color){
+      return false
+    }
+    this.setState({color: this.props.color})
+    return true
   }
   handleTouchTap = (event) => {
     // This prevents ghost click.

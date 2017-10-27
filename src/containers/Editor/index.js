@@ -38,7 +38,10 @@ class BobbobEditor extends Component {
     this.state = {
       editorState: null,
       readOnly: false,
-      operations: []
+      operations: [],
+      blockStyle: {style: {}, attributes: {}},
+      inlineStyles: {},
+      blockTree: {}
     };
     this.loadContent();
 
@@ -111,41 +114,83 @@ class BobbobEditor extends Component {
     if (editorState === this.state.editorState) {
       return
     }
-    const prevContent = this.state.editorState.getCurrentContent();
-    let currentContent = editorState.getCurrentContent();
-    const operations = currentContent.getOperations();
-    const hashes = [];
-    operations.forEach((operation, contentHash)=>{
-      hashes.push(contentHash)
-      const operationName = operation[0]
-      const operationArgs = DraftTransit.toJSON(operation[1])
-      this.props.api.ws.otChange({
-        operationName, operationArgs
-        , contentHash
+    if(this.props.api.otEnabled){
+      let currentContent = editorState.getCurrentContent();
+      const operations = currentContent.getOperations();
+      const hashes = [];
+      operations.forEach((operation, contentHash)=>{
+        hashes.push(contentHash)
+        const operationName = operation[0]
+        const operationArgs = DraftTransit.toJSON(operation[1])
+        this.props.api.ws.otChange({
+          operationName, operationArgs
+          , contentHash
+        })
       })
-    })
-    this.setState({operations: this.state.operations.concat(hashes)});
-    currentContent = Modifier.clearOperations(currentContent);
-    editorState = EditorState.set(editorState, {currentContent});
-    this.controller.updateEditorState(editorState.getCurrentContent(), editorState.getSelection());
+      this.setState({operations: this.state.operations.concat(hashes)});
+      currentContent = Modifier.clearOperations(currentContent);
+      editorState = EditorState.set(editorState, {currentContent});
+      this.controller.updateEditorState(editorState.getCurrentContent(), editorState.getSelection());
+    }
     const previousBlocksArray = this.controller.blocksArray;
     this.controller.editorState = editorState;
     this.controller.currentContent = editorState.getCurrentContent();
+    const inlineStyles = editorState.getCurrentInlineStyle().reduce(
+      (styles, style)=>{
+        const [attr, value=true ] = style.split("__")
+        styles[attr] = value
+        return styles
+      },
+      {}
+    );
+    let reachedRoot = false;
+    let blockTree = {}
     this.controller.currentInlineStyle = editorState.getCurrentInlineStyle();
     this.controller.blocksArray = this.controller.currentContent.getBlocksAsArray();
     this.controller.selection = editorState.getSelection();
     this.controller.currentBlock = this.controller.currentContent.getBlockForKey(this.controller.selection.getAnchorKey());
+    this.controller.location = this.controller.currentContent
+      .getBlockMap()
+      .reverse()
+      .skipUntil((block)=>{
+        return block.getKey()===this.controller.currentBlock.getKey()})
+      .takeUntil(block=>{
+        if(reachedRoot){
+          return reachedRoot
+        }
+        if(block.getDepth()===0){
+          reachedRoot = true
+          return false
+        }
+        return reachedRoot
+      })
+      .reduce((tree, block)=>{
+        if(!tree[block.getDepth()]){
+          tree[block.getDepth()] = block
+          blockTree[block.getType()] = {
+            style: block.getData().get('style'),
+          }
+        }
+        return tree
+      },[])
+
+    const blockStyle = {
+      type: this.controller.currentBlock.getType(),
+      style: this.controller.currentBlock.getData().get('style') || {},
+      attributes: this.controller.currentBlock.getData().get('attributes') || {}
+    }
     this.controller.currentDepth = this.controller.currentBlock.getDepth();
     this.controller.index = this.controller.blocksArray.findIndex((block) => {
       return block.getKey() === this.controller.selection.getFocusKey()
     });
 
-    this.setState({editorState})
+    this.setState({editorState, blockStyle, blockTree, inlineStyles})
   };
 
   onClick = (e) => {
     this.setState({clickTarget: e.target})
   };
+
 
   onHover = (e) => {
     if (e.target.dataset.entity) {
@@ -166,6 +211,9 @@ class BobbobEditor extends Component {
           <div>
             <div className={'contentHeader'}>
               <ControllerContainer
+                inlineStyles={this.state.inlineStyles}
+                blockStyle={this.state.blockStyle}
+                blockTree={this.state.blockTree}
                 controller={this.controller}
                 onChange={this.onChange}
                 setReadOnly={this.setReadOnly}

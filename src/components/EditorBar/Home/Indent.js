@@ -4,36 +4,28 @@ import {RichUtils} from 'draft-js';
 import IndentIncrease from '../../../icons/formatIndentIncrease';
 import IndentDecrease from '../../../icons/formatIndentDecrease';
 
-export default class Indent extends React.Component {
+export default class Indent extends React.PureComponent {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      marginLeft: 0
-    };
   }
-  componentWillReceiveProps(nextProps){
-    const style = this.props.controller.currentBlock.getData().get('style')
-    let marginLeft;
-    if(style){
-      marginLeft = style.marginLeft || 0
-    }else{
-      marginLeft = 0
+  shouldComponentUpdate(nextProps){
+    if(nextProps.marginLeft === this.props.marginLeft){
+      return false
     }
-    if(this.state.marginLeft !== marginLeft){
-      this.setState({marginLeft})
-    }
+    return true
   }
   handleIncreaseIndent = () => {
-    if(this.state.marginLeft!==864){
-      this.props.controller.setStyleAttr("marginLeft", this.state.marginLeft+48)
+    const marginLeft = this.props.marginLeft || 0
+    if(marginLeft!==864){
+      this.props.controller.setStyleAttr("marginLeft", marginLeft+48)
       this.props.onChange(this.props.controller.editorState)
     }
   };
   handleDecreaseIndent = () => {
-    if(this.state.marginLeft!==0){
-      this.props.controller.setStyleAttr("marginLeft", this.state.marginLeft-48)
+    const marginLeft = this.props.marginLeft || 0
+    if(marginLeft!==0){
+      this.props.controller.setStyleAttr("marginLeft", marginLeft-48)
       this.props.onChange(this.props.controller.editorState)
     }
   };

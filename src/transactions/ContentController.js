@@ -100,7 +100,6 @@ class ContentController {
     }else{
       lastBlock = this.currentContent.getBlockBefore(lastBlock.getKey())
     }
-    console.log(lastBlock.toJSON())
     const previousBlock = this.currentContent.getBlockBefore(this.currentBlock.getKey())
     const newContent = Modifier.removeRange(
       this.currentContent,

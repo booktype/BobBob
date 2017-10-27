@@ -49,22 +49,14 @@ export default class TableButton extends React.PureComponent {
   }
   render(){
     return (
-      <div>
-        <Badge
-          badgeContent={`${this.state.sizeX}, ${this.state.sizeY}`}
-          secondary={true}
-          badgeStyle={{top: 10, left: 10, height: 40, width: 40}}
-        >
+      <div style={{display:'inline-block'}}>
 
         <IconButton
           onTouchTap={this.handleTouchTap}
-          style={{height: "48px"}}
-          iconStyle={{width: "48px", height: "48px"}}
           label={"Insert table"}
         >
           <TableIcon />
         </IconButton>
-      </Badge>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
@@ -72,6 +64,7 @@ export default class TableButton extends React.PureComponent {
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
         >
+          <div>{`${this.state.sizeX} x ${this.state.sizeY}`}</div>
           <TablePicker onChange={this.handleSizeChange} onSelect={this.handleChosenSize} />
         </Popover>
       </div>

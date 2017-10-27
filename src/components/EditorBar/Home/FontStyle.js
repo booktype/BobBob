@@ -19,8 +19,8 @@ const icons = {
   STRIKETHROUGH: FormatStrikethrough,
   UNDERLINE: FormatUnderline
 };
-const styles = ["BOLD", "ITALIC", "CODE",
-"QUOTATION", "SUB", "SUP", "STRIKETHROUGH", "UNDERLINE"]
+const styles = ["BOLD", "ITALIC", "STRIKETHROUGH", "UNDERLINE", "CODE",
+"QUOTATION", "SUB", "SUP"]
 const labels = {
   BOLD: "Bold",
   ITALIC: "Italic",
@@ -31,32 +31,12 @@ const labels = {
   STRIKETHROUGH: "Strikethrough",
   UNDERLINE: "Underline"
 };
-export default class FontStyle extends React.Component {
+export default class FontStyle extends React.PureComponent {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      BOLD: false,
-      ITALIC: false,
-      CODE: false,
-      QUOTATION: false,
-      SUB: false,
-      SUP: false,
-      STRIKETHROUGH: false,
-      UNDERLINE: false
-    };
-  }
-  componentWillReceiveProps(nextProps){
-    let newState = {}
-    for(let type in this.state){
-      newState[type] = nextProps.controller.currentInlineStyle.has(type)
-    }
-    this.setState(newState)
   }
   handleToggleStyle = (style) => {
-    // This prevents ghost click.
-    event.preventDefault();
     this.props.onChange(
       RichUtils.toggleInlineStyle(
         this.props.controller.editorState,
@@ -78,7 +58,7 @@ export default class FontStyle extends React.Component {
               onTouchTap={()=>this.handleToggleStyle(style)}
               tooltip={labels[style]}
               >
-                <Icon color={this.state[style]?"orange":null}/>
+                <Icon color={this.props.styles[style]?"orange":null}/>
             </IconButton>
           )
           }
