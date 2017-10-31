@@ -1,10 +1,7 @@
 import ApiInterface from './interface';
-
+/* eslint-disable */
 
 class Dummy extends ApiInterface {
-  constructor(props) {
-    super(props)
-  }
 
   getCurrentUser = () => {
     return {

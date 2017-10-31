@@ -43,7 +43,8 @@ class IndexEditor extends React.Component {
   }
 
   handleKeyCommand = (command) => {
-    switch (command) {
+    // eslint-disable-next-line
+    switch(command) {
       case "split-block":
         this.setState({
           editorState: RichUtils.insertSoftNewline(this.state.editorState)

@@ -1,14 +1,10 @@
 import React from 'react'
 import IconButton from 'material-ui/IconButton';
-import {RichUtils} from 'draft-js';
 import TextDirLtoR from '../../../icons/formatTextdirectionLToR';
 import TextDirRtoL from '../../../icons/formatTextdirectionRToL';
 
-export default class TextDirection extends React.Component {
+export default class TextDirection extends React.PureComponent {
 
-  constructor(props) {
-    super(props);
-  }
   shouldComponentUpdate(nextProps){
     if(nextProps.direction === this.props.direction){
       return false

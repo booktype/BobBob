@@ -27,6 +27,7 @@ export function parse(state) {
     const tagName = tagToken.content.toLowerCase()
     if (token.close) {
       let item
+      // eslint-disable-next-line
       while ((item = stack.pop())) {
         if (tagName === item.tagName) break
       }
@@ -49,7 +50,7 @@ export function parse(state) {
           nodes = stack[previousIndex].children
           break
         }
-        currentIndex = currentIndex - 1
+        currentIndex -= 1
       }
     }
 

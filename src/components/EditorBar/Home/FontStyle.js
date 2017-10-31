@@ -33,9 +33,6 @@ const labels = {
 };
 export default class FontStyle extends React.PureComponent {
 
-  constructor(props) {
-    super(props);
-  }
   handleToggleStyle = (style) => {
     this.props.onChange(
       RichUtils.toggleInlineStyle(

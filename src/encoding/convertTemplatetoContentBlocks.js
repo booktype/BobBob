@@ -1,5 +1,5 @@
 import ContentBlock from 'draft-js/lib/ContentBlock';
-import {OrderedMap, OrderedSet, List, Map} from 'immutable'
+import {OrderedMap, List, Map} from 'immutable'
 import {genKey} from 'draft-js';
 
 

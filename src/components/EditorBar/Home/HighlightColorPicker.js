@@ -6,7 +6,7 @@ import Popover from 'material-ui/Popover';
 import {RichUtils} from 'draft-js';
 
 
-export default class HighlightColorPicker extends React.Component {
+export default class HighlightColorPicker extends React.PureComponent {
 
   constructor(props) {
     super(props);

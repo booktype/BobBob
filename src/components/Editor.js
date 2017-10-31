@@ -64,7 +64,7 @@ class RichEditor extends React.Component {
       command.push(key)
       command = command.join("-")
     }
-    if (command == "ctrl-s") {
+    if (command === "ctrl-s") {
       e.preventDefault()
       this.props.handleKeyCommand(command)
     }
@@ -105,7 +105,7 @@ class RichEditor extends React.Component {
   }
 
   render() {
-    const {editorState} = this.props;
+    // const {editorState} = this.props;
 
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.

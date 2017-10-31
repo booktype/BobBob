@@ -1,25 +1,6 @@
 import React from 'react'
-import ReactDOM, {unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer} from 'react-dom'
 
-class Card extends React.Component {
-  // static propTypes = {
-  //   active: PropTypes.bool,
-  //   position: PropTypes.oneOf([
-  //     'top',
-  //     'right',
-  //     'bottom',
-  //     'left'
-  //   ]),
-  //   arrow: PropTypes.oneOf([
-  //     null,
-  //     'center',
-  //     'top',
-  //     'right',
-  //     'bottom',
-  //     'left'
-  //   ]),
-  //   style: PropTypes.object
-  // }
+class ToolTip extends React.PureComponent {
   static defaultProps = {
     active: false,
     position: 'right',
@@ -196,6 +177,8 @@ class Card extends React.Component {
               style.top = (top + parent.offsetHeight / 2) - this.state.height + this.margin
               style.left = left - this.state.width - this.margin
               break
+            default:
+              break;
           }
         }
         break
@@ -215,6 +198,8 @@ class Card extends React.Component {
               style.top = (top + parent.offsetHeight / 2) - this.state.height + this.margin
               style.left = left + parent.offsetWidth + this.margin
               break
+            default:
+              break;
           }
         }
         break
@@ -234,6 +219,8 @@ class Card extends React.Component {
               style.left = left + parent.offsetWidth / 2 - this.margin
               style.top = top - this.state.height - this.margin
               break
+            default:
+              break;
           }
         }
         break
@@ -253,9 +240,15 @@ class Card extends React.Component {
               style.left = left + parent.offsetWidth / 2 - this.margin
               style.top = top + parent.offsetHeight + this.margin
               break
+            default:
+              break;
           }
+
         }
         break
+
+      default:
+        break;
     }
 
     return style
@@ -305,76 +298,4 @@ class Card extends React.Component {
   }
 }
 
-var portalNodes = {}
-export default Card;
-// export default class ToolTip extends React.Component {
-//   static propTypes = {
-//     parent: PropTypes.string.isRequired,
-//     active: PropTypes.bool,
-//     group: PropTypes.string,
-//     tooltipTimeout: PropTypes.number
-//   }
-//   static defaultProps = {
-//     active: false,
-//     group: 'main',
-//     tooltipTimeout: 500
-//   }
-//   componentDidMount() {
-//     if (!this.props.active) {
-//       return
-//     }
-//
-//     this.renderPortal(this.props)
-//   }
-//   componentWillReceiveProps(nextProps) {
-//     if ((!portalNodes[this.props.group] && !nextProps.active) ||
-//       (!this.props.active && !nextProps.active)) {
-//       return
-//     }
-//
-//     let props = Object.assign({}, nextProps)
-//     let newProps = Object.assign({}, nextProps)
-//
-//     if (portalNodes[this.props.group] && portalNodes[this.props.group].timeout) {
-//       clearTimeout(portalNodes[this.props.group].timeout)
-//     }
-//
-//     if (this.props.active && !props.active) {
-//       newProps.active = true
-//       portalNodes[this.props.group].timeout = setTimeout(() => {
-//         props.active = false
-//         this.renderPortal(props)
-//       }, this.props.tooltipTimeout)
-//     }
-//
-//     this.renderPortal(newProps)
-//   }
-//   componentWillUnmount() {
-//     if (portalNodes[this.props.group]) {
-//       ReactDOM.unmountComponentAtNode(portalNodes[this.props.group].node)
-//       clearTimeout(portalNodes[this.props.group].timeout)
-//     }
-//   }
-//   createPortal() {
-//     portalNodes[this.props.group] = {
-//       node: document.createElement('div'),
-//       timeout: false
-//     }
-//     portalNodes[this.props.group].node.className = 'ToolTipPortal'
-//     document.body.appendChild(portalNodes[this.props.group].node)
-//   }
-//   renderPortal(props) {
-//     if (!portalNodes[this.props.group]) {
-//       this.createPortal()
-//     }
-//     let {parent, ...other} = props
-//     let parentEl = document.querySelector(parent)
-//     renderSubtreeIntoContainer(this, <Card parentEl={parentEl} {...other}/>, portalNodes[this.props.group].node)
-//   }
-//   shouldComponentUpdate() {
-//     return false
-//   }
-//   render() {
-//     return null
-//   }
-// }
+export default ToolTip;

@@ -37,7 +37,7 @@ export const parseDefaults = {
 export function parse(str, options = parseDefaults) {
   const tokens = lexer(str, options)
   const nodes = parser(tokens, options)
-  const [formatted, blocks] = format(nodes, options, [], [])
+  const [_, blocks] = format(nodes, options, [], [])
   return blocks
 }
 

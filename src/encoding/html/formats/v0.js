@@ -34,7 +34,6 @@ var metaElements = {
   "a": "LINK",
   "img": "IMAGE"
 }
-var metaKey = 0
 
 function formatText(styledText, text = "", characterList = Immutable.List(), metaMap = Immutable.OrderedMap(), parentStyles = [], parentMeta = null, depth = 0) {
   for (let style of styledText) {
@@ -42,12 +41,13 @@ function formatText(styledText, text = "", characterList = Immutable.List(), met
       style.attributes = formatAttributes(style.attributes)
     }
     parentStyles = parentStyles.slice(0, depth + 1)
-    if (depth == 0) {
+    if (depth === 0) {
       parentMeta = Immutable.Map()
     }
     if (style.content) {
       text += style.content
-      for (var i in style.content.split("")) {
+      for (var _ in style.content.split("")) {
+        // eslint-disable-next-line
         characterList = characterList.withMutations((list) => {
           list.push(
             new CharacterMetadata({
@@ -57,7 +57,6 @@ function formatText(styledText, text = "", characterList = Immutable.List(), met
           )
         })
       }
-      // parentStyles = []
     } else {
       if (metaElements[style.tagName]) {
         metaMap = metaMap.set(`${metaMap.size + 1}`, new DraftMetaInstance({
@@ -80,7 +79,8 @@ function formatText(styledText, text = "", characterList = Immutable.List(), met
         }
       }
       if (!style.children && !style.content) {
-        text = text + ""
+        text += ""
+        // eslint-disable-next-line
         characterList = characterList.withMutations((list) => {
           list.push(new CharacterMetadata({
             meta: parentMeta,
@@ -109,13 +109,6 @@ export default function format(nodes, options, parents, blocks, entities = Immut
       const attributes = formatAttributes(node.attributes)
       const style = attributes.style
       delete attributes.style
-      node.text = node.text || ""
-      characterList = Immutable.List(node.text.split("").map(() => {
-        return new CharacterMetadata({
-          meta: Immutable.Map(),
-          style: Immutable.OrderedSet()
-        })
-      }))
       node.text = node.text || ""
       blocks.push(new ContentBlock({
         key: genKey(),
@@ -160,7 +153,7 @@ export default function format(nodes, options, parents, blocks, entities = Immut
         }
       }
       if (text.length) {
-        // children.push({tagName: "div", attributes: [], type: "element", text})
+        // eslint-disable-next-line
         var {text: alltext, characterList, metaMap} = formatText(text, "", Immutable.List(), entities)
         blocks[blocks.length - 1] = blocks[blocks.length - 1].set("text", alltext).set("characterList", characterList)
         // blocks[blocks.length-1].characterList = characterList
@@ -174,6 +167,7 @@ export default function format(nodes, options, parents, blocks, entities = Immut
         entities = arr[1].metaMap
       } else {
         if (!blocks[blocks.length - 1].getText()) {
+          // eslint-disable-next-line
           let {text: alltext, characterList, metaMap} = formatText(text, "", Immutable.List(), entities)
           blocks[blocks.length - 1] = blocks[blocks.length - 1].set("text", alltext).set("characterList", characterList)
 

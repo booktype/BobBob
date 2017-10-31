@@ -1,5 +1,4 @@
 import React from 'react';
-import {Tab} from 'material-ui/Tabs';
 import IconButton from 'material-ui/IconButton';
 import TableEdit from '../../../icons/tableEdit';
 import TableIcon from '../../../icons/table';
@@ -9,7 +8,6 @@ import TableRowPlusBefore from '../../../icons/tableRowPlusBefore';
 import TableRowPlusAfter from '../../../icons/tableRowPlusAfter';
 import TableColumnPlusBefore from '../../../icons/tableColumnPlusBefore';
 import TableColumnPlusAfter from '../../../icons/tableColumnPlusAfter';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 const styles = {
   inline: {
     display: 'inline-block'
@@ -47,7 +45,7 @@ export default class TableLayout extends React.PureComponent {
   insertColumnLeft = () => {
     let at_index = this.props.controller.getChildIndex()
     if (at_index) {
-      at_index = at_index - 1
+      at_index -= 1
     }
     console.log(at_index)
     this.props.onChange(this.props.controller.queryParent("tbody").queryAndAppend("tr", "td", at_index).editorState)

@@ -1,15 +1,10 @@
 import React from 'react'
-import IconButton from 'material-ui/IconButton';
-import {RichUtils} from 'draft-js';
 import LineSpacing from '../../../icons/formatLineSpacing';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 
 export default class ParagraphLineSpacing extends React.PureComponent {
 
-  constructor(props) {
-    super(props);
-  }
   shouldComponentUpdate(nextProps){
     if(nextProps.lineHeight === this.props.lineHeight){
       return false

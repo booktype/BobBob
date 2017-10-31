@@ -3,7 +3,6 @@ import TablePicker from './TablePicker';
 import IconButton from 'material-ui/IconButton';
 import Popover from 'material-ui/Popover';
 import TableIcon from '../../../icons/table';
-import Badge from 'material-ui/Badge';
 export default class TableButton extends React.PureComponent {
   constructor(props){
     super(props)

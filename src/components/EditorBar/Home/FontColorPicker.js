@@ -6,7 +6,7 @@ import Popover from 'material-ui/Popover';
 import {RichUtils} from 'draft-js';
 
 
-export default class FontColorPicker extends React.Component {
+export default class FontColorPicker extends React.PureComponent {
 
   constructor(props) {
     super(props);

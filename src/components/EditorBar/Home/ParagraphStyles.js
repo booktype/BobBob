@@ -1,29 +1,25 @@
 import React from 'react';
 import {RichUtils} from 'draft-js';
-import {GridList, GridTile} from 'material-ui/GridList';
-import ArrowDown from '../../../icons/arrowDownDropCircleOutline';
-import FlatButton from 'material-ui/FlatButton';
-import Popover from 'material-ui/Popover';
+// import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
-import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-const AbcText = ()=>(
-    <span style={{padding: "auto"}}>AaBbCc</span>
-)
-const ParagraphStyle = (props) => (
-  <FlatButton
-    fullWidth={true}
-    style={{height: "100%"}}
-    onTouchTap={props.onToggle}
-    >
-    <props.element style={{position: "absolute", top: 0, width: "100%"}}>
-      <span >AaBbCc</span>
-    </props.element>
-    <center style={{position: "absolute", bottom: 0, width: "100%"}}>{props.label}</center>
-  </FlatButton>
-)
+// const AbcText = ()=>(
+//     <span style={{padding: "auto"}}>AaBbCc</span>
+// )
+// const ParagraphStyle = (props) => (
+//   <FlatButton
+//     fullWidth={true}
+//     style={{height: "100%"}}
+//     onTouchTap={props.onToggle}
+//     >
+//     <props.element style={{position: "absolute", top: 0, width: "100%"}}>
+//       <span >AaBbCc</span>
+//     </props.element>
+//     <center style={{position: "absolute", bottom: 0, width: "100%"}}>{props.label}</center>
+//   </FlatButton>
+// )
 
-export default class ParagraphStyles extends React.Component {
+export default class ParagraphStyles extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -41,7 +37,7 @@ export default class ParagraphStyles extends React.Component {
     ]
   }
   shouldComponentUpdate(nextProps){
-    if(nextProps.style === this.props.style){
+    if(nextProps.style !== this.props.style){
       return true
     }
     return false

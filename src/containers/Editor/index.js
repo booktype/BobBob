@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import {
   Modifier,
   EditorState,
@@ -82,7 +81,8 @@ class BobbobEditor extends Component {
     editorState = EditorState.set(
       editorState,
       {
-        currentContent: currentContent
+        currentContent: currentContent,
+        decorator: decorators
       }
     )
     this.controller = new ContentController(editorState);
@@ -107,9 +107,6 @@ class BobbobEditor extends Component {
     }
   };
 
-  toggleSync = () => {
-    this.setState({sync: !this.state.sync})
-  };
   onChange = (editorState) => {
     if (editorState === this.state.editorState) {
       return
@@ -132,7 +129,6 @@ class BobbobEditor extends Component {
       editorState = EditorState.set(editorState, {currentContent});
       this.controller.updateEditorState(editorState.getCurrentContent(), editorState.getSelection());
     }
-    const previousBlocksArray = this.controller.blocksArray;
     this.controller.editorState = editorState;
     this.controller.currentContent = editorState.getCurrentContent();
     const inlineStyles = editorState.getCurrentInlineStyle().reduce(
@@ -187,16 +183,16 @@ class BobbobEditor extends Component {
     this.setState({editorState, blockStyle, blockTree, inlineStyles})
   };
 
-  onClick = (e) => {
-    this.setState({clickTarget: e.target})
-  };
-
-
-  onHover = (e) => {
-    if (e.target.dataset.entity) {
-      this.setState({hoverTarget: e.target})
-    }
-  };
+  // onClick = (e) => {
+  //   this.setState({clickTarget: e.target})
+  // };
+  //
+  //
+  // onHover = (e) => {
+  //   if (e.target.dataset.entity) {
+  //     this.setState({hoverTarget: e.target})
+  //   }
+  // };
 
   toHtml = () => {
     let mainEditor = document.querySelector("[data-contents]");
@@ -209,7 +205,7 @@ class BobbobEditor extends Component {
       <div  style={{margin: "auto"}}>
         {this.state.editorState ?
           <div>
-            <div className={'contentHeader'}>
+            <div onMouseDown={(e)=>{e.preventDefault()}} onMouseUp={(e)=>{e.preventDefault()}} className={'contentHeader'}>
               <ControllerContainer
                 inlineStyles={this.state.inlineStyles}
                 blockStyle={this.state.blockStyle}
@@ -217,18 +213,18 @@ class BobbobEditor extends Component {
                 controller={this.controller}
                 onChange={this.onChange}
                 setReadOnly={this.setReadOnly}
-                hoverTarget={this.state.hoverTarget}
-                clickTarget={this.state.clickTarget}
+                // hoverTarget={this.state.hoverTarget}
+                // clickTarget={this.state.clickTarget}
               />
             </div>
             <RichEditor
-              ref="editor"
-              readOnly={this.state.readOnly}
-              onClick={this.onClick}
-              onMouseOver={this.onHover}
+              // ref="editor"
+              // readOnly={this.state.readOnly}
+              // onClick={this.onClick}
+              // onMouseOver={this.onHover}
               onSave={this.onSave}
               handleKeyCommand={this.handleKeyCommand}
-              handleBeforeInput={this.handleBeforeInput}
+              // handleBeforeInput={this.handleBeforeInput}
               onChange={this.onChange}
               editorState={this.state.editorState}
             />

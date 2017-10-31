@@ -1,3 +1,4 @@
+/* eslint-disable */
 class ApiInterface {
   constructor(props) {
     this.documentID = props.documentID;
@@ -7,55 +8,55 @@ class ApiInterface {
   }
 
   getCurrentUser = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   getUsers = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   getContent = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   saveContent = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   getImages = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   uploadImage = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   getThemes = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   getFonts = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   getComments = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   addComment = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   replyComment = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   resolveComment = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
   deleteComment = () => {
-    throw 'Not Implemented Error'
+    throw {error: 'Not Implemented Error'}
   };
 
 }

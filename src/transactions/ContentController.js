@@ -7,7 +7,7 @@ import {
     BlockMapBuilder,
     CharacterMetadata
 } from "draft-js"
-import {OrderedMap,List,Repeat, Map} from 'immutable';
+import {List,Repeat, Map} from 'immutable';
 
 
 class ContentController {
@@ -68,7 +68,6 @@ class ContentController {
     return this
   }
   getChildIndex = () => {
-    const currentKey = this.currentBlock.getKey()
     const currentDepth = this.currentBlock.getDepth()
     const parentBlock = this.location.find(block=>block.getDepth()===currentDepth-1)
     return this.currentContent.getBlockMap()
@@ -250,6 +249,7 @@ class ContentController {
       if(this.currentBlock.getKey() === block.getKey()){
         inBlock = true
       }
+      return false
     })
     if(!lastNestedBlock){
       lastNestedBlock = this.currentBlock

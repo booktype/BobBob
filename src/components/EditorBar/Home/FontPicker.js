@@ -1,15 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {RichUtils} from 'draft-js';
 
-const styles = {
-  customWidth: {
-    width: 200,
-  },
-};
 
-export default class FontSizePicker extends React.Component {
+export default class FontSizePicker extends React.PureComponent {
   constructor(props){
     super(props)
     this.availableFonts = [

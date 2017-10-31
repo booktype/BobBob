@@ -1,14 +1,10 @@
 import React from 'react'
 import IconButton from 'material-ui/IconButton';
-import {RichUtils} from 'draft-js';
 import IndentIncrease from '../../../icons/formatIndentIncrease';
 import IndentDecrease from '../../../icons/formatIndentDecrease';
 
 export default class Indent extends React.PureComponent {
 
-  constructor(props) {
-    super(props);
-  }
   shouldComponentUpdate(nextProps){
     if(nextProps.marginLeft === this.props.marginLeft){
       return false

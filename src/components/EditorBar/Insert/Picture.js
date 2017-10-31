@@ -4,8 +4,6 @@ import Popover from 'material-ui/Popover';
 import ImageIcon from '../../../icons/imageArea';
 import TextField from 'material-ui/TextField';
 import Upload from 'material-ui-upload/Upload';
-import {RichUtils} from 'draft-js'
-// import client from '../../../feathers'
 export default class LinkButton extends React.PureComponent {
   constructor(props){
     super(props)
@@ -118,7 +116,7 @@ export default class LinkButton extends React.PureComponent {
           style={{overflowY: "hidden"}}
         >
           {this.state.images.map(image=>{
-            return <img key={image.preview} src={image.preview}></img>
+            return <img key={image.preview} src={image.preview} alt={''}></img>
           })}
           <div >
             <TextField
@@ -127,6 +125,7 @@ export default class LinkButton extends React.PureComponent {
               type="url"
               value={this.state.src}
               onChange={this.handlePictureChange}
+              // eslint-disable-next-line
               onKeyPress={(e)=>{e.key==="Enter"?this.handlePictureSubmit():null}}
             />
             <p>OR</p>

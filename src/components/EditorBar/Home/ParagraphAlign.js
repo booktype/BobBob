@@ -1,6 +1,5 @@
 import React from 'react'
 import IconButton from 'material-ui/IconButton';
-import {Modifier} from 'draft-js';
 import AlignLeft from '../../../icons/formatAlignLeft';
 import AlignCenter from '../../../icons/formatAlignCenter';
 import AlignRight from '../../../icons/formatAlignRight';
@@ -8,9 +7,6 @@ import AlignJustify from '../../../icons/formatAlignJustify';
 
 export default class ParagraphAlign extends React.PureComponent {
 
-  constructor(props) {
-    super(props);
-  }
   shouldComponentUpdate(nextProps, nextState){
     if(nextProps.textAlign === this.props.textAlign){
       return false
@@ -34,19 +30,19 @@ export default class ParagraphAlign extends React.PureComponent {
           onTouchTap={()=>this.handleToggleStyle("center")}
           tooltip="Align Text Center"
           >
-            <AlignCenter color={this.props.textAlign=="center"?"orange":"black"}/>
+            <AlignCenter color={this.props.textAlign==="center"?"orange":"black"}/>
         </IconButton>
         <IconButton
           onTouchTap={()=>this.handleToggleStyle("right")}
           tooltip="Align Text Right"
           >
-            <AlignRight color={this.props.textAlign=="right"?"orange":"black"}/>
+            <AlignRight color={this.props.textAlign==="right"?"orange":"black"}/>
         </IconButton>
         <IconButton
           onTouchTap={()=>this.handleToggleStyle("justify")}
           tooltip="Justify"
           >
-            <AlignJustify color={this.props.textAlign=="justify"?"orange":"black"}/>
+            <AlignJustify color={this.props.textAlign==="justify"?"orange":"black"}/>
         </IconButton>
       </div>
     )

@@ -68,7 +68,7 @@ export const ShetchFields = ({ onChange, rgb, hsl, hex, disableAlpha }) => {
       } else if (data.a > 100) {
         data.a = 100
       }
-
+      // eslint-disable-next-line
       data.a = data.a / 100
       onChange({
         h: hsl.h,

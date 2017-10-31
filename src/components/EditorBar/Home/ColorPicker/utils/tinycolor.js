@@ -3,7 +3,7 @@
 // TinyColor v1.1.2
 // https://github.com/bgrins/TinyColor
 // Brian Grinstead, MIT License
-
+/* eslint-disable */
 
 var trimLeft = /^[\s,#]+/;
 var trimRight = /\s+$/;

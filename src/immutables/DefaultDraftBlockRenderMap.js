@@ -1,31 +1,31 @@
 import {Map} from 'immutable';
 
-`
-  parents: [element] // Create Parents if they don't exist
-
-  type: text | block // text.children = [block, structure]
-                     // text.parents = [structure, none]
-                     // none.children = [none, text]
-                     // none.parents = [none, structure]
-                     // block.children = []
-                     // block.parents = [text]
-                     // structure.children = [none, text, structure]
-                     // structure.parents = [text]
-                     // if text then cut text, insert block, paste text
-                     // if block:
-                     //   if collapsed:
-                     //     if in text:
-                     //       then cut text, insert block, paste text
-                     //     else if block:
-                     //       then toggle from one type to the other
-                     //   else:
-                     //     if in text:
-                     //       then split toggle selectedBefore: p, selected: type, selectedAfter: p
-                     //       then append
-                     //     elseif block:
-                     //       then split toggle selectedBefore: currentType, selected: type, selectedAfter: currentType
-                     //       then replace
-`
+// `
+//   parents: [element] // Create Parents if they don't exist
+//
+//   type: text | block // text.children = [block, structure]
+//                      // text.parents = [structure, none]
+//                      // none.children = [none, text]
+//                      // none.parents = [none, structure]
+//                      // block.children = []
+//                      // block.parents = [text]
+//                      // structure.children = [none, text, structure]
+//                      // structure.parents = [text]
+//                      // if text then cut text, insert block, paste text
+//                      // if block:
+//                      //   if collapsed:
+//                      //     if in text:
+//                      //       then cut text, insert block, paste text
+//                      //     else if block:
+//                      //       then toggle from one type to the other
+//                      //   else:
+//                      //     if in text:
+//                      //       then split toggle selectedBefore: p, selected: type, selectedAfter: p
+//                      //       then append
+//                      //     elseif block:
+//                      //       then split toggle selectedBefore: currentType, selected: type, selectedAfter: currentType
+//                      //       then replace
+// `
 const DefaultDraftBlockRenderMap = Map({
   'firstblock':{
     element: 'div',

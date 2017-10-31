@@ -21,8 +21,6 @@ export default function contentRendererFn(props) {
 
   const blocksAsArray = content.getBlocksAsArray();
   const processedBlocks = [];
-  let currentDepth = null;
-  let lastWrapperTemplate = null;
 
   for (let ii = 0; ii < blocksAsArray.length; ii++) {
     const block = blocksAsArray[ii];
@@ -128,20 +126,19 @@ export default function contentRendererFn(props) {
       style
     });
 
-    if (wrapperTemplate) {
-      currentDepth = block.getDepth();
-    } else {
-      currentDepth = null;
-    }
-    lastWrapperTemplate = wrapperTemplate;
+    // if (wrapperTemplate) {
+    //   currentDepth = block.getDepth();
+    // } else {
+    //   currentDepth = null;
+    // }
+    // lastWrapperTemplate = wrapperTemplate;
   }
 
   // Group contiguous runs of blocks that have the same wrapperTemplate
 
   function nestBlocks(blocks, depth) {
-    const outputBlocks = []
     return blocks.reduce((acc, item) => {
-      if (item.depth == depth) {
+      if (item.depth === depth) {
         acc.push([item])
       } else if (item.depth > depth) {
         acc[acc.length - 1].push(item)
@@ -149,19 +146,14 @@ export default function contentRendererFn(props) {
       return acc
     }, []).map((block) => {
       const currentBlock = block[0]
-      if (block.length != 1) {
+      if (block.length !== 1) {
         currentBlock.children = nestBlocks(block.slice(1), block[1].depth)
       }
       return currentBlock
     })
   }
 
-  var createChildren = function (node) {
-    if (!node.children) {
-      return node.block.props.children
-    }
-    return node.children.map(createElement);
-  };
+
 
   var createElement = function (node) {
     if (!node || !node.block) {
@@ -180,8 +172,17 @@ export default function contentRendererFn(props) {
       'data-offset-key': node.offsetKey,
       ...node.attributes,
       style: node.style,
+      // eslint-disable-next-line
     }, createChildren(node));
   };
+  var createChildren = function (node) {
+    if (!node.children) {
+      return node.block.props.children
+    }
+
+    return node.children.map(createElement);
+  };
+
   const blocks = nestBlocks(processedBlocks, 0)
   const outputBlocks = blocks.map((block) => {
     return createElement(block)

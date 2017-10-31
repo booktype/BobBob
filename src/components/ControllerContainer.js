@@ -1,5 +1,5 @@
 import React from 'react';
-import EntityStyleControls from './EntityStyleControls';
+// import EntityStyleControls from './EntityStyleControls';
 import FontColorPicker from './EditorBar/Home/FontColorPicker'
 import HighlightColorPicker from './EditorBar/Home/HighlightColorPicker'
 import FontSizePicker from './EditorBar/Home/FontSizePicker'
@@ -23,20 +23,22 @@ import Tab from './Tabs/Tab';
 
 
 
-const styles = {
-};
 
-
-class ControllerContainer extends React.Component {
-  constructor(props) {
-    super(props)
-  }
+class ControllerContainer extends React.PureComponent {
 
   onChange = (editorState) => {
     this.props.onChange(editorState)
   }
-  componentWillReceiveProps(nextProps){
 
+  shouldComponentUpdate(nextProps){
+    if(
+      JSON.stringify(nextProps.inlineStyles) === JSON.stringify(this.props.inlineStyles) &&
+      JSON.stringify(nextProps.blockStyle) === JSON.stringify(this.props.blockStyle) &&
+      JSON.stringify(nextProps.blockTree) === JSON.stringify(this.props.blockTree)
+    ){
+      return false
+    }
+    return true
   }
 
   render() {
@@ -63,10 +65,7 @@ class ControllerContainer extends React.Component {
             <PictureForm controller={this.props.controller} onChange={this.onChange}/>
             <CommentButton controller={this.props.controller} onChange={this.onChange}/>
           </Tab>
-          {this.props.controller.location.find(block => {
-            return block.getType() === "table"
-          }
-          ) ?
+          {this.props.blockTree['table'] ?
             <Tab label="Table Layout" >
               <TableTab controller={this.props.controller} onChange={this.onChange}/>
             </Tab>

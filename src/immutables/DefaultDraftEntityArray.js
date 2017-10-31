@@ -55,7 +55,7 @@ export default [
           )
         }
         return (
-          <img src={src} width={width} height={height} style={style}/>
+          <img src={src} width={width} height={height} style={style} alt={alt}/>
         )
       }
     }

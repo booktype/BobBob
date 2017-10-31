@@ -11,8 +11,6 @@
  * @flow
  */
 
-'use strict';
-
 
 const ContentBlock = require('draft-js/lib/ContentBlock');
 const ContentState = require('draft-js/lib/ContentState');
@@ -204,8 +202,8 @@ class DraftEditorBlock extends React.Component {
     const {direction, offsetKey} = this.props;
     const className = cx({
       'public/DraftStyleDefault/block': true,
-      // 'public/DraftStyleDefault/ltr': direction === 'LTR',
-      // 'public/DraftStyleDefault/rtl': direction === 'RTL',
+      'public/DraftStyleDefault/ltr': direction === 'LTR',
+      'public/DraftStyleDefault/rtl': direction === 'RTL',
     });
 
     return (
