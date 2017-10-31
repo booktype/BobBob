@@ -258,10 +258,10 @@ function runDevServer(host, port, protocol) {
     watchOptions: {
       ignored: /node_modules/
     },
-    proxy: {
-      '/api': 'http://localhost:3030',
-      '/authentication': 'http://localhost:3030',
-    },
+    // proxy: {
+    //   '/api': 'http://localhost:3030',
+    //   '/authentication': 'http://localhost:3030',
+    // },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
     https: protocol === "https",
     host: host
