@@ -73,7 +73,7 @@
     "webpack-manifest-plugin": "1.1.0",
     "websocket-stream": "^4.0.0",
     "whatwg-fetch": "2.0.2",
-    "worker-loader": "^1.0.0",
+    "worker-loader": "^1.1.0",
     "ws": "^1.0.0"
   },
   "scripts": {

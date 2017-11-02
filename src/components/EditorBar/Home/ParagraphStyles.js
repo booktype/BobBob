@@ -1,23 +1,5 @@
 import React from 'react';
 import {RichUtils} from 'draft-js';
-// import FlatButton from 'material-ui/FlatButton';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-// const AbcText = ()=>(
-//     <span style={{padding: "auto"}}>AaBbCc</span>
-// )
-// const ParagraphStyle = (props) => (
-//   <FlatButton
-//     fullWidth={true}
-//     style={{height: "100%"}}
-//     onTouchTap={props.onToggle}
-//     >
-//     <props.element style={{position: "absolute", top: 0, width: "100%"}}>
-//       <span >AaBbCc</span>
-//     </props.element>
-//     <center style={{position: "absolute", bottom: 0, width: "100%"}}>{props.label}</center>
-//   </FlatButton>
-// )
 
 export default class ParagraphStyles extends React.PureComponent {
 
@@ -54,19 +36,19 @@ export default class ParagraphStyles extends React.PureComponent {
   render() {
     return (
       <div style={{display: "inline-block"}}>
-        <SelectField
-          floatingLabelText="Style"
+        <select
           value={this.props.style || "p"}
-          onChange={(e,i,value)=>this.toggleStyle(value)}
-          >
-            {this.availableStyles.map(style=>{
-              return (
-                <MenuItem key={style.element} value={style.element} primaryText={style.label} >
-                </MenuItem>
-              )
-            }
-          )}
-        </SelectField>
+          onChange={(e)=>{e.preventDefault();this.toggleStyle(e.target.value)}}
+        >
+          {this.availableStyles.map(style=>{
+            return (
+              <option key={style.element} className={style.element} value={style.element}>
+                {style.label}
+              </option>
+            )
+          }
+        )}
+        </select>
       </div>
     )
   }
