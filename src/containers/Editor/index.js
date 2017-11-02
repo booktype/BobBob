@@ -108,6 +108,7 @@ class BobbobEditor extends Component {
   };
 
   onChange = (editorState) => {
+    editorState = EditorState.forceSelection(editorState, editorState.getSelection())
     if (editorState === this.state.editorState) {
       return
     }
@@ -205,7 +206,9 @@ class BobbobEditor extends Component {
       <div  style={{margin: "auto"}}>
         {this.state.editorState ?
           <div>
-            <div onMouseDown={(e)=>{e.preventDefault()}} onMouseUp={(e)=>{e.preventDefault()}} className={'contentHeader'}>
+            <div
+              className={'contentHeader'}
+            >
               <ControllerContainer
                 inlineStyles={this.state.inlineStyles}
                 blockStyle={this.state.blockStyle}
