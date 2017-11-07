@@ -13,17 +13,15 @@ export default class FontColorPicker extends React.PureComponent {
 
     this.state = {
       open: false,
-      color: null
     };
   }
   shouldComponentUpdate(nextProps, nextState){
     if(nextState.open!==this.state.open){
       return true
     }
-    if(nextProps.color === this.props.color){
+    if(nextProps.color && nextProps.color === this.props.color){
       return false
     }
-    this.setState({color: this.props.color})
     return true
   }
   handleTouchTap = (event) => {
@@ -36,12 +34,12 @@ export default class FontColorPicker extends React.PureComponent {
     });
   };
   handleColorChange = (color) => {
-    if(this.state.color){
+    if(this.props.color){
       this.props.onChange(
         RichUtils.toggleInlineStyle(
           RichUtils.toggleInlineStyle(
             this.props.controller.editorState,
-            `color__${this.state.color}`,
+            `color__${this.props.color}`,
           ),
           `color__${color.hex}`,
         )
@@ -54,7 +52,6 @@ export default class FontColorPicker extends React.PureComponent {
         )
       );
     }
-    this.setState({color: color.hex})
 
   }
   handleRequestClose = () => {
@@ -70,7 +67,7 @@ export default class FontColorPicker extends React.PureComponent {
           onTouchTap={this.handleTouchTap}
           tooltip="Font Color"
           >
-            <FormatColorText color={this.state.color}/>
+            <FormatColorText color={this.props.color}/>
           </IconButton>
           <Popover
             open={this.state.open}
@@ -79,7 +76,7 @@ export default class FontColorPicker extends React.PureComponent {
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
             onRequestClose={this.handleRequestClose}
             >
-              <ColorPicker color={{hex:this.state.color}} onChange={this.handleColorChange} disableAlpha={true}/>
+              <ColorPicker color={{hex:this.props.color}} onChange={this.handleColorChange} disableAlpha={true}/>
           </Popover>
       </div>
     )

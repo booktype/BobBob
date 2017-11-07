@@ -13,17 +13,15 @@ export default class HighlightColorPicker extends React.PureComponent {
 
     this.state = {
       open: false,
-      color: null
     };
   }
   shouldComponentUpdate(nextProps, nextState){
     if(nextState.open!==this.state.open){
       return true
     }
-    if(nextProps.backgroundColor === this.props.backgroundColor){
+    if(nextProps.backgroundColor && nextProps.backgroundColor === this.props.backgroundColor){
       return false
     }
-    this.setState({backgroundColor: this.props.backgroundColor})
     return true
   }
   handleTouchTap = (event) => {
@@ -54,7 +52,6 @@ export default class HighlightColorPicker extends React.PureComponent {
         )
       );
     }
-    this.setState({backgroundColor: color.hex})
 
   }
   handleRequestClose = () => {
@@ -70,7 +67,7 @@ export default class HighlightColorPicker extends React.PureComponent {
           onTouchTap={this.handleTouchTap}
           tooltip="Highlight Color"
           >
-            <FormatColorFill color={this.state.backgroundColor}/>
+            <FormatColorFill color={this.props.backgroundColor}/>
           </IconButton>
           <Popover
             open={this.state.open}
@@ -79,7 +76,7 @@ export default class HighlightColorPicker extends React.PureComponent {
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
             onRequestClose={this.handleRequestClose}
             >
-              <ColorPicker color={{hex: this.state.backgroundColor}} onChange={this.handleColorChange} disableAlpha={true}/>
+              <ColorPicker color={{hex: this.props.backgroundColor}} onChange={this.handleColorChange} disableAlpha={true}/>
           </Popover>
       </div>
     )
