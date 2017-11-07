@@ -67,20 +67,6 @@ export default function contentRendererFn(props) {
     const depth = block.getDepth();
     let className = props.blockStyleFn(block);
 
-    // // List items are special snowflakes, since we handle nesting and
-    // // counters manually.
-    // if (Element === 'li') {
-    //   const shouldResetCount = (
-    //     lastWrapperTemplate !== wrapperTemplate ||
-    //     currentDepth === null ||
-    //     depth > currentDepth
-    //   );
-    //   className = joinClasses(
-    //     className,
-    //     getListItemClasses(blockType, depth, shouldResetCount, direction),
-    //   );
-    // }
-
     const Component = CustomComponent || EditorBlock;
     let childProps = {
       className,
@@ -126,15 +112,7 @@ export default function contentRendererFn(props) {
       style
     });
 
-    // if (wrapperTemplate) {
-    //   currentDepth = block.getDepth();
-    // } else {
-    //   currentDepth = null;
-    // }
-    // lastWrapperTemplate = wrapperTemplate;
   }
-
-  // Group contiguous runs of blocks that have the same wrapperTemplate
 
   function nestBlocks(blocks, depth) {
     return blocks.reduce((acc, item) => {
