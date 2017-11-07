@@ -52,3 +52,14 @@
   white-space: pre;
   margin: 1em 0px;
 }
+
+
+.public-DraftStyleDefault-ltr {
+    direction: ltr;
+    text-align: left
+}
+
+.public-DraftStyleDefault-rtl {
+    direction: rtl;
+    text-align: right
+}
