@@ -74,18 +74,15 @@ export default class OrderedList extends React.PureComponent {
 
   render() {
     return (
-      <div style={{display: "inline-block",  marginRight: '-40px'}}>
+      <div style={{display: "inline-block"}}>
         <span style={{display: "flex"}}>
           <IconButton
             onTouchTap={()=>this.handleToggleList("decimal")}
-            style={{float: "left", padding: 2, display: "block"}}
             tooltip="Bulleted List"
           >
             <FormatListNumbers color={this.props.ol?"orange":null} />
           </IconButton>
           <IconButton
-            style={{float: "left", padding: 2, display: "block"}}
-            iconStyle={{width: 16, height: 16, marginLeft: -50}}
             onTouchTap={this.handleTouchTap}
             tooltip="Number types">
             <ArrowDown />

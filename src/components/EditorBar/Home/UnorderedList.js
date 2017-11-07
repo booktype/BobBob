@@ -72,22 +72,19 @@ export default class UnorderedList extends React.PureComponent {
 
   render() {
     return (
-      <div style={{display: "inline-block", marginRight: '-40px'}}>
+      <div style={{display: "inline-block"}}>
         <span style={{display: "flex"}}>
           <IconButton
             onTouchTap={()=>this.handleToggleList("disc")}
-            style={{float: "left", padding: 2, display: "block"}}
             tooltip="Bulleted List">
             <FormatListBulletedType
               color={this.props.ul?"orange":null}
             />
           </IconButton>
           <IconButton
-            style={{float: "left", padding: 2, display: "block"}}
-            iconStyle={{widht: 16, height: 16, marginLeft: -50}}
             onTouchTap={this.handleTouchTap}
             tooltip="Bullet types">
-            <ArrowDown />
+            <ArrowDown  />
           </IconButton>
         </span>
         <Popover
