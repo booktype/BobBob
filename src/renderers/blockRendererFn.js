@@ -202,14 +202,14 @@ class DraftEditorBlock extends React.Component {
     const {direction, offsetKey} = this.props;
     const className = cx({
       'public/DraftStyleDefault/block': true,
-      'public/DraftStyleDefault/ltr': direction === 'LTR',
-      'public/DraftStyleDefault/rtl': direction === 'RTL',
+      'ltr': direction === 'LTR',
+      'rtl': direction === 'RTL',
     });
 
     return (
-      <span data-offset-key={offsetKey} className={className}>
+      <div data-offset-key={offsetKey} className={className}>
         {this._renderChildren()}
-      </span>
+      </div>
     );
   }
 }

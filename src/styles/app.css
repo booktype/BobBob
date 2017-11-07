@@ -54,12 +54,12 @@
 }
 
 
-.public-DraftStyleDefault-ltr {
+.ltr {
     direction: ltr;
     text-align: left
 }
 
-.public-DraftStyleDefault-rtl {
+.rtl {
     direction: rtl;
     text-align: right
 }
