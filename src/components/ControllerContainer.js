@@ -43,7 +43,7 @@ class ControllerContainer extends React.PureComponent {
 
   render() {
     return (
-      <div style={{zoom: 0.73}}>
+      <div style={{zoom: 0.70}}>
         <Tabs >
           <Tab label={"Home"}>
             <FontPicker fontFamily={this.props.inlineStyles.fontFamily} controller={this.props.controller} onChange={this.onChange}/>
@@ -55,9 +55,9 @@ class ControllerContainer extends React.PureComponent {
             <Indent marginLeft={this.props.blockStyle.style.marginLeft} controller={this.props.controller} onChange={this.onChange}/>
             <OrderedList ol={this.props.blockTree['ol']} controller={this.props.controller} onChange={this.onChange}/>
             <UnorderedList ul={this.props.blockTree['ul']} controller={this.props.controller} onChange={this.onChange}/>
-            <LineSpacing lineHeight={this.props.blockStyle.style.lineHeight} controller={this.props.controller} onChange={this.onChange}/>
             <TextDirection direction={this.props.blockStyle.style.direction} controller={this.props.controller} onChange={this.onChange}/>
             <ParagraphStyles style={this.props.blockStyle.type} controller={this.props.controller} onChange={this.onChange}/>
+            <LineSpacing lineHeight={this.props.blockStyle.style.lineHeight} controller={this.props.controller} onChange={this.onChange}/>
           </Tab>
           <Tab label={"Insert"}>
             <TablePicker controller={this.props.controller} onChange={this.onChange}/>

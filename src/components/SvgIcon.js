@@ -1,14 +1,16 @@
 import React from 'react';
 
 function SvgIcon(props) {
-  const { children, className, viewBox, ...other } = props;
-
+  const { children, className, style, ...other } = props;
+  const viewBox = `0 0 ${style.width} ${style.height}`
   return (
     <svg
       className={className}
       focusable="false"
       viewBox={viewBox}
-
+      style={style}
+      width={style.width}
+      height={style.height}
       {...other}
     >
       {children}
@@ -17,10 +19,9 @@ function SvgIcon(props) {
 }
 
 SvgIcon.defaultProps = {
-  viewBox: '0 0 24 24',
   style: {
-    height: '24px',
-    width: '24px',
+    height: 24,
+    width: 24,
     userSelect: 'none'
   }
 };

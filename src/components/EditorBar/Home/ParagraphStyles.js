@@ -7,6 +7,7 @@ export default class ParagraphStyles extends React.PureComponent {
     super(props);
 
     this.availableStyles = [
+      { element: 'p', label: 'Unstyled' },
       { element: 'h1', label: 'Title'},
       { element: 'h2', label: 'Subtitle' },
       { element: 'h3', label: 'Heading 3' },
@@ -14,7 +15,6 @@ export default class ParagraphStyles extends React.PureComponent {
       { element: 'h5', label: 'Heading 5' },
       { element: 'h6', label: 'Heading 6' },
       { element: 'blockquote', label: 'Blockquote' },
-      { element: 'p', label: 'Unstyled' },
       { element: 'pre', label: 'Preformatted' }
     ]
   }
@@ -36,7 +36,10 @@ export default class ParagraphStyles extends React.PureComponent {
   render() {
     return (
       <div style={{display: "inline-block"}}>
+        <label style={{display: 'block'}} htmlFor={'styles'}>Styles</label>
         <select
+          id={'styles'}
+          name={'styles'}
           value={this.props.style || "p"}
           onChange={(e)=>{e.preventDefault();this.toggleStyle(e.target.value)}}
         >
