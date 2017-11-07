@@ -1,5 +1,5 @@
 import React from 'react'
-import IconButton from 'material-ui/IconButton';
+import IconButton from '../../IconButton';
 import AlignLeft from '../../../icons/formatAlignLeft';
 import AlignCenter from '../../../icons/formatAlignCenter';
 import AlignRight from '../../../icons/formatAlignRight';

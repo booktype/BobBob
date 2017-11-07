@@ -19,42 +19,54 @@ const wrapper = {
 }
 
 export default class TableSizePicker extends React.PureComponent {
-  constructor(props){
+  constructor(props) {
     super(props)
-    this.state= {
+    this.state = {
       x: 0,
       y: 0
     }
   }
-  resize = (e)=>{
-    let x,y;
+  resize = (e) => {
+    let x,
+      y;
     const bounds = e.target.getBoundingClientRect()
-    x = e.pageX-bounds.left
-    y = e.pageY-bounds.top
-    const sizeX = 1-x/18%1 + x/18
-    const sizeY = 1-y/18%1 + y/18
-    x = 1-x/18%1 + x/16
-    y = 1-y/18%1 + y/16
-    this.setState({x,y,  sizeX, sizeY})
+    x = e.pageX - bounds.left
+    y = e.pageY - bounds.top
+    const sizeX = 1 - x / 18 % 1 + x / 18
+    const sizeY = 1 - y / 18 % 1 + y / 18
+    x = 1 - x / 18 % 1 + x / 16
+    y = 1 - y / 18 % 1 + y / 16
+    this.setState({x, y, sizeX, sizeY})
     this.props.onChange({sizeX, sizeY})
   }
 
-  render(){
+  render() {
     return (
-        <div onMouseMove={this.resize} onClick={this.props.onSelect}style={wrapper}>
-    <div style={{width: "100%", height:"100%"}}>
-    <div style={{...unhighlighted,
-  position: "absolute",
-    top:0,left:0,width:`${this.state.x+1}em`, height:`${this.state.y+1}em`
-                }}></div>
-      <div style={{...highlighted,
-           position: "absolute",
-    top:0,left:0,
-          width:`${this.state.x}em`, height:`${this.state.y}em`}}></div>
+      <div onMouseMove={this.resize} onClick={this.props.onSelect} style={wrapper}>
+        <div style={{
+          width: "100%",
+          height: "100%"
+        }}>
+          <div style={{
+            ...unhighlighted,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: `${this.state.x + 1}em`,
+            height: `${this.state.y + 1}em`
+          }}></div>
+          <div style={{
+            ...highlighted,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: `${this.state.x}em`,
+            height: `${this.state.y}em`
+          }}></div>
 
-      </div>
+        </div>
         {this.state.sizeX},{this.state.sizeY}
-  </div>
+      </div>
     )
   }
 }

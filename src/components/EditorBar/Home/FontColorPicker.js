@@ -1,6 +1,6 @@
 import React from 'react'
 import ColorPicker from './ColorPicker/Color'
-import IconButton from 'material-ui/IconButton';
+import IconButton from '../../IconButton';
 import FormatColorText from '../../../icons/formatColorText'
 import Popover from 'material-ui/Popover';
 import {RichUtils} from 'draft-js';

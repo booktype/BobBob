@@ -1,5 +1,5 @@
 import React from 'react'
-import IconButton from 'material-ui/IconButton';
+import IconButton from '../../IconButton';
 import {RichUtils} from 'draft-js';
 import FormatBold from '../../../icons/formatBold'
 import FormatItalic from '../../../icons/formatItalic'

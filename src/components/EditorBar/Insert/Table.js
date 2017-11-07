@@ -1,6 +1,6 @@
 import React from 'react';
 import TablePicker from './TablePicker';
-import IconButton from 'material-ui/IconButton';
+import IconButton from '../../IconButton';
 import Popover from 'material-ui/Popover';
 import TableIcon from '../../../icons/table';
 export default class TableButton extends React.PureComponent {

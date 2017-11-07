@@ -1,5 +1,5 @@
 import React from 'react';
-import IconButton from 'material-ui/IconButton';
+import IconButton from '../../IconButton';
 import TableEdit from '../../../icons/tableEdit';
 import TableIcon from '../../../icons/table';
 import TableColumnRemove from '../../../icons/tableColumnRemove';

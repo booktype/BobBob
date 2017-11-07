@@ -1,5 +1,5 @@
 import React from 'react';
-import IconButton from 'material-ui/IconButton';
+import IconButton from '../../IconButton';
 import Popover from 'material-ui/Popover';
 import LinkIcon from '../../../icons/link';
 import LinkOffIcon from '../../../icons/linkOff';

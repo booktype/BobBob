@@ -1,5 +1,5 @@
 import React from 'react';
-import IconButton from 'material-ui/IconButton';
+import IconButton from '../../IconButton';
 import Popover from 'material-ui/Popover';
 import ImageIcon from '../../../icons/imageArea';
 import TextField from 'material-ui/TextField';

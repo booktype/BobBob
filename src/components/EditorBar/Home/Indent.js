@@ -1,5 +1,5 @@
 import React from 'react'
-import IconButton from 'material-ui/IconButton';
+import IconButton from '../../IconButton';
 import IndentIncrease from '../../../icons/formatIndentIncrease';
 import IndentDecrease from '../../../icons/formatIndentDecrease';
 
