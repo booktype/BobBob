@@ -1,6 +1,5 @@
 import React from 'react';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import SelectField ,{Option} from '../../SelectField';
 import {RichUtils} from 'draft-js';
 
 
@@ -60,14 +59,14 @@ export default class FontSizePicker extends React.PureComponent {
   render(){
     return (
       <SelectField
-        floatingLabelText="Font"
+        label="Font"
         value={this.props.fontFamily || "sans-serif"}
-        onChange={(e,i,value)=>this.handleFontChange(value)}
+        onChange={(value)=>this.handleFontChange(value)}
         style={{width: 150, fontFamily: this.props.fontFamily || "sans-serif"}}
       >
         {this.availableFonts.map(fontFamily=>{
           return (
-            <MenuItem key={fontFamily} style={{fontFamily}} value={fontFamily} primaryText={fontFamily} />
+            <Option key={fontFamily} style={{fontFamily}} value={fontFamily} primaryText={fontFamily} />
           )
         }
       )}

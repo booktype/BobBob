@@ -1,11 +1,10 @@
 import React from 'react';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import SelectField, {Option} from '../../SelectField';
 import {RichUtils} from 'draft-js';
 
 const styles = {
   customWidth: {
-    width: 60,
+    width: 70,
   },
 };
 
@@ -43,14 +42,14 @@ export default class FontSizePicker extends React.PureComponent {
   render(){
     return (
       <SelectField
-        floatingLabelText="Size"
+        label="Size"
         value={this.props.fontSize ||  '16px'}
-        onChange={(e,i,value)=>this.handleSizeChange(value)}
+        onChange={(value)=>this.handleSizeChange(value)}
         style={styles.customWidth}
       >
         {this.availableSizes.map(size=>{
           return (
-            <MenuItem key={size} value={`${size}`} primaryText={`${size}`} />
+            <Option key={size} value={`${size}`} primaryText={`${size}`} />
           )
         }
       )}
