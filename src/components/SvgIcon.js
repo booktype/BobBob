@@ -13,7 +13,7 @@ function SvgIcon(props) {
       height={style.height}
       {...other}
     >
-      {children}
+      <props.children.type {...children.props} fill={other.color} />
     </svg>
   );
 }
