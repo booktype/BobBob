@@ -3,6 +3,7 @@
   display: inline-block;
   position: relative;
   text-align: center;
+  padding: 3px;
 }
 .qs .popover {
   top: 35px;
