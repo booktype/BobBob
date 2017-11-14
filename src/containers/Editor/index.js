@@ -15,18 +15,19 @@ import createEntityStrategy from '../../utils/createEntityStrategy';
 import editorStateToJSON from '../../encoding/editorStateToJSON';
 import editorStateFromRaw from '../../encoding/editorStateFromRaw';
 import editorContentsToHTML from '../../encoding/editorContentsToHTML';
-import ControllerContainer from '../../components/ControllerContainer'
-import RichEditor from '../../components/Editor'
+import ControllerContainer from '../../components/ControllerContainer';
+import RichEditor from '../../components/Editor';
 import '../../styles/app.scss';
 
-const DraftTransit = transit.withRecords([SelectionState, ContentBlock, CharacterMetadata])
+
+const DraftTransit = transit.withRecords([SelectionState, ContentBlock, CharacterMetadata]);
 
 const decorators = new CompositeDecorator(DefaultDraftEntityArray.map(
   (decorator) => {
     return {
       strategy: createEntityStrategy(decorator.name),
       component: decorator.component
-    }
+    };
   }
 ));
 
@@ -45,37 +46,42 @@ class BobbobEditor extends Component {
     this.loadContent();
 
   }
+
   async loadContent() {
     const content = await this.props.api.getContent();
-    let editorState = editorStateFromRaw(content)
-    let currentContent = editorState.getCurrentContent()
-    if(this.props.api.otEnabled){
-      currentContent = Modifier.enableOT(currentContent)
-      this.props.api.ws.publish('init',{bookID: this.props.api.bookID, documentID: this.documentID, userID: this.props.api.userID})
+    let editorState = editorStateFromRaw(content);
+    let currentContent = editorState.getCurrentContent();
+    if (this.props.api.otEnabled) {
+      currentContent = Modifier.enableOT(currentContent);
+      this.props.api.ws.publish('init', {
+        bookID: this.props.api.bookID,
+        documentID: this.documentID,
+        userID: this.props.api.userID
+      });
 
-      this.props.api.ws.publish('ready',{documentID: this.props.api.documentID})
+      this.props.api.ws.publish('ready', {documentID: this.props.api.documentID});
 
-      this.props.api.ws.subscribe = (message)=> {
-        let transformations = []
-        if(message.action === 'otChange'){
-          transformations.push(message.args)
-        }else if(message.action === 'syncChanges'){
-          transformations = transformations.concat(message.args)
-        }else{
-          return
+      this.props.api.ws.subscribe = (message) => {
+        let transformations = [];
+        if (message.action === 'otChange') {
+          transformations.push(message.args);
+        } else if (message.action === 'syncChanges') {
+          transformations = transformations.concat(message.args);
+        } else {
+          return;
         }
-        let content = this.state.editorState.getCurrentContent()
-        for(let ot of transformations){
-          if(!this.state.operations.includes(ot.contentHash)){
-            const args = DraftTransit.fromJSON(ot.operationArgs)
-            content = Modifier[ot.operationName](content, ...args)
-            content = Modifier.clearOperations(content)
+        let content = this.state.editorState.getCurrentContent();
+        for (let ot of transformations) {
+          if (!this.state.operations.includes(ot.contentHash)) {
+            const args = DraftTransit.fromJSON(ot.operationArgs);
+            content = Modifier[ot.operationName](content, ...args);
+            content = Modifier.clearOperations(content);
           }
         }
         this.onChange(EditorState.set(this.state.editorState,
           {currentContent: content}
-        ))
-      }
+        ));
+      };
     }
 
     editorState = EditorState.set(
@@ -84,47 +90,48 @@ class BobbobEditor extends Component {
         currentContent: currentContent,
         decorator: decorators
       }
-    )
+    );
     this.controller = new ContentController(editorState);
     this.controller.onSave = this.onSave;
-    this.controller.api = this.props.api
+    this.controller.api = this.props.api;
     this.setState({
       editorState
-    })
+    });
   }
+
   onSave = () => {
     this.props.api.saveContent(editorStateToJSON(this.state.editorState));
-    console.log('save')
+    console.log('save');
   };
 
   setReadOnly = (readOnly) => {
-    this.setState({readOnly})
+    this.setState({readOnly});
   };
 
   handleKeyCommand = (command) => {
     if (command === "ctrl-s") {
-      this.onSave()
+      this.onSave();
     }
   };
 
   onChange = (editorState) => {
-    editorState = EditorState.forceSelection(editorState, editorState.getSelection())
+    editorState = EditorState.forceSelection(editorState, editorState.getSelection());
     if (editorState === this.state.editorState) {
-      return
+      return;
     }
-    if(this.props.api.otEnabled){
+    if (this.props.api.otEnabled) {
       let currentContent = editorState.getCurrentContent();
       const operations = currentContent.getOperations();
       const hashes = [];
-      operations.forEach((operation, contentHash)=>{
-        hashes.push(contentHash)
-        const operationName = operation[0]
-        const operationArgs = DraftTransit.toJSON(operation[1])
+      operations.forEach((operation, contentHash) => {
+        hashes.push(contentHash);
+        const operationName = operation[0];
+        const operationArgs = DraftTransit.toJSON(operation[1]);
         this.props.api.ws.otChange({
           operationName, operationArgs
           , contentHash
-        })
-      })
+        });
+      });
       this.setState({operations: this.state.operations.concat(hashes)});
       currentContent = Modifier.clearOperations(currentContent);
       editorState = EditorState.set(editorState, {currentContent});
@@ -133,15 +140,15 @@ class BobbobEditor extends Component {
     this.controller.editorState = editorState;
     this.controller.currentContent = editorState.getCurrentContent();
     const inlineStyles = editorState.getCurrentInlineStyle().reduce(
-      (styles, style)=>{
-        const [attr, value=true ] = style.split("__")
-        styles[attr] = value
-        return styles
+      (styles, style) => {
+        const [attr, value = true] = style.split("__");
+        styles[attr] = value;
+        return styles;
       },
       {}
     );
     let reachedRoot = false;
-    let blockTree = {}
+    let blockTree = {};
     this.controller.currentInlineStyle = editorState.getCurrentInlineStyle();
     this.controller.blocksArray = this.controller.currentContent.getBlocksAsArray();
     this.controller.selection = editorState.getSelection();
@@ -149,39 +156,40 @@ class BobbobEditor extends Component {
     this.controller.location = this.controller.currentContent
       .getBlockMap()
       .reverse()
-      .skipUntil((block)=>{
-        return block.getKey()===this.controller.currentBlock.getKey()})
-      .takeUntil(block=>{
-        if(reachedRoot){
-          return reachedRoot
-        }
-        if(block.getDepth()===0){
-          reachedRoot = true
-          return false
-        }
-        return reachedRoot
+      .skipUntil((block) => {
+        return block.getKey() === this.controller.currentBlock.getKey();
       })
-      .reduce((tree, block)=>{
-        if(!tree[block.getDepth()]){
-          tree[block.getDepth()] = block
+      .takeUntil(block => {
+        if (reachedRoot) {
+          return reachedRoot;
+        }
+        if (block.getDepth() === 0) {
+          reachedRoot = true;
+          return false;
+        }
+        return reachedRoot;
+      })
+      .reduce((tree, block) => {
+        if (!tree[block.getDepth()]) {
+          tree[block.getDepth()] = block;
           blockTree[block.getType()] = {
             style: block.getData().get('style'),
-          }
+          };
         }
-        return tree
-      },[])
+        return tree;
+      }, []);
 
     const blockStyle = {
       type: this.controller.currentBlock.getType(),
       style: this.controller.currentBlock.getData().get('style') || {},
       attributes: this.controller.currentBlock.getData().get('attributes') || {}
-    }
+    };
     this.controller.currentDepth = this.controller.currentBlock.getDepth();
     this.controller.index = this.controller.blocksArray.findIndex((block) => {
-      return block.getKey() === this.controller.selection.getFocusKey()
+      return block.getKey() === this.controller.selection.getFocusKey();
     });
 
-    this.setState({editorState, blockStyle, blockTree, inlineStyles})
+    this.setState({editorState, blockStyle, blockTree, inlineStyles});
   };
 
   // onClick = (e) => {
@@ -198,12 +206,12 @@ class BobbobEditor extends Component {
   toHtml = () => {
     let mainEditor = document.querySelector("[data-contents]");
     mainEditor = mainEditor.cloneNode(true);
-    return editorContentsToHTML(mainEditor)
+    return editorContentsToHTML(mainEditor);
   };
 
   render() {
     return (
-      <div  style={{margin: "auto"}}>
+      <div style={{margin: "auto"}}>
         {this.state.editorState ?
           <div>
             <div

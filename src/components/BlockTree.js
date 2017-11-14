@@ -8,12 +8,12 @@ class BlockTree extends React.Component {
     super(props);
     this.state = {
       location: []
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
 
-    this.setState({location: nextProps.controller.location})
+    this.setState({location: nextProps.controller.location});
 
   }
 
@@ -28,9 +28,9 @@ class BlockTree extends React.Component {
           </Step>
         ))}
       </Stepper>
-    )
+    );
   }
 }
 
 
-export default BlockTree
+export default BlockTree;

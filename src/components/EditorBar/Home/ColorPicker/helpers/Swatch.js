@@ -1,7 +1,8 @@
-import React from 'react'
-import reactCSS from 'reactcss'
+import React from 'react';
+import reactCSS from 'reactcss';
 
-export const Swatch = ({ color, style, onClick, title = color }) => {
+
+export const Swatch = ({color, style, onClick, title = color}) => {
   const styles = reactCSS({
     'default': {
       swatch: {
@@ -14,13 +15,13 @@ export const Swatch = ({ color, style, onClick, title = color }) => {
     'custom': {
       swatch: style,
     },
-  }, 'custom')
+  }, 'custom');
 
-  const handleClick = (e) => onClick(color, e)
+  const handleClick = (e) => onClick(color, e);
 
   return (
-    <div style={ styles.swatch } onClick={ handleClick } title={ title } />
-  )
-}
+    <div style={styles.swatch} onClick={handleClick} title={title}/>
+  );
+};
 
-export default Swatch
+export default Swatch;

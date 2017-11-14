@@ -1,7 +1,7 @@
-import React from 'react'
-import ColorPicker from './ColorPicker/Color'
+import React from 'react';
+import ColorPicker from './ColorPicker/Color';
 import IconButton from '../../IconButton';
-import FormatColorText from '../../../icons/formatColorText'
+import FormatColorText from '../../../icons/formatColorText';
 import Popover from 'material-ui/Popover';
 import {RichUtils} from 'draft-js';
 
@@ -15,15 +15,17 @@ export default class FontColorPicker extends React.PureComponent {
       open: false,
     };
   }
-  shouldComponentUpdate(nextProps, nextState){
-    if(nextState.open!==this.state.open){
-      return true
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.open !== this.state.open) {
+      return true;
     }
-    if(nextProps.color && nextProps.color === this.props.color){
-      return false
+    if (nextProps.color && nextProps.color === this.props.color) {
+      return false;
     }
-    return true
+    return true;
   }
+
   handleTouchTap = (event) => {
     // This prevents ghost click.
     event.preventDefault();
@@ -34,7 +36,7 @@ export default class FontColorPicker extends React.PureComponent {
     });
   };
   handleColorChange = (color) => {
-    if(this.props.color){
+    if (this.props.color) {
       this.props.onChange(
         RichUtils.toggleInlineStyle(
           RichUtils.toggleInlineStyle(
@@ -44,7 +46,7 @@ export default class FontColorPicker extends React.PureComponent {
           `color__${color.hex}`,
         )
       );
-    }else{
+    } else {
       this.props.onChange(
         RichUtils.toggleInlineStyle(
           this.props.controller.editorState,
@@ -66,19 +68,19 @@ export default class FontColorPicker extends React.PureComponent {
         <IconButton
           onTouchTap={this.handleTouchTap}
           tooltip="Font Color"
-          >
-            <FormatColorText color={this.props.color}/>
-          </IconButton>
-          <Popover
-            open={this.state.open}
-            anchorEl={this.state.anchorEl}
-            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            onRequestClose={this.handleRequestClose}
-            >
-              <ColorPicker color={{hex:this.props.color}} onChange={this.handleColorChange} disableAlpha={true}/>
-          </Popover>
+        >
+          <FormatColorText color={this.props.color}/>
+        </IconButton>
+        <Popover
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          onRequestClose={this.handleRequestClose}
+        >
+          <ColorPicker color={{hex: this.props.color}} onChange={this.handleColorChange} disableAlpha={true}/>
+        </Popover>
       </div>
-    )
+    );
   }
 }

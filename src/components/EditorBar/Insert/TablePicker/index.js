@@ -2,6 +2,7 @@ import React from 'react';
 import DimensionHighlighted from "./dimension-highlighted.png";
 import DimensionUnhighlighted from "./dimension-unhighlighted.png";
 
+
 const unhighlighted = {
   background: `url(${DimensionUnhighlighted})`,
   maxWidth: "20em",
@@ -16,28 +17,29 @@ const wrapper = {
   width: "20em",
   height: "20em",
   overflowY: "hidden"
-}
+};
 
 export default class TableSizePicker extends React.PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       x: 0,
       y: 0
-    }
+    };
   }
+
   resize = (e) => {
     let x,
       y;
-    const bounds = e.target.getBoundingClientRect()
-    x = e.pageX - bounds.left
-    y = e.pageY - bounds.top
-    const sizeX = 1 - x / 18 % 1 + x / 18
-    const sizeY = 1 - y / 18 % 1 + y / 18
-    x = 1 - x / 18 % 1 + x / 16
-    y = 1 - y / 18 % 1 + y / 16
-    this.setState({x, y, sizeX, sizeY})
-    this.props.onChange({sizeX, sizeY})
+    const bounds = e.target.getBoundingClientRect();
+    x = e.pageX - bounds.left;
+    y = e.pageY - bounds.top;
+    const sizeX = 1 - x / 18 % 1 + x / 18;
+    const sizeY = 1 - y / 18 % 1 + y / 18;
+    x = 1 - x / 18 % 1 + x / 16;
+    y = 1 - y / 18 % 1 + y / 16;
+    this.setState({x, y, sizeX, sizeY});
+    this.props.onChange({sizeX, sizeY});
   }
 
   render() {
@@ -67,6 +69,6 @@ export default class TableSizePicker extends React.PureComponent {
         </div>
         {this.state.sizeX},{this.state.sizeY}
       </div>
-    )
+    );
   }
 }

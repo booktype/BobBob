@@ -63,7 +63,7 @@ export default function contentRendererFn(props) {
       configForType.element ||
       blockRenderMap.get('unstyled').element
     );
-    const voidElement = configForType.void
+    const voidElement = configForType.void;
     const depth = block.getDepth();
     let className = props.blockStyleFn(block);
 
@@ -103,18 +103,18 @@ export default function contentRendererFn(props) {
       <Component {...componentProps} />,
     );
 
-    const data = block.getData().toJSON()
-    const attributes = data.attributes || {}
+    const data = block.getData().toJSON();
+    const attributes = data.attributes || {};
     if (attributes.dataset) {
       for (var prop in attributes.dataset) {
-        attributes[`data-${prop}`] = attributes.dataset[prop]
+        attributes[`data-${prop}`] = attributes.dataset[prop];
       }
-      delete attributes.dataset
+      delete attributes.dataset;
     }
     if (attributes.className && attributes.className.constructor === Array) {
-      attributes.className = attributes.className.join(" ")
+      attributes.className = attributes.className.join(" ");
     }
-    const style = data.style || {}
+    const style = data.style || {};
     processedBlocks.push({
       block: child,
       wrapperTemplate,
@@ -139,20 +139,19 @@ export default function contentRendererFn(props) {
   function nestBlocks(blocks, depth) {
     return blocks.reduce((acc, item) => {
       if (item.depth === depth) {
-        acc.push([item])
+        acc.push([item]);
       } else if (item.depth > depth) {
-        acc[acc.length - 1].push(item)
+        acc[acc.length - 1].push(item);
       }
-      return acc
+      return acc;
     }, []).map((block) => {
-      const currentBlock = block[0]
+      const currentBlock = block[0];
       if (block.length !== 1) {
-        currentBlock.children = nestBlocks(block.slice(1), block[1].depth)
+        currentBlock.children = nestBlocks(block.slice(1), block[1].depth);
       }
-      return currentBlock
-    })
+      return currentBlock;
+    });
   }
-
 
 
   var createElement = function (node) {
@@ -177,15 +176,15 @@ export default function contentRendererFn(props) {
   };
   var createChildren = function (node) {
     if (!node.children) {
-      return node.block.props.children
+      return node.block.props.children;
     }
 
     return node.children.map(createElement);
   };
 
-  const blocks = nestBlocks(processedBlocks, 0)
+  const blocks = nestBlocks(processedBlocks, 0);
   const outputBlocks = blocks.map((block) => {
-    return createElement(block)
-  })
-  return outputBlocks
+    return createElement(block);
+  });
+  return outputBlocks;
 }

@@ -22,8 +22,8 @@ export default function onPaste(editorState, html) {
     if (htmlFragment) {
       const {blocks, metaMap} = htmlFragment;
       if (blocks) {
-        let htmlMap = BlockMapBuilder.createFromArray(blocks,);
-        return insertFragment(editorState, htmlMap, Immutable.OrderedMap(), metaMap)
+        let htmlMap = BlockMapBuilder.createFromArray(blocks);
+        return insertFragment(editorState, htmlMap, Immutable.OrderedMap(), metaMap);
       }
     }
   }

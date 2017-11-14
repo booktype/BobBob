@@ -1,14 +1,16 @@
-import React from 'react'
+import React from 'react';
 import IconButton from '../../IconButton';
 import {RichUtils} from 'draft-js';
-import FormatBold from '../../../icons/formatBold'
-import FormatItalic from '../../../icons/formatItalic'
-import CodeTags from '../../../icons/codeTags'
-import Quote from '../../../icons/formatQuoteClose'
-import FormatSubscript from '../../../icons/formatSubscript'
-import FormatSuperscript from '../../../icons/formatSuperscript'
-import FormatStrikethrough from '../../../icons/formatStrikethrough'
-import FormatUnderline from '../../../icons/formatUnderline'
+import FormatBold from '../../../icons/formatBold';
+import FormatItalic from '../../../icons/formatItalic';
+import CodeTags from '../../../icons/codeTags';
+import Quote from '../../../icons/formatQuoteClose';
+import FormatSubscript from '../../../icons/formatSubscript';
+import FormatSuperscript from '../../../icons/formatSuperscript';
+import FormatStrikethrough from '../../../icons/formatStrikethrough';
+import FormatUnderline from '../../../icons/formatUnderline';
+
+
 const icons = {
   BOLD: FormatBold,
   ITALIC: FormatItalic,
@@ -20,7 +22,7 @@ const icons = {
   UNDERLINE: FormatUnderline
 };
 const styles = ["BOLD", "ITALIC", "STRIKETHROUGH", "UNDERLINE", "CODE",
-"QUOTATION", "SUB", "SUP"]
+  "QUOTATION", "SUB", "SUP"];
 const labels = {
   BOLD: "Bold",
   ITALIC: "Italic",
@@ -46,21 +48,21 @@ export default class FontStyle extends React.PureComponent {
   render() {
     return (
       <div style={{display: "inline-block"}}>
-        {styles.map(style=>{
-          const Icon = icons[style]
+        {styles.map(style => {
+            const Icon = icons[style];
 
-          return (
-            <IconButton
-              key={style}
-              onTouchTap={()=>this.handleToggleStyle(style)}
-              tooltip={labels[style]}
+            return (
+              <IconButton
+                key={style}
+                onTouchTap={() => this.handleToggleStyle(style)}
+                tooltip={labels[style]}
               >
-                <Icon color={this.props.styles[style]?"orange":null}/>
-            </IconButton>
-          )
+                <Icon color={this.props.styles[style] ? "orange" : null}/>
+              </IconButton>
+            );
           }
         )}
       </div>
-    )
+    );
   }
 }

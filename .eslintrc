@@ -1,0 +1,53 @@
+{
+  "extends": "react-app",
+  "rules": {
+    "semi": 2,
+    "array-callback-return": 2,
+    "no-delete-var": 2,
+    "no-self-compare": 2,
+    "no-useless-return": 2,
+    "no-unused-vars": 2,
+    "no-use-before-define": 2,
+    "array-bracket-spacing": [
+      "error",
+      "never"
+    ],
+    "comma-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "func-call-spacing": [
+      "error",
+      "never"
+    ],
+    "jsx-quotes": [
+      "error",
+      "prefer-double"
+    ],
+    "key-spacing": [
+      "error",
+      {
+        "beforeColon": false
+      }
+    ],
+    "keyword-spacing": [
+      "error",
+      {
+        "before": true
+      }
+    ],
+    "space-before-blocks": [
+      "error",
+      "always"
+    ],
+    "space-before-function-paren": [
+      "error",
+      {
+        "named": "never"
+      }
+    ]
+  }
+}

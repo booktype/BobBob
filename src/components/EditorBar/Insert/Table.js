@@ -3,9 +3,11 @@ import TablePicker from './TablePicker';
 import IconButton from '../../IconButton';
 import Popover from 'material-ui/Popover';
 import TableIcon from '../../../icons/table';
+
+
 export default class TableButton extends React.PureComponent {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       open: false,
       sizeX: 0,
@@ -29,32 +31,33 @@ export default class TableButton extends React.PureComponent {
     });
   };
   handleSizeChange = (size) => {
-    console.log(size)
-    this.setState({...size})
+    console.log(size);
+    this.setState({...size});
   }
   handleChosenSize = () => {
-    this.handleRequestClose()
+    this.handleRequestClose();
     this.props.controller
       .insertElementAfter("div")
       .setAttr("className", "group_table")
       .appendChild("table")
-      .appendChild("tbody")
-    for(let x = 0; x<this.state.sizeX;x++){
+      .appendChild("tbody");
+    for (let x = 0; x < this.state.sizeX; x++) {
       this.props.controller.appendChild("tr")
-      .appendChildren("td", this.state.sizeY).queryParent("tbody")
+        .appendChildren("td", this.state.sizeY).queryParent("tbody");
     }
-    this.props.onChange(this.props.controller.editorState)
-    this.setState({sizeX:0, sizeY: 0})
+    this.props.onChange(this.props.controller.editorState);
+    this.setState({sizeX: 0, sizeY: 0});
   }
-  render(){
+
+  render() {
     return (
-      <div style={{display:'inline-block'}}>
+      <div style={{display: 'inline-block'}}>
 
         <IconButton
           onTouchTap={this.handleTouchTap}
           label={"Insert table"}
         >
-          <TableIcon />
+          <TableIcon/>
         </IconButton>
         <Popover
           open={this.state.open}
@@ -64,7 +67,7 @@ export default class TableButton extends React.PureComponent {
           onRequestClose={this.handleRequestClose}
         >
           <div>{`${this.state.sizeX} x ${this.state.sizeY}`}</div>
-          <TablePicker onChange={this.handleSizeChange} onSelect={this.handleChosenSize} />
+          <TablePicker onChange={this.handleSizeChange} onSelect={this.handleChosenSize}/>
         </Popover>
       </div>
     );

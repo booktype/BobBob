@@ -12,7 +12,7 @@ const styles = {
   commentImage: {
     width: "100%"
   },
-  inlineCommentImage:{
+  inlineCommentImage: {
     "position": "absolute",
     "width": "30px",
     "height": "30px",
@@ -88,5 +88,5 @@ const styles = {
     "OTransition": "all 0.2s ease-in-out",
     "transition": "all 0.2s ease-in-out"
   }
-}
+};
 export default styles;

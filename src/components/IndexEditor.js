@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {Map} from 'immutable';
 import ContentState from 'draft-js/lib/ContentState';
 import DraftEntityInstance from 'draft-js/lib/DraftEntityInstance';
@@ -12,9 +12,9 @@ import contentRendererFn from '../renderers/contentRendererFn';
 import leafRendererFn from '../renderers/leafRendererFn';
 import DefaultDraftBlockRenderMap from '../immutables/DefaultDraftBlockRenderMap';
 import DefaultDraftInlineStyle from '../immutables/DefaultDraftInlineStyle';
-import InlineStyleControls from './InlineStyleControls'
+import InlineStyleControls from './InlineStyleControls';
 import ContentController from '../transactions/ContentController';
-import convertTemplatetoContentBlocks from '../encoding/convertTemplatetoContentBlocks'
+import convertTemplatetoContentBlocks from '../encoding/convertTemplatetoContentBlocks';
 import './RichEditor.css';
 
 
@@ -39,12 +39,12 @@ class IndexEditor extends React.Component {
     this.controller = new ContentController(editorState);
     this.state = {
       editorState
-    }
+    };
   }
 
   handleKeyCommand = (command) => {
     // eslint-disable-next-line
-    switch(command) {
+    switch (command) {
       case "split-block":
         this.setState({
           editorState: RichUtils.insertSoftNewline(this.state.editorState)
@@ -52,12 +52,12 @@ class IndexEditor extends React.Component {
         return "handled";
       case "delete":
         if (isSelectionAtEndOfBlock(this.state.editorState)) {
-          return "handled"
+          return "handled";
         }
         return "not-handled";
       case "backspace":
         if (this.state.editorState.getSelection().getFocusOffset() === 0) {
-          return "handled"
+          return "handled";
         }
         return "not-handled";
     }
@@ -90,7 +90,7 @@ class IndexEditor extends React.Component {
             text: block.getText(),
             characterList: block.getCharacterList()
           }
-        }))
+        }));
       }
     });
     console.log(entities.toJSON());
@@ -98,7 +98,7 @@ class IndexEditor extends React.Component {
     console.log(entities);
     this.setState({
       editorState
-    })
+    });
   };
 
   customStyleFn = (style, block) => {
@@ -106,7 +106,7 @@ class IndexEditor extends React.Component {
       const [property, value] = style.split("__");
       return {
         [property]: value
-      }
+      };
     }
   };
 
@@ -131,9 +131,9 @@ class IndexEditor extends React.Component {
           spellCheck={true}
         />
       </div>
-    )
+    );
   }
 }
 
 
-export default IndexEditor
+export default IndexEditor;

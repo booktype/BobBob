@@ -1,30 +1,31 @@
-import React, { Component, PureComponent } from 'react'
-import reactCSS from 'reactcss'
-import * as hue from '../utils/hue'
+import React, {Component, PureComponent} from 'react';
+import reactCSS from 'reactcss';
+import * as hue from '../utils/hue';
+
 
 export class Hue extends (PureComponent || Component) {
   componentWillUnmount() {
-    this.unbindEventListeners()
+    this.unbindEventListeners();
   }
 
   handleChange = (e, skip) => {
-    const change = hue.calculateChange(e, skip, this.props, this.refs.container)
-    change && this.props.onChange(change, e)
+    const change = hue.calculateChange(e, skip, this.props, this.refs.container);
+    change && this.props.onChange(change, e);
   }
 
   handleMouseDown = (e) => {
-    this.handleChange(e, true)
-    window.addEventListener('mousemove', this.handleChange)
-    window.addEventListener('mouseup', this.handleMouseUp)
+    this.handleChange(e, true);
+    window.addEventListener('mousemove', this.handleChange);
+    window.addEventListener('mouseup', this.handleMouseUp);
   }
 
   handleMouseUp = () => {
-    this.unbindEventListeners()
+    this.unbindEventListeners();
   }
 
   unbindEventListeners() {
-    window.removeEventListener('mousemove', this.handleChange)
-    window.removeEventListener('mouseup', this.handleMouseUp)
+    window.removeEventListener('mousemove', this.handleChange);
+    window.removeEventListener('mouseup', this.handleMouseUp);
   }
 
   render() {
@@ -66,28 +67,29 @@ export class Hue extends (PureComponent || Component) {
           top: `${ -((this.props.hsl.h * 100) / 360) + 100 }%`,
         },
       },
-    }, { vertical: this.props.direction === 'vertical' })
+    }, {vertical: this.props.direction === 'vertical'});
 
     return (
-      <div style={ styles.hue }>
+      <div style={styles.hue}>
         <div
-          style={ styles.container }
+          style={styles.container}
           ref="container"
-          onMouseDown={ this.handleMouseDown }
-          onTouchMove={ this.handleChange }
-          onTouchStart={ this.handleChange }
+          onMouseDown={this.handleMouseDown}
+          onTouchMove={this.handleChange}
+          onTouchStart={this.handleChange}
         >
-          <div style={ styles.pointer }>
-            { this.props.pointer ? (
-              <this.props.pointer { ...this.props } />
+          <div style={styles.pointer}>
+            {this.props.pointer ? (
+              <this.props.pointer {...this.props} />
             ) : (
-              <div style={ styles.slider } />
-            ) }
+              <div style={styles.slider}/>
+            )}
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Hue
+
+export default Hue;

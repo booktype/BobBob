@@ -1,21 +1,25 @@
 import React from 'react';
 
-export default function SelectField(props){
+
+export default function SelectField(props) {
   return (
     <div style={{display: 'inline-block'}}>
       <label style={{display: 'block'}}>
-         {props.label}
+        {props.label}
       </label>
       <select
         className={props.className}
         style={props.style}
         value={props.value}
-        onChange={(e)=>{e.preventDefault();props.onChange(e.target.value)}}
+        onChange={(e) => {
+          e.preventDefault();
+          props.onChange(e.target.value);
+        }}
       >
         {props.children}
       </select>
     </div>
-  )
+  );
 }
 
 export function Option(props) {
@@ -24,8 +28,8 @@ export function Option(props) {
       style={props.style}
       className={props.className}
       value={props.value}
-      >
+    >
       {props.primaryText}
     </option>
-  )
+  );
 }

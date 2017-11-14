@@ -4,41 +4,41 @@ class OT {
     this.documentID = documentID;
     this.wsUrl = wsUrl;
     this.userID = userID;
-    this.connectWS()
+    this.connectWS();
   }
 
   connectWS = () => {
     this.server = new WebSocket(this.wsUrl);
     this.server.onopen = () => {
-      this.publish('init', {bookID: this.bookID, documentID: this.documentID, userID: this.userID})
+      this.publish('init', {bookID: this.bookID, documentID: this.documentID, userID: this.userID});
     };
     this.server.onclose = () => {
       setTimeout(
         () => {
-          this.connectWS()
+          this.connectWS();
         }, 3000
-      )
+      );
     };
     this.server.onmessage = (e) => {
       const data = JSON.parse(e.data);
 
       if (data.documentID === this.documentID) {
-        this.subscribe(data)
+        this.subscribe(data);
       }
-    }
+    };
   };
 
   updateDocumentID(documentID) {
     this.documentID = documentID;
-    this.publish('init', {bookID: this.bookID, documentID: this.documentID, userID: this.userID})
+    this.publish('init', {bookID: this.bookID, documentID: this.documentID, userID: this.userID});
   }
 
   publish(action, args) {
-    this.server.send(JSON.stringify({action, args, documentID: this.documentID}))
+    this.server.send(JSON.stringify({action, args, documentID: this.documentID}));
   }
 
   otChange = (change) => {
-    this.publish('otChange', change)
+    this.publish('otChange', change);
   };
 
   subscribe() {

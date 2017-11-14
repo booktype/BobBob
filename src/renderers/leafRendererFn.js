@@ -1,12 +1,13 @@
 import React from 'react';
 import {Map} from 'immutable';
 
+
 export default function leafRendererFn(props) {
   const {block} = props;
   let {text} = props;
-  let meta = Map()
-  if(props.start || text){
-    meta = block.getCharacterList().get(props.start).getMeta()
+  let meta = Map();
+  if (props.start || text) {
+    meta = block.getCharacterList().get(props.start).getMeta();
   }
 
   // If the leaf is at the end of its block and ends in a soft newline, append
@@ -19,19 +20,19 @@ export default function leafRendererFn(props) {
 
   const {customStyleMap, customStyleFn, offsetKey, styleSet, metaMap} = props;
   let mergedStyles = {};
-  let styleMapEntry = {}
+  let styleMapEntry = {};
   let Element = styleSet.reduce((MappedElement, styleName) => {
     if (styleName.includes("__")) {
       styleMapEntry = {
         style: customStyleFn(styleName, block)
-      }
-    }else if(styleName.includes("_")){
-      const [styleGroup, styleType] = styleName.split("_")
+      };
+    } else if (styleName.includes("_")) {
+      const [styleGroup, styleType] = styleName.split("_");
       styleMapEntry = customStyleMap[styleGroup][styleType];
-    }else{
+    } else {
       styleMapEntry = customStyleMap[styleName];
     }
-    const { style, ...element} = styleMapEntry
+    const {style, ...element} = styleMapEntry;
     if (
       style !== undefined &&
       mergedStyles.textDecoration !== style.textDecoration
@@ -40,41 +41,41 @@ export default function leafRendererFn(props) {
       mergedStyles.textDecoration =
         [mergedStyles.textDecoration, style.textDecoration].join(' ').trim();
     }
-    if( element.tag !== undefined ){
-      if(element.void){
-        return (props)=>(
-          <element.tag />
-        )
+    if (element.tag !== undefined) {
+      if (element.void) {
+        return (props) => (
+          <element.tag/>
+        );
       }
-      let attributes = element.attributes || {}
-      if(meta.get(styleName)){
-        const metaAttributes = metaMap.get(meta.get(styleName)).getData().attributes
-        attributes = Object.assign({[`data-${styleName}`]:meta.get(styleName)},attributes, metaAttributes)
+      let attributes = element.attributes || {};
+      if (meta.get(styleName)) {
+        const metaAttributes = metaMap.get(meta.get(styleName)).getData().attributes;
+        attributes = Object.assign({[`data-${styleName}`]: meta.get(styleName)}, attributes, metaAttributes);
       }
-      return (props)=>(
+      return (props) => (
         <element.tag style={style} {...attributes}>
           {MappedElement(props)}
         </element.tag>
-      )
-    }else{
-      mergedStyles = Object.assign(mergedStyles, style)
-      return MappedElement
+      );
+    } else {
+      mergedStyles = Object.assign(mergedStyles, style);
+      return MappedElement;
     }
-  }, props=><span {...props}/>);
-
+  }, props => <span {...props}/>);
 
 
   class CustomLeaf extends React.Component {
-    render(){
+    render() {
       return (
         <Element
           data-offset-key={offsetKey}
           style={mergedStyles}>
           {this.props.children}
         </Element>
-        )
+      );
     }
   }
 
-  return CustomLeaf
+
+  return CustomLeaf;
 }

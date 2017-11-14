@@ -1,12 +1,13 @@
 /* eslint-disable no-param-reassign */
 
-import React from 'react'
-import reactCSS from 'reactcss'
-import color from './utils/color'
+import React from 'react';
+import reactCSS from 'reactcss';
+import color from './utils/color';
 
-import { EditableInput } from './helpers'
+import {EditableInput} from './helpers';
 
-export const ShetchFields = ({ onChange, rgb, hsl, hex, disableAlpha }) => {
+
+export const ShetchFields = ({onChange, rgb, hsl, hex, disableAlpha}) => {
   const styles = reactCSS({
     'default': {
       fields: {
@@ -46,14 +47,14 @@ export const ShetchFields = ({ onChange, rgb, hsl, hex, disableAlpha }) => {
         display: 'none',
       },
     },
-  }, { disableAlpha })
+  }, {disableAlpha});
 
   const handleChange = (data, e) => {
     if (data.hex) {
       color.isValidHex(data.hex) && onChange({
         hex: data.hex,
         source: 'hex',
-      }, e)
+      }, e);
     } else if (data.r || data.g || data.b) {
       onChange({
         r: data.r || rgb.r,
@@ -61,12 +62,12 @@ export const ShetchFields = ({ onChange, rgb, hsl, hex, disableAlpha }) => {
         b: data.b || rgb.b,
         a: rgb.a,
         source: 'rgb',
-      }, e)
+      }, e);
     } else if (data.a) {
       if (data.a < 0) {
-        data.a = 0
+        data.a = 0;
       } else if (data.a > 100) {
-        data.a = 100
+        data.a = 100;
       }
       // eslint-disable-next-line
       data.a = data.a / 100
@@ -76,62 +77,62 @@ export const ShetchFields = ({ onChange, rgb, hsl, hex, disableAlpha }) => {
         l: hsl.l,
         a: data.a,
         source: 'rgb',
-      }, e)
+      }, e);
     }
-  }
+  };
 
   return (
-    <div style={ styles.fields } className="flexbox-fix">
-      <div style={ styles.double }>
+    <div style={styles.fields} className="flexbox-fix">
+      <div style={styles.double}>
         <EditableInput
-          style={{ input: styles.input, label: styles.label }}
+          style={{input: styles.input, label: styles.label}}
           label="hex"
-          value={ hex.replace('#', '') }
-          onChange={ handleChange }
+          value={hex.replace('#', '')}
+          onChange={handleChange}
         />
       </div>
-      <div style={ styles.single }>
+      <div style={styles.single}>
         <EditableInput
-          style={{ input: styles.input, label: styles.label }}
+          style={{input: styles.input, label: styles.label}}
           label="r"
-          value={ rgb.r }
-          onChange={ handleChange }
+          value={rgb.r}
+          onChange={handleChange}
           dragLabel="true"
           dragMax="255"
         />
       </div>
-      <div style={ styles.single }>
+      <div style={styles.single}>
         <EditableInput
-          style={{ input: styles.input, label: styles.label }}
+          style={{input: styles.input, label: styles.label}}
           label="g"
-          value={ rgb.g }
-          onChange={ handleChange }
+          value={rgb.g}
+          onChange={handleChange}
           dragLabel="true"
           dragMax="255"
         />
       </div>
-      <div style={ styles.single }>
+      <div style={styles.single}>
         <EditableInput
-          style={{ input: styles.input, label: styles.label }}
+          style={{input: styles.input, label: styles.label}}
           label="b"
-          value={ rgb.b }
-          onChange={ handleChange }
+          value={rgb.b}
+          onChange={handleChange}
           dragLabel="true"
           dragMax="255"
         />
       </div>
-      <div style={ styles.alpha }>
+      <div style={styles.alpha}>
         <EditableInput
-          style={{ input: styles.input, label: styles.label }}
+          style={{input: styles.input, label: styles.label}}
           label="a"
-          value={ Math.round(rgb.a * 100) }
-          onChange={ handleChange }
+          value={Math.round(rgb.a * 100)}
+          onChange={handleChange}
           dragLabel="true"
           dragMax="100"
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ShetchFields
+export default ShetchFields;
