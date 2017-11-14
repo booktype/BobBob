@@ -1,4 +1,4 @@
-export default function createEntityStrategy (type){
+export default function createEntityStrategy(type) {
   return (contentState, contentBlock, callback) => {
     contentBlock.findEntityRanges(
       (character) => {
@@ -10,5 +10,5 @@ export default function createEntityStrategy (type){
       },
       callback
     );
-  }
+  };
 }

@@ -1,36 +1,37 @@
-import React, { Component, PureComponent } from 'react'
-import reactCSS from 'reactcss'
-import * as alpha from '../utils/alpha'
+import React, {Component, PureComponent} from 'react';
+import reactCSS from 'reactcss';
+import * as alpha from '../utils/alpha';
 
-import Checkboard from './Checkboard'
+import Checkboard from './Checkboard';
+
 
 export class Alpha extends (PureComponent || Component) {
   componentWillUnmount() {
-    this.unbindEventListeners()
+    this.unbindEventListeners();
   }
 
   handleChange = (e, skip) => {
-    const change = alpha.calculateChange(e, skip, this.props, this.refs.container)
-    change && this.props.onChange(change, e)
+    const change = alpha.calculateChange(e, skip, this.props, this.refs.container);
+    change && this.props.onChange(change, e);
   }
 
   handleMouseDown = (e) => {
-    this.handleChange(e, true)
-    window.addEventListener('mousemove', this.handleChange)
-    window.addEventListener('mouseup', this.handleMouseUp)
+    this.handleChange(e, true);
+    window.addEventListener('mousemove', this.handleChange);
+    window.addEventListener('mouseup', this.handleMouseUp);
   }
 
   handleMouseUp = () => {
-    this.unbindEventListeners()
+    this.unbindEventListeners();
   }
 
   unbindEventListeners = () => {
-    window.removeEventListener('mousemove', this.handleChange)
-    window.removeEventListener('mouseup', this.handleMouseUp)
+    window.removeEventListener('mousemove', this.handleChange);
+    window.removeEventListener('mouseup', this.handleMouseUp);
   }
 
   render() {
-    const rgb = this.props.rgb
+    const rgb = this.props.rgb;
     const styles = reactCSS({
       'default': {
         alpha: {
@@ -83,32 +84,33 @@ export class Alpha extends (PureComponent || Component) {
     }, {
       vertical: this.props.direction === 'vertical',
       overwrite: true,
-    })
+    });
 
     return (
-      <div style={ styles.alpha }>
-        <div style={ styles.checkboard }>
-          <Checkboard renderers={ this.props.renderers } />
+      <div style={styles.alpha}>
+        <div style={styles.checkboard}>
+          <Checkboard renderers={this.props.renderers}/>
         </div>
-        <div style={ styles.gradient } />
+        <div style={styles.gradient}/>
         <div
-          style={ styles.container }
+          style={styles.container}
           ref="container"
-          onMouseDown={ this.handleMouseDown }
-          onTouchMove={ this.handleChange }
-          onTouchStart={ this.handleChange }
+          onMouseDown={this.handleMouseDown}
+          onTouchMove={this.handleChange}
+          onTouchStart={this.handleChange}
         >
-          <div style={ styles.pointer }>
-            { this.props.pointer ? (
-              <this.props.pointer { ...this.props } />
+          <div style={styles.pointer}>
+            {this.props.pointer ? (
+              <this.props.pointer {...this.props} />
             ) : (
-              <div style={ styles.slider } />
-            ) }
+              <div style={styles.slider}/>
+            )}
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Alpha
+
+export default Alpha;

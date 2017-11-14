@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import contentRendererFn from '../renderers/contentRendererFn';
 import {
   getDefaultKeyBinding,
@@ -9,8 +9,8 @@ import leafRendererFn from '../renderers/leafRendererFn';
 import blockRendererFn from '../renderers/blockRendererFn';
 import DefaultDraftBlockRenderMap from '../immutables/DefaultDraftBlockRenderMap';
 import DefaultDraftInlineStyle from '../immutables/DefaultDraftInlineStyle';
-import keycodes from '../constants/keycodes'
-import onPaste from '../handlers/onPaste'
+import keycodes from '../constants/keycodes';
+import onPaste from '../handlers/onPaste';
 import './RichEditor.css';
 
 
@@ -41,43 +41,43 @@ class RichEditor extends React.Component {
 
   customStyleFn = (style, block) => {
     if (style.includes("__")) {
-      const [property, value] = style.split("__")
+      const [property, value] = style.split("__");
       return {
         [property]: value
-      }
+      };
     }
   }
 
   _keyBindingFn = (e) => {
-    let command = []
-    const key = keycodes[e.keyCode.toString()]
+    let command = [];
+    const key = keycodes[e.keyCode.toString()];
     if (key) {
       if (e.ctrlKey) {
-        command.push("ctrl")
+        command.push("ctrl");
       }
       if (e.shiftKey) {
-        command.push("shift")
+        command.push("shift");
       }
       if (e.altKey) {
-        command.push("alt")
+        command.push("alt");
       }
-      command.push(key)
-      command = command.join("-")
+      command.push(key);
+      command = command.join("-");
     }
     if (command === "ctrl-s") {
-      e.preventDefault()
-      this.props.handleKeyCommand(command)
+      e.preventDefault();
+      this.props.handleKeyCommand(command);
     }
     if (command === "ctrl-enter") {
 
-      this.props.onChange(RichUtils.insertSoftNewline(this.props.editorState))
-      return "handled"
+      this.props.onChange(RichUtils.insertSoftNewline(this.props.editorState));
+      return "handled";
     }
     return getDefaultKeyBinding(e);
   }
 
   _handleKeyCommand(command) {
-    this.props.handleKeyCommand(command)
+    this.props.handleKeyCommand(command);
     const {editorState} = this.state;
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
@@ -97,10 +97,10 @@ class RichEditor extends React.Component {
 
   _onPaste = (text, html) => {
     if (html) {
-      this.props.onChange(onPaste(this.props.editorState, html))
-      return true
+      this.props.onChange(onPaste(this.props.editorState, html));
+      return true;
     } else {
-      return false
+      return false;
     }
   }
 
@@ -136,7 +136,7 @@ class RichEditor extends React.Component {
                   editorState: this.props.editorState,
                   onChange: this.props.onChange
                 }
-              }
+              };
             }}
             editorState={this.props.editorState}
             handleKeyCommand={this.props.handleKeyCommand}

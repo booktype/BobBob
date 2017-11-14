@@ -4,10 +4,12 @@ import Popover from 'material-ui/Popover';
 import LinkIcon from '../../../icons/link';
 import LinkOffIcon from '../../../icons/linkOff';
 import TextField from 'material-ui/TextField';
-import {RichUtils} from 'draft-js'
+import {RichUtils} from 'draft-js';
+
+
 export default class LinkButton extends React.PureComponent {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       open: false,
       url: ""
@@ -32,35 +34,36 @@ export default class LinkButton extends React.PureComponent {
   handleUrlChange = (e, url) => {
     this.setState({
       url
-    })
+    });
   }
-  componentWillReceiveProps(nextProps){
-    const data = nextProps.controller.getCurrentMetaData("LINK")
-    if(data && data.attributes && data.attributes.href){
-      this.setState({url: data.attributes.href})
-    }else if(this.state.url){
-      this.setState({url: ""})
+
+  componentWillReceiveProps(nextProps) {
+    const data = nextProps.controller.getCurrentMetaData("LINK");
+    if (data && data.attributes && data.attributes.href) {
+      this.setState({url: data.attributes.href});
+    } else if (this.state.url) {
+      this.setState({url: ""});
     }
   }
+
   removeLink = () => {
     this.props.onChange(
       RichUtils.toggleInlineStyleWithMeta(
         this.props.controller.editorState,
         "LINK",
-        {
-        }
+        {}
       )
     );
   }
   handleUrlSubmit = () => {
-    this.handleRequestClose()
+    this.handleRequestClose();
     let href;
-    if(!this.state.url.startsWith("http://") && !this.state.url.startsWith("https://")){
-      href = `http://${this.state.url}`
-    }else{
-      href = this.state.url
+    if (!this.state.url.startsWith("http://") && !this.state.url.startsWith("https://")) {
+      href = `http://${this.state.url}`;
+    } else {
+      href = this.state.url;
     }
-    if(this.props.controller.currentInlineStyle.has("LINK")){
+    if (this.props.controller.currentInlineStyle.has("LINK")) {
       this.props.onChange(
         this.props.controller.replaceStyleMetaData(
           "LINK",
@@ -70,8 +73,8 @@ export default class LinkButton extends React.PureComponent {
             }
           }
         ).editorState
-      )
-    }else{
+      );
+    } else {
       this.props.onChange(
         RichUtils.toggleInlineStyleWithMeta(
           this.props.controller.editorState,
@@ -85,14 +88,15 @@ export default class LinkButton extends React.PureComponent {
       );
     }
   }
-  render(){
+
+  render() {
     return (
-      <div style={{display:'inline-block'}}>
+      <div style={{display: 'inline-block'}}>
         <IconButton
           onTouchTap={this.handleTouchTap}
           label={"Insert Link"}
         >
-          <LinkIcon color={this.state.url?"orange":null}/>
+          <LinkIcon color={this.state.url ? "orange" : null}/>
         </IconButton>
         <IconButton
           onTouchTap={this.removeLink}
@@ -101,7 +105,7 @@ export default class LinkButton extends React.PureComponent {
           iconStyle={{width: "24px", height: "24px"}}
           label={"Remove Link"}
         >
-          <LinkOffIcon color={this.state.url?"orange":null}/>
+          <LinkOffIcon color={this.state.url ? "orange" : null}/>
         </IconButton>
         <Popover
           open={this.state.open}
@@ -119,7 +123,9 @@ export default class LinkButton extends React.PureComponent {
               value={this.state.url}
               onChange={this.handleUrlChange}
               // eslint-disable-next-line
-              onKeyPress={(e)=>{e.key==="Enter"?this.handleUrlSubmit():null}}
+              onKeyPress={(e) => {
+                e.key === "Enter" ? this.handleUrlSubmit() : null;
+              }}
             />
           </div>
         </Popover>

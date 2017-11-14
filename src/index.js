@@ -4,9 +4,8 @@ import reactTapPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import BobbobEditor from './containers/Editor';
-import BooktypeApi from './api/booktype'
+import BooktypeApi from './api/booktype';
 import DummyApi from './api/dummy';
-
 
 
 reactTapPlugin();
@@ -30,6 +29,7 @@ window.EditorController = class {
     this._api = api;
     this._container = contentContainer;
   }
+
   _render() {
     ReactDOM.render(
       <BobBob api={this._api}/>,
@@ -39,7 +39,7 @@ window.EditorController = class {
 
   initEditor(documentID) {
     this._api.documentID = documentID;
-    this._render()
+    this._render();
   }
 
   destroyEditor() {
@@ -47,8 +47,8 @@ window.EditorController = class {
     return ReactDOM.unmountComponentAtNode(this._container);
   }
 
-  getDocumentID () {
-    return this._api.documentID
+  getDocumentID() {
+    return this._api.documentID;
   }
 };
 
@@ -57,6 +57,6 @@ window.BooktypeApi = BooktypeApi;
 const controller = new window.EditorController(new DummyApi({
   documentID: 1,
   direction: 'ltr'
-}), document.querySelector('#app'))
-controller.initEditor()
-export default BobBob
+}), document.querySelector('#app'));
+controller.initEditor();
+export default BobBob;

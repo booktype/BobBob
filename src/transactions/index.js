@@ -1,2 +1,2 @@
-export {insertFragment} from './insertFragment'
-export {ContentController} from './ContentController'
+export {insertFragment} from './insertFragment';
+export {ContentController} from './ContentController';

@@ -50,7 +50,7 @@ const SideContentItem = (props) => {
           <props.header active={false}/>
         </div>
       </li>
-    )
+    );
   } else {
     return (
       <li style={{
@@ -65,8 +65,8 @@ const SideContentItem = (props) => {
           <props.body active={true}/>
         </div>
       </li>
-    )
+    );
   }
-}
+};
 
 export default SideContentItem;

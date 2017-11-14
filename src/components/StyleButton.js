@@ -11,8 +11,8 @@ class StyleButton extends React.Component {
       if (this.props.inputs) {
         this.setState({
           showForm: true
-        })
-        this.props.setReadOnly(true)
+        });
+        this.props.setReadOnly(true);
       } else {
         this.props.onToggle(this.props.style);
 
@@ -20,7 +20,7 @@ class StyleButton extends React.Component {
     };
     this.state = {
       showForm: false
-    }
+    };
 
   }
 
@@ -43,9 +43,9 @@ class StyleButton extends React.Component {
               schema={{"type": "object", "properties": this.props.inputs}}
               uiSchema={this.props.inputs}
               onSubmit={(data) => {
-                this.setState({showForm: false})
-                this.props.setReadOnly(false)
-                this.props.onToggle(this.props.style, data.formData)
+                this.setState({showForm: false});
+                this.props.setReadOnly(false);
+                this.props.onToggle(this.props.style, data.formData);
               }
               }
               formData={this.props.data}
@@ -58,4 +58,4 @@ class StyleButton extends React.Component {
 }
 
 
-export default StyleButton
+export default StyleButton;

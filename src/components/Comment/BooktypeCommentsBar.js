@@ -26,7 +26,7 @@ const iconButtonElement = (
 
 export default class BooktypeCommentBar extends React.PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     // get comments
     // loop through comments and find comment key
     // get the absolute position of the comments
@@ -34,38 +34,38 @@ export default class BooktypeCommentBar extends React.PureComponent {
     this.state = {
       comments: [],
       open: true
-    }
-    this.refreshComments()
+    };
+    this.refreshComments();
 
   }
 
   replyToComment = (cid, content) => {
     this.props.controller.chapter.replyComment(cid, content).then((res) => {
-      this.refreshComments()
-    })
+      this.refreshComments();
+    });
   }
 
   shouldComponentUpdate() {
-    const currentComment = this.props.controller.getCurrentMetaKey("COMMENT")
-    console.log(currentComment)
+    const currentComment = this.props.controller.getCurrentMetaKey("COMMENT");
+    console.log(currentComment);
     if (currentComment) {
       if (currentComment === this.state.currentComment) {
-        return false
+        return false;
       }
-      this.setState({currentComment})
-      return true
+      this.setState({currentComment});
+      return true;
     }
     if (this.state.currentComment) {
-      this.setState({currentComment})
-      return true
+      this.setState({currentComment});
+      return true;
     }
-    return false
+    return false;
   }
 
   componentWillUpdate() {
     // const commentsLength = document.querySelectorAll("[data-comment]").length
     // this.setState({commentsLength})
-    this.refreshComments()
+    this.refreshComments();
 
   }
 
@@ -78,7 +78,7 @@ export default class BooktypeCommentBar extends React.PureComponent {
   }
 
   render() {
-    let top = 0
+    let top = 0;
     return (
       <Drawer
         open={this.state.currentComment}
@@ -95,15 +95,15 @@ export default class BooktypeCommentBar extends React.PureComponent {
                   <IconMenu iconButtonElement={iconButtonElement}>
                     <MenuItem
                       onTouchTap={() => {
-                        this.props.controller.chapter.resolveComment(comment.cid)
-                        this.refreshComments()
+                        this.props.controller.chapter.resolveComment(comment.cid);
+                        this.refreshComments();
                       }}>
                       Resolve
                     </MenuItem>
                     <MenuItem
                       onTouchTap={() => {
-                        this.props.controller.chapter.deleteComment(comment.cid)
-                        this.refreshComments()
+                        this.props.controller.chapter.deleteComment(comment.cid);
+                        this.refreshComments();
 
                       }}>Delete</MenuItem>
                   </IconMenu>
@@ -130,7 +130,7 @@ export default class BooktypeCommentBar extends React.PureComponent {
                           </p>
                         }
                       />
-                    )
+                    );
                   }).concat([
                     <ListItem
                       key={"reply"}
@@ -139,7 +139,7 @@ export default class BooktypeCommentBar extends React.PureComponent {
                         hintText="Reply"
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
-                            this.replyToComment(comment.cid, e.target.value)
+                            this.replyToComment(comment.cid, e.target.value);
                           }
                         }}
                       />
@@ -147,10 +147,10 @@ export default class BooktypeCommentBar extends React.PureComponent {
                   ])
                 }
               />
-            )
+            );
           })}
         </List>
       </Drawer>
-    )
+    );
   }
 }

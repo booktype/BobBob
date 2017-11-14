@@ -1,50 +1,48 @@
 import React from 'react';
 // import EntityStyleControls from './EntityStyleControls';
-import FontColorPicker from './EditorBar/Home/FontColorPicker'
-import HighlightColorPicker from './EditorBar/Home/HighlightColorPicker'
-import FontSizePicker from './EditorBar/Home/FontSizePicker'
-import FontPicker from './EditorBar/Home/FontPicker'
-import FontStyle from './EditorBar/Home/FontStyle'
-import UnorderedList from './EditorBar/Home/UnorderedList'
-import OrderedList from './EditorBar/Home/OrderedList'
-import Indent from './EditorBar/Home/Indent'
-import ParagraphAlign from './EditorBar/Home/ParagraphAlign'
-import TextDirection from './EditorBar/Home/TextDirection'
-import LineSpacing from './EditorBar/Home/ParagraphLineSpacing'
-import ParagraphStyles from './EditorBar/Home/ParagraphStyles'
-import TablePicker from './EditorBar/Insert/Table'
-import LinkForm from './EditorBar/Insert/Link'
-import PictureForm from './EditorBar/Insert/Picture'
-import CommentButton from './EditorBar/Insert/Comment'
-import TableTab from './EditorBar/Table/Layout'
+import FontColorPicker from './EditorBar/Home/FontColorPicker';
+import HighlightColorPicker from './EditorBar/Home/HighlightColorPicker';
+import FontSizePicker from './EditorBar/Home/FontSizePicker';
+import FontPicker from './EditorBar/Home/FontPicker';
+import FontStyle from './EditorBar/Home/FontStyle';
+import UnorderedList from './EditorBar/Home/UnorderedList';
+import OrderedList from './EditorBar/Home/OrderedList';
+import Indent from './EditorBar/Home/Indent';
+import ParagraphAlign from './EditorBar/Home/ParagraphAlign';
+import TextDirection from './EditorBar/Home/TextDirection';
+import LineSpacing from './EditorBar/Home/ParagraphLineSpacing';
+import ParagraphStyles from './EditorBar/Home/ParagraphStyles';
+import TablePicker from './EditorBar/Insert/Table';
+import LinkForm from './EditorBar/Insert/Link';
+import PictureForm from './EditorBar/Insert/Picture';
+import CommentButton from './EditorBar/Insert/Comment';
+import TableTab from './EditorBar/Table/Layout';
 
 import Tabs from './Tabs/Tabs';
 import Tab from './Tabs/Tab';
 
 
-
-
 class ControllerContainer extends React.PureComponent {
 
   onChange = (editorState) => {
-    this.props.onChange(editorState)
+    this.props.onChange(editorState);
   }
 
-  shouldComponentUpdate(nextProps){
-    if(
+  shouldComponentUpdate(nextProps) {
+    if (
       JSON.stringify(nextProps.inlineStyles) === JSON.stringify(this.props.inlineStyles) &&
       JSON.stringify(nextProps.blockStyle) === JSON.stringify(this.props.blockStyle) &&
       JSON.stringify(nextProps.blockTree) === JSON.stringify(this.props.blockTree)
-    ){
-      return false
+    ) {
+      return false;
     }
-    return true
+    return true;
   }
 
   render() {
     return (
       <div style={{zoom: 0.70}}>
-        <Tabs >
+        <Tabs>
           <Tab label={"Home"}>
             <FontPicker fontFamily={this.props.inlineStyles.fontFamily} controller={this.props.controller} onChange={this.onChange}/>
             <FontSizePicker fontSize={this.props.inlineStyles.fontSize} controller={this.props.controller} onChange={this.onChange}/>
@@ -66,13 +64,13 @@ class ControllerContainer extends React.PureComponent {
             <CommentButton controller={this.props.controller} onChange={this.onChange}/>
           </Tab>
           {this.props.blockTree['table'] ?
-            <Tab label="Table Layout" >
+            <Tab label="Table Layout">
               <TableTab controller={this.props.controller} onChange={this.onChange}/>
             </Tab>
-          : null}
+            : null}
         </Tabs>
       </div>
-    )
+    );
   }
 }
 

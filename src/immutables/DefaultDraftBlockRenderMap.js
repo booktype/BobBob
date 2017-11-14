@@ -27,7 +27,7 @@ import {Map} from 'immutable';
 //                      //       then replace
 // `
 const DefaultDraftBlockRenderMap = Map({
-  'firstblock':{
+  'firstblock': {
     element: 'div',
     void: true
   },
@@ -192,9 +192,9 @@ const DefaultDraftBlockRenderMap = Map({
   },
   "ol": {
     "name": "Ordered List",
-    toggle: (controller)=>{
+    toggle: (controller) => {
       return controller.insertElementAfter("ol")
-      .appendChild("li").getCurrentContent()
+        .appendChild("li").getCurrentContent();
     },
     "children": ["li"],
     "attributes": [
@@ -239,12 +239,12 @@ const DefaultDraftBlockRenderMap = Map({
   },
   "tr": {
     "name": "Row",
-    toggle: (controller)=>{
+    toggle: (controller) => {
       const columns = controller.queryParent("tr")
-                                     .countChildren()
+        .countChildren();
       return controller.insertElementBefore("tr")
-                            .appendChildren("td", columns)
-                            .getCurrentContent()
+        .appendChildren("td", columns)
+        .getCurrentContent();
     },
     "parents": [
       "tbody", "thead", "tfoot"
@@ -276,9 +276,9 @@ const DefaultDraftBlockRenderMap = Map({
   },
   "ul": {
     "name": "Unordered List",
-    toggle: (controller)=>{
+    toggle: (controller) => {
       return controller.insertElementAfter("ul")
-      .appendChild("li").getCurrentContent()
+        .appendChild("li").getCurrentContent();
     },
     "children": ["li"],
     "attributes": [
@@ -295,13 +295,13 @@ const DefaultDraftBlockRenderMap = Map({
   },
   "table": {
     "name": "Table",
-    toggle: (controller)=>{
+    toggle: (controller) => {
 
       return controller.insertElementAfter("table")
-      .appendChild("tbody")
-      .appendChild("tr")
-      .appendChildren("td", 2)
-      .getCurrentContent()
+        .appendChild("tbody")
+        .appendChild("tr")
+        .appendChildren("td", 2)
+        .getCurrentContent();
     },
     "children": [
       "tbody",
@@ -326,11 +326,11 @@ const DefaultDraftBlockRenderMap = Map({
   },
   "td": {
     "name": "Cell",
-    toggle: (controller)=>{
-        const at_index = controller.getChildIndex()
+    toggle: (controller) => {
+      const at_index = controller.getChildIndex();
 
-        return controller.queryParent("tbody")
-          .queryAndAppend("tr","td", at_index).getCurrentContent()
+      return controller.queryParent("tbody")
+        .queryAndAppend("tr", "td", at_index).getCurrentContent();
     },
     "parents": ["tr"],
     "children": ["flow"],

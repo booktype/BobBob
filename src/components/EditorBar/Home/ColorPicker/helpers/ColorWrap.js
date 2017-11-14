@@ -1,44 +1,46 @@
-import React, { Component, PureComponent } from 'react'
-import debounce from 'lodash/debounce'
-import color from '../utils/color'
+import React, {Component, PureComponent} from 'react';
+import debounce from 'lodash/debounce';
+import color from '../utils/color';
+
 
 export const ColorWrap = (Picker) => {
   class ColorPicker extends (PureComponent || Component) {
     constructor(props) {
-      super()
+      super();
 
       this.state = {
         ...color.toState(props.color, 0),
         visible: props.display,
-      }
+      };
 
       this.debounce = debounce((fn, data, event) => {
-        fn(data, event)
-      }, 100)
+        fn(data, event);
+      }, 100);
     }
 
     componentWillReceiveProps(nextProps) {
       this.setState({
         ...color.toState(nextProps.color, this.state.oldHue),
         visible: nextProps.display,
-      })
+      });
     }
 
 
     handleChange = (data, event) => {
-      const isValidColor = color.simpleCheckForValidColor(data)
+      const isValidColor = color.simpleCheckForValidColor(data);
       if (isValidColor) {
-        const colors = color.toState(data, data.h || this.state.oldHue)
-        this.setState(colors)
-        this.props.onChangeComplete && this.debounce(this.props.onChangeComplete, colors, event)
-        this.props.onChange && this.props.onChange(colors, event)
+        const colors = color.toState(data, data.h || this.state.oldHue);
+        this.setState(colors);
+        this.props.onChangeComplete && this.debounce(this.props.onChangeComplete, colors, event);
+        this.props.onChange && this.props.onChange(colors, event);
       }
     }
 
     render() {
-      return <Picker { ...this.props } { ...this.state } onChange={ this.handleChange } />
+      return <Picker {...this.props} {...this.state} onChange={this.handleChange}/>;
     }
   }
+
 
   ColorPicker.defaultProps = {
     color: {
@@ -47,9 +49,9 @@ export const ColorWrap = (Picker) => {
       l: 0.20,
       a: 1,
     },
-  }
+  };
 
-  return ColorPicker
-}
+  return ColorPicker;
+};
 
-export default ColorWrap
+export default ColorWrap;

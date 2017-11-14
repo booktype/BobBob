@@ -1,10 +1,7 @@
-
 export default {
   DEFAULT: {
     tag: "span",
-    style: {
-
-    }
+    style: {}
   },
   BREAK: {
     tag: "br",
@@ -12,26 +9,24 @@ export default {
     void: true
   },
   BOLD: {
-    tag:"b",
-    style:{
+    tag: "b",
+    style: {
       fontWeight: 'bold',
     }
   },
-  LINK:{
+  LINK: {
     tag: "a",
-    style: {
-
-    }
+    style: {}
   },
-  COMMENT:{
+  COMMENT: {
     tag: "span",
     style: {
       backgroundColor: 'lightgoldenrodyellow'
     }
   },
   CODE: {
-    tag:"code",
-    style:{
+    tag: "code",
+    style: {
       fontFamily: 'monospace',
       wordWrap: 'break-word',
     }
@@ -44,32 +39,32 @@ export default {
     tag: "em",
     style: {}
   },
-  STRONG:{
+  STRONG: {
     tag: "strong",
     style: {}
   },
-  SAMP:{
+  SAMP: {
     tag: "samp",
     style: {}
   },
-  VAR:{
+  VAR: {
     tag: "var",
     style: {}
   },
-  QUOTATION:{
+  QUOTATION: {
     tag: "q",
     style: {}
   },
   SUB: {
-    tag:"sub",
+    tag: "sub",
     style: {}
   },
   SUP: {
-    tag:"sup",
+    tag: "sup",
     style: {}
   },
   BDO: {
-    RTL:{
+    RTL: {
       tag: "bdo",
       attributes: {
         dir: "rtl"
@@ -85,21 +80,21 @@ export default {
     }
   },
   ITALIC: {
-    tag:"i",
-    style:{
+    tag: "i",
+    style: {
       fontStyle: 'italic',
     }
   },
 
   STRIKETHROUGH: {
     tag: "strike",
-    style:{
+    style: {
       textDecoration: 'line-through',
     }
   },
   UNDERLINE: {
-    tag:"u",
-    style:{
+    tag: "u",
+    style: {
       textDecoration: 'underline',
     }
   },
