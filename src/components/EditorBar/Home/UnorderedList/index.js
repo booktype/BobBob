@@ -1,26 +1,15 @@
 import React from 'react';
-import IconButton from '../../IconButton';
-import Popover from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
-import FormatListBulletedType from '../../../icons/formatListBulleted';
-import ArrowDown from '../../../icons/arrowDownDropCircleOutline';
+import IconButton from '../../../IconButton';
+import SelectField, {Option} from '../../../SelectField';
+import FormatListBulletedType from '../../../../icons/formatListBulleted';
+import DiscIcon from './disc.png';
+import CircleIcon from './circle.png';
+import SquareIcon from './square.png';
 
-const styles = {
-  listEmptyLine: {
-    "height": "2px",
-    "marginLeft": "4px",
-    "marginRight": "4px",
-    "backgroundColor": "#000000",
-    "width": 30,
-    "position": "absolute",
-    "marginTop": "8%",
-    "outline": "1px solid"
-  }
+const optionStyle = {
+  height: 70
 }
-const ListEmptyLine = () => (
-  <li><span style={styles.listEmptyLine}></span></li>
-)
+
 export default class UnorderedList extends React.PureComponent {
 
   constructor(props) {
@@ -42,7 +31,7 @@ export default class UnorderedList extends React.PureComponent {
   handleToggleList=(listStyleType)=>{
     if(this.props.ul){
       this.props.onChange(
-        this.props.controller
+        this.props.controller.queryParent('ul')
         .setStyleAttr("listStyleType", listStyleType)
         .editorState
       )
@@ -54,21 +43,6 @@ export default class UnorderedList extends React.PureComponent {
       )
     }
   }
-  handleTouchTap = (event) => {
-    // This prevents ghost click.
-    event.preventDefault();
-
-    this.setState({
-      open: true,
-      anchorEl: event.currentTarget,
-    });
-  };
-
-  handleRequestClose = () => {
-    this.setState({
-      open: false,
-    });
-  };
 
   render() {
     return (
@@ -81,52 +55,23 @@ export default class UnorderedList extends React.PureComponent {
               color={this.props.ul?"orange":null}
             />
           </IconButton>
-          <IconButton
-            onTouchTap={this.handleTouchTap}
-            tooltip="Bullet types">
-            <ArrowDown  />
-          </IconButton>
+          <SelectField
+            value={this.props.ul && this.props.ul.listStyleType}
+            onChange={this.handleToggleList}
+            style={{ width: 90 }}
+          >
+            <Option value={'disc'} label={'Disc'} style={optionStyle}>
+              <img src={DiscIcon} alt={'Disc list style type'} />
+            </Option>
+            <Option value={'circle'} label={'Circle'} style={optionStyle}>
+              <img src={CircleIcon} alt={'Circle list style type'} />
+            </Option>
+            <Option value={'square'} label={'Square'} style={optionStyle}>
+              <img src={SquareIcon} alt={'Square list style type'} />
+            </Option>
+          </SelectField>
+
         </span>
-        <Popover
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={this.handleRequestClose}
-        >
-          <Menu style={{width: 100}}>
-            <MenuItem
-              onTouchTap={()=>this.handleToggleList("disc")}
-              style={{backgroundColor: this.props.ul && this.props.ul.listStyleType==="disc"?"orange":null}}
-            >
-              <ul style={{listStyleType: "disc" ,marginLeft: 8}}>
-                <ListEmptyLine />
-                <ListEmptyLine />
-                <ListEmptyLine />
-              </ul>
-            </MenuItem>
-            <MenuItem
-              onTouchTap={()=>this.handleToggleList("circle")}
-              style={{backgroundColor: this.props.ul && this.props.ul.listStyleType==="circle"?"orange":null}}
-             >
-              <ul style={{listStyleType: "circle",marginLeft: 8}}>
-                <ListEmptyLine />
-                <ListEmptyLine />
-                <ListEmptyLine />
-              </ul>
-            </MenuItem>
-            <MenuItem
-              onTouchTap={()=>this.handleToggleList("square")}
-              style={{backgroundColor: this.props.ul && this.props.ul.listStyleType==="square"?"orange":null}}
-            >
-              <ul style={{listStyleType: "square",marginLeft: 8}}>
-                <ListEmptyLine />
-                <ListEmptyLine />
-                <ListEmptyLine />
-              </ul>
-            </MenuItem>
-          </Menu>
-        </Popover>
       </div>
     );
   }

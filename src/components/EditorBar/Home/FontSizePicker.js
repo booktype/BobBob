@@ -46,10 +46,11 @@ export default class FontSizePicker extends React.PureComponent {
         value={this.props.fontSize ||  '16px'}
         onChange={(value)=>this.handleSizeChange(value)}
         style={styles.customWidth}
+        hint="Choose font size"
       >
         {this.availableSizes.map(size=>{
           return (
-            <Option key={size} value={`${size}`} primaryText={`${size}`} />
+            <Option key={size} value={`${size}`} label={`${size}`} />
           )
         }
       )}

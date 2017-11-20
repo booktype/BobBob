@@ -1,13 +1,11 @@
 import React from 'react'
 import LineSpacing from '../../../icons/formatLineSpacing';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
-import SelectField, {Option} from '../../SelectField';
+import SelectField, { Option } from '../../SelectField';
 
 export default class ParagraphLineSpacing extends React.PureComponent {
 
-  shouldComponentUpdate(nextProps){
-    if(nextProps.lineHeight && nextProps.lineHeight === this.props.lineHeight){
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.lineHeight && nextProps.lineHeight === this.props.lineHeight) {
       return false
     }
     return true
@@ -25,13 +23,15 @@ export default class ParagraphLineSpacing extends React.PureComponent {
         label={'Line Spacing'}
         value={this.props.lineHeight || 1}
         onChange={this.handleChange}
+        hint='Choose line spacing'
+        icon={<LineSpacing />}
       >
-        {[1,1.15,1.5,2,2.5,3].map(lh=>{
+        {[1, 1.15, 1.5, 2, 2.5, 3].map(lh => {
           return (
             <Option
               key={lh}
               value={lh}
-              primaryText={lh}
+              label={lh}
             />
           )
         })}

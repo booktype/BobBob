@@ -9,7 +9,7 @@ export default class ParagraphStyles extends React.PureComponent {
 
     this.availableStyles = [
       {
-        element: 'p',
+        element: 'unstyled',
         label: 'Unstyled'
       }, {
         element: 'h1',
@@ -56,14 +56,15 @@ export default class ParagraphStyles extends React.PureComponent {
         label={"Styles"}
         value={this.props.style}
         onChange={(value) => this.toggleStyle(value)}
-      >
+        hint={'Choose style'}
+        >
         {this.availableStyles.map(style => {
           return (
             <Option
               key={style.element}
-              className={style.element}
+              className={`el-${style.element}`}
               value={style.element}
-              primaryText={style.label}
+              label={style.label}
             />
             )
           })
