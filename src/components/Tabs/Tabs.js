@@ -14,7 +14,7 @@ export default class Tabs extends PureComponent {
   }
   render(){
     return (
-      <div className="bg-white mt3 mh3 bb shadow-1 br2 overflow-hidden">
+      <div className="bg-white mt3 mh3 bb shadow-1 br2 ">
         <div className="bg-blue f6 flex shadow-1" style={{justifyContent: 'space-around'}}>
           {this.props.children.map((tab,idx)=>{
             if(tab){
