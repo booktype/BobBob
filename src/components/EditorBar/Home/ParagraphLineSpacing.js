@@ -1,19 +1,20 @@
-import React from 'react'
+import React from 'react';
 import LineSpacing from '../../../icons/formatLineSpacing';
 import SelectField, { Option } from '../../SelectField';
+
 
 export default class ParagraphLineSpacing extends React.PureComponent {
 
   shouldComponentUpdate(nextProps) {
     if (nextProps.lineHeight && nextProps.lineHeight === this.props.lineHeight) {
-      return false
+      return false;
     }
-    return true
+    return true;
   }
 
   handleChange = (lineHeight) => {
-    this.props.controller.setStyleAttr("lineHeight", lineHeight)
-    this.props.onChange(this.props.controller.editorState)
+    this.props.controller.setStyleAttr("lineHeight", lineHeight);
+    this.props.onChange(this.props.controller.editorState);
   };
 
 
@@ -23,7 +24,7 @@ export default class ParagraphLineSpacing extends React.PureComponent {
         label={'Line Spacing'}
         value={this.props.lineHeight || 1}
         onChange={this.handleChange}
-        hint='Choose line spacing'
+        hint= {'Choose line spacing'}
         icon={<LineSpacing />}
       >
         {[1, 1.15, 1.5, 2, 2.5, 3].map(lh => {
@@ -33,9 +34,9 @@ export default class ParagraphLineSpacing extends React.PureComponent {
               value={lh}
               label={lh}
             />
-          )
+          );
         })}
       </SelectField>
-    )
+    );
   }
 }

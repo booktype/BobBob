@@ -1,19 +1,20 @@
-import React, { Component, PureComponent } from 'react'
-import reactCSS from 'reactcss'
-import throttle from 'lodash/throttle'
-import * as saturation from '../utils/saturation'
+import React, {Component, PureComponent} from 'react';
+import reactCSS from 'reactcss';
+import throttle from 'lodash/throttle';
+import * as saturation from '../utils/saturation';
+
 
 export class Saturation extends (PureComponent || Component) {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.throttle = throttle((fn, data, e) => {
-      fn(data, e)
-    }, 50)
+      fn(data, e);
+    }, 50);
   }
 
   componentWillUnmount() {
-    this.unbindEventListeners()
+    this.unbindEventListeners();
   }
 
   handleChange = (e, skip) => {
@@ -21,26 +22,26 @@ export class Saturation extends (PureComponent || Component) {
       this.props.onChange,
       saturation.calculateChange(e, skip, this.props, this.refs.container),
       e
-    )
+    );
   }
 
   handleMouseDown = (e) => {
-    this.handleChange(e, true)
-    window.addEventListener('mousemove', this.handleChange)
-    window.addEventListener('mouseup', this.handleMouseUp)
+    this.handleChange(e, true);
+    window.addEventListener('mousemove', this.handleChange);
+    window.addEventListener('mouseup', this.handleMouseUp);
   }
 
   handleMouseUp = () => {
-    this.unbindEventListeners()
+    this.unbindEventListeners();
   }
 
   unbindEventListeners() {
-    window.removeEventListener('mousemove', this.handleChange)
-    window.removeEventListener('mouseup', this.handleMouseUp)
+    window.removeEventListener('mousemove', this.handleChange);
+    window.removeEventListener('mouseup', this.handleMouseUp);
   }
 
   render() {
-    const { color, white, black, pointer, circle } = this.props.style || {}
+    const {color, white, black, pointer, circle} = this.props.style || {};
     const styles = reactCSS({
       'default': {
         color: {
@@ -80,29 +81,30 @@ export class Saturation extends (PureComponent || Component) {
         pointer,
         circle,
       },
-    }, { 'custom': !!this.props.style })
+    }, {'custom': !!this.props.style});
 
     return (
       <div
-        style={ styles.color }
+        style={styles.color}
         ref="container"
-        onMouseDown={ this.handleMouseDown }
-        onTouchMove={ this.handleChange }
-        onTouchStart={ this.handleChange }
+        onMouseDown={this.handleMouseDown}
+        onTouchMove={this.handleChange}
+        onTouchStart={this.handleChange}
       >
-        <div style={ styles.white }>
-          <div style={ styles.black } />
-          <div style={ styles.pointer }>
-            { this.props.pointer ? (
-              <this.props.pointer { ...this.props } />
+        <div style={styles.white}>
+          <div style={styles.black}/>
+          <div style={styles.pointer}>
+            {this.props.pointer ? (
+              <this.props.pointer {...this.props} />
             ) : (
-              <div style={ styles.circle } />
-            ) }
+              <div style={styles.circle}/>
+            )}
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Saturation
+
+export default Saturation;

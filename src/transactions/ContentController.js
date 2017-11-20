@@ -1,60 +1,61 @@
 import {
-    ContentBlock,
-    EditorState,
-    genKey,
-    SelectionState,
-    Modifier,
-    BlockMapBuilder,
-    CharacterMetadata
-} from "draft-js"
-import {List,Repeat, Map} from 'immutable';
+  ContentBlock,
+  EditorState,
+  genKey,
+  SelectionState,
+  Modifier,
+  BlockMapBuilder,
+  CharacterMetadata
+} from "draft-js";
+import {List, Repeat, Map} from 'immutable';
 
 
 class ContentController {
-  constructor(editorState){
+  constructor(editorState) {
 
-    this.currentContent = editorState.getCurrentContent()
-    this.selection = editorState.getSelection()
-    this.editorState = editorState
-    this.updateEditorState(this.currentContent)
+    this.currentContent = editorState.getCurrentContent();
+    this.selection = editorState.getSelection();
+    this.editorState = editorState;
+    this.updateEditorState(this.currentContent);
   }
+
   getSelectedText = () => {
     return this.currentBlock.getText()
-      .slice(this.selection.getAnchorOffset(), this.selection.getFocusOffset())
+      .slice(this.selection.getAnchorOffset(), this.selection.getFocusOffset());
   }
-  countChildren = ()=>{
-    const tail = this.blocksArray.slice(this.index+1)
-    let counter = 0
-    for (let block of tail){
-      if(block.getDepth() === this.currentDepth+1){
-        counter++
+  countChildren = () => {
+    const tail = this.blocksArray.slice(this.index + 1);
+    let counter = 0;
+    for (let block of tail) {
+      if (block.getDepth() === this.currentDepth + 1) {
+        counter++;
       }
-      if(block.getDepth()===this.currentDepth){
-        break
+      if (block.getDepth() === this.currentDepth) {
+        break;
       }
     }
-    return counter
+    return counter;
   }
   getCurrentMetaData = (styleType) => {
-    const metaKey = this.editorState.getCurrentMeta().get(styleType)
-    if(metaKey){
-      return this.currentContent.getMeta(metaKey).getData()
+    const metaKey = this.editorState.getCurrentMeta().get(styleType);
+    if (metaKey) {
+      return this.currentContent.getMeta(metaKey).getData();
     }
-    return false
+    return false;
   }
   getCurrentMetaKey = (styleType) => {
-    const metaKey = this.editorState.getCurrentMeta().get(styleType)
-    if(metaKey){
-      return metaKey
+    const metaKey = this.editorState.getCurrentMeta().get(styleType);
+    if (metaKey) {
+      return metaKey;
     }
-    return false
+    return false;
   }
 
   replaceStyleMetaData = (styleType, data) => {
-    const metaKey = this.editorState.getCurrentMeta().get(styleType)
-    const changedContent = Modifier.mergeMetaData(this.currentContent, metaKey, data)
-    this.updateEditorState(changedContent)
-    return this
+    const metaKey = this.editorState.getCurrentMeta().get(styleType);
+    const changedContent = Modifier.mergeMetaData(this.currentContent, metaKey, data);
+    this.updateEditorState(changedContent);
+    return this;
   }
   insertEntity = (type, data) => {
     const contentWithEntity = this.currentContent.createEntity(
@@ -63,43 +64,43 @@ class ContentController {
       data
     );
     const entityKey = contentWithEntity.getLastCreatedEntityKey();
-    this.updateEditorState(contentWithEntity)
-    this.insertCharacterAtSelectionEndWithEntity(" ", entityKey)
-    return this
+    this.updateEditorState(contentWithEntity);
+    this.insertCharacterAtSelectionEndWithEntity(" ", entityKey);
+    return this;
   }
   getChildIndex = () => {
-    const currentDepth = this.currentBlock.getDepth()
-    const parentBlock = this.location.find(block=>block.getDepth()===currentDepth-1)
+    const currentDepth = this.currentBlock.getDepth();
+    const parentBlock = this.location.find(block => block.getDepth() === currentDepth - 1);
     return this.currentContent.getBlockMap()
-      .skipUntil(block=>parentBlock===block)
-      .takeUntil(block=>this.currentBlock===block)
-      .count(block=>currentDepth===block.getDepth())
+      .skipUntil(block => parentBlock === block)
+      .takeUntil(block => this.currentBlock === block)
+      .count(block => currentDepth === block.getDepth());
   }
-  queryParent = (type)=>{
-    const block = this.location.reverse().find(block=>block.getType()===type)
-    this.location.reverse()
-    if(!block){
-      return false
+  queryParent = (type) => {
+    const block = this.location.reverse().find(block => block.getType() === type);
+    this.location.reverse();
+    if (!block) {
+      return false;
     }
     const selection = new SelectionState({
       focusKey: block.getKey(),
       anchorKey: block.getKey(),
-      focusOffset:0,
-      anchorOffset:0,
-    })
-    this.updateEditorState(this.currentContent, selection)
-    return this
+      focusOffset: 0,
+      anchorOffset: 0,
+    });
+    this.updateEditorState(this.currentContent, selection);
+    return this;
   }
   removeElement = () => {
     let lastBlock = this.currentContent.getBlockMap()
-      .skipUntil(block=>block===this.currentBlock)
-      .find(block=>block.getDepth()<=this.currentBlock.getDepth()&&block!==this.currentBlock)
-    if(!lastBlock){
-      lastBlock = this.currentContent.getLastBlock()
-    }else{
-      lastBlock = this.currentContent.getBlockBefore(lastBlock.getKey())
+      .skipUntil(block => block === this.currentBlock)
+      .find(block => block.getDepth() <= this.currentBlock.getDepth() && block !== this.currentBlock);
+    if (!lastBlock) {
+      lastBlock = this.currentContent.getLastBlock();
+    } else {
+      lastBlock = this.currentContent.getBlockBefore(lastBlock.getKey());
     }
-    const previousBlock = this.currentContent.getBlockBefore(this.currentBlock.getKey())
+    const previousBlock = this.currentContent.getBlockBefore(this.currentBlock.getKey());
     const newContent = Modifier.removeRange(
       this.currentContent,
       this.selection.merge({
@@ -109,115 +110,115 @@ class ContentController {
         focusOffset: lastBlock.getText().length
       }),
       "backward"
-    )
+    );
     this.updateEditorState(newContent, new SelectionState({
       anchorKey: previousBlock.getKey(),
       anchorOffset: 0,
       focusKey: previousBlock.getKey(),
       focusOffset: 0
-    }))
-    return this
+    }));
+    return this;
   }
   queryAndRemove = (query, type, at_index) => {
-    let counter=-1;
+    let counter = -1;
     let selection;
-    const afterKey = this.currentContent.getKeyAfter(this.currentBlock.getKey())
+    const afterKey = this.currentContent.getKeyAfter(this.currentBlock.getKey());
     this.currentContent
       .getBlockMap()
-      .skipUntil(block=>block.getKey()===afterKey)
-      .takeUntil(block=>block.getDepth()===this.currentBlock.getDepth())
-      .filter(block=>block.getDepth()<=this.currentBlock.getDepth()+2)
-      .forEach((block,key)=>{
-        if(block.getType()===query){
-          counter = -1
+      .skipUntil(block => block.getKey() === afterKey)
+      .takeUntil(block => block.getDepth() === this.currentBlock.getDepth())
+      .filter(block => block.getDepth() <= this.currentBlock.getDepth() + 2)
+      .forEach((block, key) => {
+        if (block.getType() === query) {
+          counter = -1;
         }
-        if(counter === at_index){
+        if (counter === at_index) {
           selection = new SelectionState({
-            focusKey:block.getKey(),
-            anchorKey:block.getKey(),
-            focusOffset:0,
-            anchorOffset:0
-          })
-          this.updateEditorState(this.currentContent, selection)
-          this.removeElement()
+            focusKey: block.getKey(),
+            anchorKey: block.getKey(),
+            focusOffset: 0,
+            anchorOffset: 0
+          });
+          this.updateEditorState(this.currentContent, selection);
+          this.removeElement();
         }
-        counter++
-      })
-    return this
+        counter++;
+      });
+    return this;
   }
-  queryAndAppend = (query, type, at_index=0) => {
-    let counter=-1;
+  queryAndAppend = (query, type, at_index = 0) => {
+    let counter = -1;
     let selection;
-    const afterKey = this.currentContent.getKeyAfter(this.currentBlock.getKey())
+    const afterKey = this.currentContent.getKeyAfter(this.currentBlock.getKey());
     this.currentContent
       .getBlockMap()
-      .skipUntil(block=>block.getKey()===afterKey)
-      .takeUntil(block=>block.getDepth()===this.currentBlock.getDepth())
-      .filter(block=>block.getDepth()<=this.currentBlock.getDepth()+2)
-      .forEach((block,key)=>{
-        if(block.getType()===query){
-          counter = -1
+      .skipUntil(block => block.getKey() === afterKey)
+      .takeUntil(block => block.getDepth() === this.currentBlock.getDepth())
+      .filter(block => block.getDepth() <= this.currentBlock.getDepth() + 2)
+      .forEach((block, key) => {
+        if (block.getType() === query) {
+          counter = -1;
         }
-        if(counter === at_index){
+        if (counter === at_index) {
           selection = new SelectionState({
-            focusKey:block.getKey(),
-            anchorKey:block.getKey(),
-            focusOffset:0,
-            anchorOffset:0
-          })
-          this.updateEditorState(this.currentContent, selection)
-          this.insertElementAfter(type)
+            focusKey: block.getKey(),
+            anchorKey: block.getKey(),
+            focusOffset: 0,
+            anchorOffset: 0
+          });
+          this.updateEditorState(this.currentContent, selection);
+          this.insertElementAfter(type);
         }
-        counter++
-      })
-    return this
+        counter++;
+      });
+    return this;
 
   }
-  appendChild = (type, text="") => {
-    return this.appendChildren(type, 1, text)
+  appendChild = (type, text = "") => {
+    return this.appendChildren(type, 1, text);
   }
-  appendChildren = (type, size, text="") => {
-    const currentBlock = this.currentContent.getBlockForKey(this.selection.getFocusKey())
+  appendChildren = (type, size, text = "") => {
+    const currentBlock = this.currentContent.getBlockForKey(this.selection.getFocusKey());
     let newBlockMap = [
       currentBlock
-    ]
+    ];
     let newKey;
     const charData = CharacterMetadata.create({});
-    for(let i=0; i<size;i++){
-      newKey = genKey()
+    for (let i = 0; i < size; i++) {
+      newKey = genKey();
       newBlockMap.push(
         new ContentBlock({
           key: newKey,
           type,
-          depth:currentBlock.getDepth()+1,
+          depth: currentBlock.getDepth() + 1,
           text,
           characterList: List(Repeat(charData, text.length))
         })
-      )
+      );
     }
-    newBlockMap = BlockMapBuilder.createFromArray(newBlockMap)
+    newBlockMap = BlockMapBuilder.createFromArray(newBlockMap);
     const withFragment = Modifier.replaceWithFragment(
       this.currentContent,
       this.selection.merge({
-        focusOffset: currentBlock.getText().length-1,
+        focusOffset: currentBlock.getText().length - 1,
         anchorOffset: 0
       }),
       newBlockMap
-    )
+    );
     this.updateEditorState(withFragment, new SelectionState(
       {focusOffset: 0, anchorOffset: 0, anchorKey: newKey, focusKey: newKey}
-    ))
-    return this
+    ));
+    return this;
   }
-  createEntity = (type, mutability="MUTABLE", data={}) => {
+  createEntity = (type, mutability = "MUTABLE", data = {}) => {
     const withEntity = Modifier.createEntity(
       this.currentContent,
       type,
       mutability,
       data
-    )
-    this.updateEditorState(withEntity)
-    return this.currentContent.getLastCreatedEntityKey()
+    );
+    this.updateEditorState(withEntity);
+    return this.currentContent.getLastCreatedEntityKey();
   }
   insertCharacterAtSelectionEndWithEntity = (char, entityKey) => {
     const withEntity = Modifier.insertText(
@@ -227,41 +228,41 @@ class ContentController {
       null,
       entityKey,
       null
-    )
-    this.updateEditorState(withEntity)
-    return this
+    );
+    this.updateEditorState(withEntity);
+    return this;
   }
   insertElementAfter = (type) => {
     const charData = CharacterMetadata.create({});
-    const newBlockKey = genKey()
+    const newBlockKey = genKey();
     const newBlock = new ContentBlock({
       key: newBlockKey,
       type,
       depth: this.currentBlock.getDepth(),
-      text:" ",
+      text: " ",
       characterList: List([charData])
-    })
-    let inBlock = false
-    let lastNestedBlock = this.currentContent.getBlockMap().find(block=>{
-      if(inBlock && block.getDepth()<= this.currentBlock.getDepth()){
-        return true
+    });
+    let inBlock = false;
+    let lastNestedBlock = this.currentContent.getBlockMap().find(block => {
+      if (inBlock && block.getDepth() <= this.currentBlock.getDepth()) {
+        return true;
       }
-      if(this.currentBlock.getKey() === block.getKey()){
-        inBlock = true
+      if (this.currentBlock.getKey() === block.getKey()) {
+        inBlock = true;
       }
-      return false
-    })
-    if(!lastNestedBlock){
-      lastNestedBlock = this.currentBlock
-    }else{
-      lastNestedBlock = this.currentContent.getBlockBefore(lastNestedBlock.getKey())
+      return false;
+    });
+    if (!lastNestedBlock) {
+      lastNestedBlock = this.currentBlock;
+    } else {
+      lastNestedBlock = this.currentContent.getBlockBefore(lastNestedBlock.getKey());
     }
     const newBlockMap = BlockMapBuilder.createFromArray(
       [
         lastNestedBlock,
         newBlock,
       ]
-    )
+    );
     const withNewBlock = Modifier.replaceWithFragment(
       this.currentContent,
       this.selection.merge({
@@ -271,34 +272,34 @@ class ContentController {
         anchorOffset: 0
       }),
       newBlockMap
-    )
+    );
 
     const newSelection = this.selection.merge({
       focusKey: newBlockKey,
       anchorKey: newBlockKey,
       anchorOffset: 0,
       focusOffset: 0
-    })
-    this.updateEditorState(withNewBlock, newSelection)
-    return this
+    });
+    this.updateEditorState(withNewBlock, newSelection);
+    return this;
   }
-  insertElementBefore = (type)=>{
-    const previousBlock = this.currentContent.getBlockBefore(this.selection.getFocusKey())
+  insertElementBefore = (type) => {
+    const previousBlock = this.currentContent.getBlockBefore(this.selection.getFocusKey());
     const charData = CharacterMetadata.create({});
-    const newBlockKey = genKey()
+    const newBlockKey = genKey();
     const newBlock = new ContentBlock({
       key: newBlockKey,
       type,
       depth: this.currentBlock.getDepth(),
-      text:" ",
+      text: " ",
       characterList: List([charData])
-    })
+    });
     const newBlockMap = BlockMapBuilder.createFromArray(
       [
         previousBlock,
         newBlock,
       ]
-    )
+    );
     const withNewBlock = Modifier.replaceWithFragment(
       this.currentContent,
       new SelectionState({
@@ -308,20 +309,20 @@ class ContentController {
         focusKey: previousBlock.getKey()
       }),
       newBlockMap
-    )
+    );
 
     const newSelection = this.selection.merge({
       focusKey: newBlockKey,
       anchorKey: newBlockKey,
       anchorOffset: 0,
       focusOffset: 0
-    })
-    this.updateEditorState(withNewBlock, newSelection)
-    return this
+    });
+    this.updateEditorState(withNewBlock, newSelection);
+    return this;
   }
-  toggleBlockInBlock = (type)=>{
-    const newBlockKey = genKey()
-    const currentBlock = this.currentContent.getBlockForKey(this.selection.getFocusKey())
+  toggleBlockInBlock = (type) => {
+    const newBlockKey = genKey();
+    const currentBlock = this.currentContent.getBlockForKey(this.selection.getFocusKey());
     const withNewBlock = Modifier.splitBlock(
       this.currentContent,
       this.selection.merge({
@@ -329,100 +330,102 @@ class ContentController {
         focusOffset: 0
       }),
       newBlockKey
-    )
+    );
     const newSelection = this.selection.merge({
       focusKey: newBlockKey,
       anchorKey: newBlockKey
-    })
+    });
     const withType = Modifier.setBlockType(
       withNewBlock,
       newSelection,
       type
-    )
+    );
     const adjustedDepth = Modifier.adjustBlockDepth(
       withType,
       newSelection,
-      currentBlock.getDepth()+1,
+      currentBlock.getDepth() + 1,
       100
-    )
+    );
     const withoutData = Modifier.setBlockData(
       adjustedDepth,
       newSelection,
       new Map({})
-    )
-    this.updateEditorState(withoutData, newSelection)
-    return this
+    );
+    this.updateEditorState(withoutData, newSelection);
+    return this;
   }
   setStyleAttr = (attr, value) => {
-    let style = this.currentBlock.getData().get("style") || {}
+    let style = this.currentBlock.getData().get("style") || {};
 
-    style = {...style, [attr]: value}
+    style = {...style, [attr]: value};
     const withStyle = Modifier.mergeBlockData(
       this.currentContent,
       this.selection,
       new Map({
         style
       })
-    )
-    this.updateEditorState(withStyle)
-    return this
+    );
+    this.updateEditorState(withStyle);
+    return this;
   }
   setAttr = (attr, value) => {
-    const attributes = this.currentBlock.getData().get("attributes") || {}
-    attributes[attr] = value
+    const attributes = this.currentBlock.getData().get("attributes") || {};
+    attributes[attr] = value;
     const withAttr = Modifier.mergeBlockData(
       this.currentContent,
       this.selection,
       new Map({
         attributes
       })
-    )
-    this.updateEditorState(withAttr)
-    return this
+    );
+    this.updateEditorState(withAttr);
+    return this;
   }
-  getStyleType = (styleType)=>{
-    return this.currentInlineStyle.find((style)=>style.startsWith(styleType))
+  getStyleType = (styleType) => {
+    return this.currentInlineStyle.find((style) => style.startsWith(styleType));
   }
   updateEditorState = (currentContent, selection) => {
     this.editorState = EditorState.set(this.editorState, {
       currentContent,
       selection: selection || this.selection
-    })
-    this.currentContent = currentContent
-    this.selection = selection || this.selection
-    this.blockKey = this.selection.getFocusKey()
-    let reachedRoot = false
+    });
+    this.currentContent = currentContent;
+    this.selection = selection || this.selection;
+    this.blockKey = this.selection.getFocusKey();
+    let reachedRoot = false;
     this.location = this
-     .currentContent
-     .getBlockMap()
-     .reverse()
-     .skipUntil((block)=>block.getKey()===this.blockKey)
-     .takeUntil(block=>{
-       if(reachedRoot){
-         return reachedRoot
-       }
-       if(block.getDepth()===0){
-         reachedRoot = true
-         return false
-       }
-       return reachedRoot
-     })
-     .reduce((tree, block)=>{
-       if(!tree[block.getDepth()]){
-         tree[block.getDepth()] = block
-       }
-       return tree
-     },[])
-    this.blocksArray = currentContent.getBlocksAsArray()
-    this.currentBlock = this.currentContent.getBlockForKey(this.selection.getAnchorKey())
-    this.currentDepth = this.currentBlock.getDepth()
-    this.currentInlineStyle = this.editorState.getCurrentInlineStyle()
-    this.index = this.blocksArray.findIndex((block)=>{
-      return block.getKey()===this.selection.getFocusKey()
-    })
+      .currentContent
+      .getBlockMap()
+      .reverse()
+      .skipUntil((block) => block.getKey() === this.blockKey)
+      .takeUntil(block => {
+        if (reachedRoot) {
+          return reachedRoot;
+        }
+        if (block.getDepth() === 0) {
+          reachedRoot = true;
+          return false;
+        }
+        return reachedRoot;
+      })
+      .reduce((tree, block) => {
+        if (!tree[block.getDepth()]) {
+          tree[block.getDepth()] = block;
+        }
+        return tree;
+      }, []);
+    this.blocksArray = currentContent.getBlocksAsArray();
+    this.currentBlock = this.currentContent.getBlockForKey(this.selection.getAnchorKey());
+    this.currentDepth = this.currentBlock.getDepth();
+    this.currentInlineStyle = this.editorState.getCurrentInlineStyle();
+    this.index = this.blocksArray.findIndex((block) => {
+      return block.getKey() === this.selection.getFocusKey();
+    });
   }
   getCurrentContent = () => {
-    return this.currentContent
+    return this.currentContent;
   }
 }
-export default ContentController
+
+
+export default ContentController;

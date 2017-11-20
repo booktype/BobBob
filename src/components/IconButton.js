@@ -2,11 +2,13 @@ import React from 'react';
 
 import './IconButton.css';
 
+
 export default class IconButton extends React.PureComponent {
-  handleMouseOver = () =>{
+  handleMouseOver = () => {
 
   }
-  render(){
+
+  render() {
     const {tooltip, style, iconStyle} = this.props;
     return (
       <button style={style} onClick={this.props.onTouchTap} className={'qs f6 link dim br1 ba  ph1 pv1 mb1 dib bg-white black'}>
@@ -19,6 +21,6 @@ export default class IconButton extends React.PureComponent {
           {this.props.children}
         </div>
       </button>
-    )
+    );
   }
 }

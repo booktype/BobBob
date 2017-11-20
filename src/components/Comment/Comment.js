@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './commentStyle'
+import styles from './commentStyle';
 
 
 const CommentBoxSummary = (props) => {
@@ -10,12 +10,12 @@ const CommentBoxSummary = (props) => {
           <span key={idx} style={styles.circleImage}>
             <img style={styles.commentImage} src={comment.author.avatar}/>
           </span>
-        )
+        );
       })
       }
     </div>
-  )
-}
+  );
+};
 const Comment = (props) => {
   return (
     <li style={styles.comment}>
@@ -30,8 +30,8 @@ const Comment = (props) => {
         <p style={styles.commentContent}>{props.content}</p>
       </span>
     </li>
-  )
-}
+  );
+};
 const CommentForm = (props) => {
   return (
     <form style={styles.commentForm}>
@@ -39,11 +39,11 @@ const CommentForm = (props) => {
       <button onClick={props.onSubmit} style={styles.commentButton}>Post
       </button>
     </form>
-  )
-}
+  );
+};
 
 const CommentBody = (props) => {
-  console.log(props)
+  console.log(props);
   if (props.comment) {
     return (
       <div>
@@ -51,30 +51,30 @@ const CommentBody = (props) => {
           <Comment {...props.comment} />
           {
             props.comment.replies ? props.comment.replies.map((comment, idx) => {
-              return (<Comment {...comment} key={idx}/>)
+              return (<Comment {...comment} key={idx}/>);
             }) : null
           }
         </ul>
         <CommentForm onSubmit={(e) => {
-          e.preventDefault()
-          const content = e.target.previousElementSibling.value
+          e.preventDefault();
+          const content = e.target.previousElementSibling.value;
           props.onReply(
             content, props.comment.cid
-            , props.metaKey)
+            , props.metaKey);
         }}/>
       </div>
-    )
+    );
   } else {
     return (
       <CommentForm onSubmit={(e) => {
-        e.preventDefault()
-        const content = e.target.previousElementSibling.value
+        e.preventDefault();
+        const content = e.target.previousElementSibling.value;
         props.onSubmit(
           content
-          , props.metaKey)
+          , props.metaKey);
       }}/>
 
-    )
+    );
   }
-}
-export {CommentBody, CommentBoxSummary}
+};
+export {CommentBody, CommentBoxSummary};

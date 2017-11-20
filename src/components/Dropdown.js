@@ -1,6 +1,9 @@
 import React from 'react';
 import 'Dropdown.css';
-let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
+
+
+let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 
 class DropDown extends React.Component {
   constructor(props) {
@@ -20,24 +23,25 @@ class DropDown extends React.Component {
 
   render() {
     let menu;
-    if(this.state.menuActive) {
+    if (this.state.menuActive) {
       menu = <div>
-                <ul>
-                  <li>First Item </li>
-                  <li>Second Item </li>
-                  <li>Third Item </li>
-                </ul>
-              </div>
+        <ul>
+          <li>First Item</li>
+          <li>Second Item</li>
+          <li>Third Item</li>
+        </ul>
+      </div>;
     } else {
       menu = "";
     }
     return (
-      <div id = "menu">
-        <i className = "fa fa-plus" onClick = { this.toggleMenu }/>
+      <div id="menu">
+        <i className="fa fa-plus" onClick={this.toggleMenu}/>
         {menu}
-    </div>
-    )
+      </div>
+    );
   }
 }
 
-export default Dropdown;
+
+export default DropDown;

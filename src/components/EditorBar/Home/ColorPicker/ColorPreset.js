@@ -1,10 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import reactCSS from 'reactcss'
+import React from 'react';
+import PropTypes from 'prop-types';
+import reactCSS from 'reactcss';
 
-import { Swatch } from './helpers'
+import {Swatch} from './helpers';
 
-export const SketchPresetColors = ({ colors, onClick }) => {
+
+export const SketchPresetColors = ({colors, onClick}) => {
   const styles = reactCSS({
     'default': {
       colors: {
@@ -32,34 +33,34 @@ export const SketchPresetColors = ({ colors, onClick }) => {
     },
   }, {
     'no-presets': !colors || !colors.length,
-  })
+  });
 
   const handleClick = (hex, e) => {
     onClick({
       hex,
       source: 'hex',
-    }, e)
-  }
+    }, e);
+  };
 
   return (
-    <div style={ styles.colors } className="flexbox-fix">
-      { colors.map((colorObjOrString) => {
+    <div style={styles.colors} className="flexbox-fix">
+      {colors.map((colorObjOrString) => {
         const c = typeof colorObjOrString === 'string'
-          ? { color: colorObjOrString }
-          : colorObjOrString
+          ? {color: colorObjOrString}
+          : colorObjOrString;
         return (
-          <div key={ c.color } style={ styles.swatchWrap }>
+          <div key={c.color} style={styles.swatchWrap}>
             <Swatch
-              { ...c }
-              style={ styles.swatch }
-              onClick={ handleClick }
+              {...c}
+              style={styles.swatch}
+              onClick={handleClick}
             />
           </div>
-        )
-      }) }
+        );
+      })}
     </div>
-  )
-}
+  );
+};
 SketchPresetColors.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.oneOfType([
     PropTypes.string,
@@ -68,6 +69,6 @@ SketchPresetColors.propTypes = {
       title: PropTypes.string,
     })]
   )),
-}
+};
 
-export default SketchPresetColors
+export default SketchPresetColors;

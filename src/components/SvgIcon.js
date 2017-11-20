@@ -2,7 +2,7 @@ import React from 'react';
 
 function SvgIcon(props) {
   const { children, className, style, ...other } = props;
-  const viewBox = `0 0 ${style.width} ${style.height}`
+  const viewBox = `0 0 ${style.width} ${style.height}`;
   return (
     <svg
       className={className}

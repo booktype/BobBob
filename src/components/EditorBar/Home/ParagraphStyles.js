@@ -2,6 +2,7 @@ import React from 'react';
 import {RichUtils} from 'draft-js';
 import SelectField, {Option} from '../../SelectField';
 
+
 export default class ParagraphStyles extends React.PureComponent {
 
   constructor(props) {
@@ -36,17 +37,19 @@ export default class ParagraphStyles extends React.PureComponent {
         element: 'pre',
         label: 'Preformatted'
       }
-    ]
+    ];
   }
+
   shouldComponentUpdate(nextProps) {
     if (nextProps.style !== this.props.style) {
-      return true
+      return true;
     }
-    return false
+    return false;
   }
+
   toggleStyle = (style) => {
     this.props.onChange(
-      RichUtils.toggleBlockType(this.props.controller.editorState, style,)
+      RichUtils.toggleBlockType(this.props.controller.editorState, style)
     );
   }
 
@@ -66,10 +69,10 @@ export default class ParagraphStyles extends React.PureComponent {
               value={style.element}
               label={style.label}
             />
-            )
-          })
+          );
+        })
         }
       </SelectField>
-    )
+    );
   }
 }

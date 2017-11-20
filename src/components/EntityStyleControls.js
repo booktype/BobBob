@@ -1,11 +1,11 @@
 import React from 'react';
 import {EditorState} from 'draft-js';
-import {List, Map} from 'immutable'
+import {List, Map} from 'immutable';
 
-import StyleButton from './StyleButton'
+import StyleButton from './StyleButton';
 import Tooltip from './Tooltip';
 import Modal from './Modal';
-import IndexEditor from './IndexEditor'
+import IndexEditor from './IndexEditor';
 
 
 const ENTITY_STYLES = [
@@ -14,7 +14,7 @@ const ENTITY_STYLES = [
     toggle: (props) => {
       const entityKey = props.controller.createEntity("ENDNOTE");
       props.controller.insertCharacterAtFocusWithEntity("\r", entityKey);
-      return props.controller.getCurrentContent()
+      return props.controller.getCurrentContent();
     },
   },
 ];
@@ -27,7 +27,7 @@ class EntityStyleControls extends React.PureComponent {
       tooltipActive: false,
       modalActive: false
     };
-    this.currentEntities = List([])
+    this.currentEntities = List([]);
 
     // if(props.controller.selection.getAnchorKey()===props.controller.selection.getFocusKey()){
     //   currentEntities = props.controller.currentBlock.getCharacterList().slice(
@@ -53,7 +53,7 @@ class EntityStyleControls extends React.PureComponent {
         modalActive: true,
         modalTitle: entity.getType(),
         modalType: entity.getType()
-      })
+      });
     }
 
     if (
@@ -67,9 +67,9 @@ class EntityStyleControls extends React.PureComponent {
         tooltipActive: true,
         tooltipParent: nextProps.hoverTarget,
         tooltipText: entity.getData().text
-      })
+      });
     } else if (this.state.tooltipActive) {
-      this.setState({tooltipActive: false})
+      this.setState({tooltipActive: false});
     }
   }
 
@@ -77,9 +77,9 @@ class EntityStyleControls extends React.PureComponent {
     let entities = Map();
     window.document.querySelectorAll(`.${type.toLowerCase()}`)
       .forEach((element) => {
-        const entity = this.props.controller.currentContent.getEntity(element.dataset.entity)
+        const entity = this.props.controller.currentContent.getEntity(element.dataset.entity);
         // entity.key = element.dataset.entity
-        entities = entities.set(element.dataset.entity, entity)
+        entities = entities.set(element.dataset.entity, entity);
       });
     const template = `
       <ol>
@@ -99,9 +99,9 @@ class EntityStyleControls extends React.PureComponent {
               this.props.controller.currentContent.getEntityMap().merge(entities)
             )
           })
-        )
+        );
       }}
-    />
+    />;
   };
 
   toggleEntity = (type, data) => {
@@ -124,11 +124,11 @@ class EntityStyleControls extends React.PureComponent {
           isVisible={this.state.modalActive}
           onCloseClicked={() => {
             this.props.setReadOnly(false);
-            this.setState({modalActive: false})
+            this.setState({modalActive: false});
           }}
           onOverlayClicked={() => {
             this.props.setReadOnly(false);
-            this.setState({modalActive: false})
+            this.setState({modalActive: false});
           }}
           title={this.state.modalTitle}
         >
@@ -136,9 +136,9 @@ class EntityStyleControls extends React.PureComponent {
             {this.renderModalChildren(this.state.modalType)}
           </ol>
         </Modal>
-      )
+      );
     } else {
-      return null
+      return null;
     }
   };
 
@@ -170,4 +170,4 @@ class EntityStyleControls extends React.PureComponent {
 }
 
 
-export default EntityStyleControls
+export default EntityStyleControls;

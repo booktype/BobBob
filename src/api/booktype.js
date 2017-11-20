@@ -28,15 +28,15 @@ class BooktypeApi extends ApiInterface {
       this.getCurrentUser().then((user) => {
         console.log('BooktypeApi getCurrentUser', user);
 
-        console.log('this.otServerWsUrl',this.otServerWsUrl);
+        console.log('this.otServerWsUrl', this.otServerWsUrl);
 
         this.ws = new OT({
           wsUrl: this.otServerWsUrl,
           bookID: this.bookID,
           documentID: null,
           userID: user.id
-        })
-      })
+        });
+      });
     }
 
   }
@@ -50,52 +50,52 @@ class BooktypeApi extends ApiInterface {
         },
         (data) => {
           if (data.result === false) {
-            reject(data)
+            reject(data);
           } else {
-            resolve(data)
+            resolve(data);
           }
 
         },
         (error) => {
-          reject(error)
+          reject(error);
         }
       );
-    })
+    });
   }
 
   set documentID(value) {
     console.log("setting docid", value);
     if (this.otEnabled) {
-      this.ws.updateDocumentID(value)
+      this.ws.updateDocumentID(value);
     }
-    this._documentID = value
+    this._documentID = value;
   }
 
   get documentID() {
-    return this._documentID
+    return this._documentID;
   }
 
   _get(url) {
     return new Promise(
       (resolve, reject) => {
-        this.axios.get(url).then(response => resolve(response.data))
-      })
+        this.axios.get(url).then(response => resolve(response.data));
+      });
   };
 
   _patch(url, data) {
-    return this.axios.patch(url, data)
+    return this.axios.patch(url, data);
   };
 
   _post(url, data) {
-    return this.axios.post(url, data)
+    return this.axios.post(url, data);
   };
 
   getCurrentUser = () => {
-    return this._get(`/_api/v1/users/current/`)
+    return this._get(`/_api/v1/users/current/`);
   };
 
   getUsers = () => {
-    return this._get(`/_api/v1/books/${this.bookID}/users`)
+    return this._get(`/_api/v1/books/${this.bookID}/users`);
   };
 
   getContent = () => {
@@ -108,14 +108,14 @@ class BooktypeApi extends ApiInterface {
               if (!data.content_json) {
                 content = editorStateToJSON(
                   onPaste(EditorState.createEmpty(), data.content)
-                )
+                );
               } else {
-                content = data.content_json
+                content = data.content_json;
               }
-              resolve(JSON.parse(content))
+              resolve(JSON.parse(content));
             }
-          )
-      })
+          );
+      });
   };
 
   saveContent = (content) => {
@@ -128,11 +128,11 @@ class BooktypeApi extends ApiInterface {
         content_json: content,
         content: content_html
       }
-    )
+    );
   };
 
   getImages = () => {
-    return this._get(`_api/v1/books/${this.bookID}/attachments`)
+    return this._get(`_api/v1/books/${this.bookID}/attachments`);
   };
 
   uploadImage = (file) => {
@@ -145,7 +145,7 @@ class BooktypeApi extends ApiInterface {
           'Content-Type': 'multipart/form-data',
         }
       }
-    )
+    );
   };
 
   getThemes = () => {
@@ -154,36 +154,37 @@ class BooktypeApi extends ApiInterface {
 
   getFonts = () => {
     return new Promise((resolve, reject) => {
-      this._get(`_api/v1/themes`).then(({data}) => {
-        resolve(data.reduce((fonts, theme) => {
-          return fonts.concat(theme.fonts)
-        }, []))
-      })
-    })
+      this._get(`_api/v1/themes`).then(
+        ({data}) => {
+          resolve(data.reduce((fonts, theme) => {
+            return fonts.concat(theme.fonts);
+          }, []));
+        });
+    });
   };
 
   getComments = (resolved = false) => {
     return this._sputnikSend('get_comments', {
       resolved
-    })
+    });
   };
 
   addComment = (content, text) => {
-    return this._sputnikSend("add_comment", {content, text})
+    return this._sputnikSend("add_comment", {content, text});
   };
 
   replyComment = (content, comment_id) => {
-    return this._sputnikSend("reply_comment", {comment_id, content})
+    return this._sputnikSend("reply_comment", {comment_id, content});
   };
 
   resolveComment = (comment_id) => {
-    return this._sputnikSend("resolve_comment", {comment_id})
+    return this._sputnikSend("resolve_comment", {comment_id});
   };
 
   deleteComment = (comment_id) => {
-    return this._sputnikSend("delete_comment", {comment_id})
+    return this._sputnikSend("delete_comment", {comment_id});
   };
 }
 
 
-export default BooktypeApi
+export default BooktypeApi;
