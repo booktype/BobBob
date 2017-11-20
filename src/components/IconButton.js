@@ -9,7 +9,7 @@ export default class IconButton extends React.PureComponent {
   render(){
     const {tooltip, style, iconStyle} = this.props;
     return (
-      <button style={style} onClick={this.props.onTouchTap} className={'qs'}>
+      <button style={style} onClick={this.props.onTouchTap} className={'qs f6 link dim br1 ba  ph1 pv1 mb1 dib bg-white black'}>
         <div className={'popover'}>
           <span>
             {tooltip}

@@ -15,7 +15,7 @@
   font-family: 'Helvetica',sans-serif;
   padding: 5px 13px;
   position: absolute;
-  z-index: 4;
+  z-index: 1000;
   width:100%;
 }
 .qs:hover .popover {
