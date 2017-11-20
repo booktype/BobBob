@@ -8,7 +8,7 @@ import SquareIcon from './square.png';
 
 const optionStyle = {
   height: 70
-}
+};
 
 export default class UnorderedList extends React.PureComponent {
 
@@ -19,28 +19,28 @@ export default class UnorderedList extends React.PureComponent {
       open: false,
     };
   }
-  shouldComponentUpdate(nextProps, nextState){
-    if(nextState.open !== this.state.open){
-      return true
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.open !== this.state.open) {
+      return true;
     }
-    if(nextProps.ul === this.props.ul){
-      return false
+    if (nextProps.ul === this.props.ul) {
+      return false;
     }
-    return true
+    return true;
   }
   handleToggleList=(listStyleType)=>{
-    if(this.props.ul){
+    if (this.props.ul) {
       this.props.onChange(
         this.props.controller.queryParent('ul')
         .setStyleAttr("listStyleType", listStyleType)
         .editorState
-      )
-    }else{
+      );
+    } else {
       this.props.onChange(
         this.props.controller.insertElementAfter("ul")
         .setStyleAttr("listStyleType", listStyleType)
         .appendChild("li").editorState
-      )
+      );
     }
   }
 

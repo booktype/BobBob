@@ -24,7 +24,7 @@ export default class ParagraphLineSpacing extends React.PureComponent {
         label={'Line Spacing'}
         value={this.props.lineHeight || 1}
         onChange={this.handleChange}
-        hint= {'Choose line spacing'}
+        hint={'Choose line spacing'}
         icon={<LineSpacing />}
       >
         {[1, 1.15, 1.5, 2, 2.5, 3].map(lh => {

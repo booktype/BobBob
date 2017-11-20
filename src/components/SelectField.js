@@ -34,7 +34,7 @@ export default class SelectField extends React.PureComponent {
           }
         });
       } else {
-        this.setState({ selected: selected.props })
+        this.setState({ selected: selected.props });
       }
     }
   }

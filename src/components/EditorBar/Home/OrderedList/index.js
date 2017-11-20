@@ -11,28 +11,28 @@ import UpperRomanIcon from './upper-roman.png';
 
 const optionStyle = {
   height: 70
-}
+};
 export default class OrderedList extends React.PureComponent {
 
-  shouldComponentUpdate(nextProps, nextState){
-    if(nextProps.ol === this.props.ol){
-      return false
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.ol === this.props.ol) {
+      return false;
     }
-    return true
+    return true;
   }
   handleToggleList=(listStyleType)=>{
-    if(this.props.ol){
+    if (this.props.ol) {
       this.props.onChange(
         this.props.controller.queryParent('ol')
         .setStyleAttr("listStyleType", listStyleType)
         .editorState
-      )
-    }else{
+      );
+    } else {
       this.props.onChange(
         this.props.controller.insertElementAfter("ol")
         .setStyleAttr("listStyleType", listStyleType)
         .appendChild("li").editorState
-      )
+      );
     }
   }
   render() {

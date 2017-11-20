@@ -130,8 +130,8 @@ export default class LinkButton extends React.PureComponent {
               type="url"
               value={this.state.src}
               onChange={this.handlePictureChange}
-              // eslint-disable-next-line
               onKeyPress={(e) => {
+                // eslint-disable-next-line
                 e.key === "Enter" ? this.handlePictureSubmit() : null;
               }}
             />

@@ -122,8 +122,8 @@ export default class LinkButton extends React.PureComponent {
               type="url"
               value={this.state.url}
               onChange={this.handleUrlChange}
-              // eslint-disable-next-line
               onKeyPress={(e) => {
+                // eslint-disable-next-line
                 e.key === "Enter" ? this.handleUrlSubmit() : null;
               }}
             />
