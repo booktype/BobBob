@@ -14,6 +14,7 @@ import LineSpacing from './EditorBar/Home/ParagraphLineSpacing';
 import ParagraphStyles from './EditorBar/Home/ParagraphStyles';
 import TablePicker from './EditorBar/Insert/Table';
 import LinkForm from './EditorBar/Insert/Link';
+import HorizontalLine from './EditorBar/Insert/HorizontalLine';
 import PictureForm from './EditorBar/Insert/Picture';
 import CommentButton from './EditorBar/Insert/Comment';
 import TableTab from './EditorBar/Table/Layout';
@@ -59,6 +60,7 @@ class ControllerContainer extends React.PureComponent {
           </Tab>
           <Tab label={"Insert"}>
             <TablePicker controller={this.props.controller} onChange={this.onChange}/>
+            <HorizontalLine controller={this.props.controller} onChange={this.onChange}/>
             <LinkForm controller={this.props.controller} onChange={this.onChange}/>
             <PictureForm controller={this.props.controller} onChange={this.onChange}/>
             <CommentButton controller={this.props.controller} onChange={this.onChange}/>
