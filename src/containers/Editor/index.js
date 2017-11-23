@@ -113,9 +113,7 @@ class BobbobEditor extends Component {
       this.onSave();
     }
   };
-
   onChange = (editorState) => {
-    editorState = EditorState.forceSelection(editorState, editorState.getSelection());
     if (editorState === this.state.editorState) {
       return;
     }

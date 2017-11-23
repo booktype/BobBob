@@ -1,15 +1,14 @@
 import React from 'react';
 import reactCSS from 'reactcss';
 
-import {ColorWrap, Saturation, Hue, Alpha, Checkboard} from './helpers';
-import SketchFields from './ColorFields';
+import { ColorWrap } from './helpers';
 import SketchPresetColors from './ColorPreset';
 
 
 export const Sketch = ({
-                         width, rgb, hex, hsv, hsl, onChange, disableAlpha,
-                         presetColors, renderers
-                       }) => {
+  width, rgb, hex, hsv, hsl, onChange, disableAlpha,
+  presetColors, renderers
+}) => {
   const styles = reactCSS({
     'default': {
       picker: {
@@ -48,7 +47,7 @@ export const Sketch = ({
       activeColor: {
         absolute: '0px 0px 0px 0px',
         borderRadius: '2px',
-        background: `rgba(${ rgb.r },${ rgb.g },${ rgb.b },${ rgb.a })`,
+        background: `rgba(${rgb.r},${rgb.g},${rgb.b},${rgb.a})`,
         boxShadow: 'inset 0 0 0 1px rgba(0,0,0,.15), inset 0 0 4px rgba(0,0,0,.25)',
       },
       hue: {
@@ -83,51 +82,11 @@ export const Sketch = ({
         display: 'none',
       },
     },
-  }, {disableAlpha});
+  }, { disableAlpha });
 
   return (
     <div style={styles.picker} className="sketch-picker">
-      <div style={styles.saturation}>
-        <Saturation
-          style={styles.Saturation}
-          hsl={hsl}
-          hsv={hsv}
-          onChange={onChange}
-        />
-      </div>
-      <div style={styles.controls} className="flexbox-fix">
-        <div style={styles.sliders}>
-          <div style={styles.hue}>
-            <Hue
-              style={styles.Hue}
-              hsl={hsl}
-              onChange={onChange}
-            />
-          </div>
-          <div style={styles.alpha}>
-            <Alpha
-              style={styles.Alpha}
-              rgb={rgb}
-              hsl={hsl}
-              renderers={renderers}
-              onChange={onChange}
-            />
-          </div>
-        </div>
-        <div style={styles.color}>
-          <Checkboard/>
-          <div style={styles.activeColor}/>
-        </div>
-      </div>
-
-      <SketchFields
-        rgb={rgb}
-        hsl={hsl}
-        hex={hex}
-        onChange={onChange}
-        disableAlpha={disableAlpha}
-      />
-      <SketchPresetColors colors={presetColors} onClick={onChange}/>
+      <SketchPresetColors colors={presetColors} onClick={onChange} />
     </div>
   );
 };

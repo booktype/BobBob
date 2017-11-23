@@ -1,0 +1,39 @@
+div.popover-container {
+  float: left;
+  display: block;
+}
+div.popover-container.show > div.popover-content {
+  transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  -webkit-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+}
+div.popover-container > div.popover-content {
+  float: left;
+  position: relative;
+  width: 100%;
+  transform: scale(1, 0);
+  -ms-transform: scale(1, 0);
+  -webkit-transform: scale(1, 0);
+  -o-transform: scale(1, 0);
+  -moz-transform: scale(1, 0);
+  -webkit-transition: -webkit-transform ease 250ms;
+  -moz-transition: -webkit-transform ease 250ms;
+  -ms-transition: -webkit-transform ease 250ms;
+  -o-transition: -webkit-transform ease 250ms;
+  transition: -webkit-transform ease 250ms;
+  -webkit-transition: transform ease 250ms;
+  -moz-transition: transform ease 250ms;
+  -ms-transition: transform ease 250ms;
+  -o-transition: transform ease 250ms;
+  transition: transform ease 250ms;
+}
+div.popover-container > div.popover-content > div {
+  position: absolute;
+  width: 100%;
+  min-width: 150px;
+  z-index: 100;
+  cursor: pointer;
+  background: white;
+}

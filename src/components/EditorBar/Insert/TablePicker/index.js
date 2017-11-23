@@ -29,11 +29,11 @@ export default class TableSizePicker extends React.PureComponent {
   }
 
   resize = (e) => {
-    let x,
-      y;
+    let x, y;
     const bounds = e.target.getBoundingClientRect();
-    x = e.pageX - bounds.left;
-    y = e.pageY - bounds.top;
+    x = e.pageX - bounds.left + 5;
+    y = e.pageY - bounds.top + 21;
+    console.log(x, y);
     const sizeX = 1 - x / 18 % 1 + x / 18;
     const sizeY = 1 - y / 18 % 1 + y / 18;
     x = 1 - x / 18 % 1 + x / 16;
@@ -54,8 +54,8 @@ export default class TableSizePicker extends React.PureComponent {
             position: "absolute",
             top: 0,
             left: 0,
-            width: `${this.state.x + 1}em`,
-            height: `${this.state.y + 1}em`
+            width: `15em`,
+            height: `15em`
           }}></div>
           <div style={{
             ...highlighted,
@@ -67,7 +67,6 @@ export default class TableSizePicker extends React.PureComponent {
           }}></div>
 
         </div>
-        {this.state.sizeX},{this.state.sizeY}
       </div>
     );
   }
