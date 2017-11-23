@@ -35,8 +35,8 @@ class RichEditor extends React.Component {
   }
 
   _onTab(e) {
-    const maxDepth = 4;
-    this.onChange(RichUtils.onTab(e, this.props.editorState, maxDepth));
+    // const maxDepth = 4;
+    // this.onChange(RichUtils.onTab(e, this.props.editorState, maxDepth));
   }
 
   customStyleFn = (style, block) => {
