@@ -35,7 +35,6 @@ export default class TableLayout extends React.PureComponent {
   }
   deleteColumn = () => {
     let at_index = this.props.controller.getChildIndex();
-    console.log(at_index);
     this.props.onChange(this.props.controller.queryParent("tbody").queryAndRemove("tr", "td", at_index).editorState);
   }
   insertRowAbove = () => {
@@ -53,12 +52,10 @@ export default class TableLayout extends React.PureComponent {
     if (at_index) {
       at_index -= 1;
     }
-    console.log(at_index);
     this.props.onChange(this.props.controller.queryParent("tbody").queryAndAppend("tr", "td", at_index).editorState);
   }
   insertColumnRight = () => {
     const at_index = this.props.controller.getChildIndex();
-    console.log(at_index);
     this.props.onChange(this.props.controller.queryParent("tbody").queryAndAppend("tr", "td", at_index).editorState);
 
   }
