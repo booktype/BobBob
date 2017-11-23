@@ -64,6 +64,41 @@ class RichEditor extends React.Component {
       command.push(key);
       command = command.join("-");
     }
+    if (command === "delete" || command === "backspace" || command === "enter") {
+      const selection = this.props.editorState.getSelection();
+      const content = this.props.editorState.getCurrentContent();
+      const anchorKey = selection.getAnchorKey();
+      const block = content.getBlockForKey(anchorKey);
+      const blockBefore = content.getBlockBefore(anchorKey);
+      const blockAfter = content.getBlockAfter(anchorKey);
+      if (command === "backspace" && selection.getAnchorOffset()===0) {
+        const block = content.getBlockForKey(selection.getAnchorKey());
+        if (block.getType() === "td" || block.getDepth() > blockBefore.getDepth()) {
+          return "handled";
+        }
+      }
+      if (command === "delete" && blockAfter) {
+        const blockAfterChild = content
+          .getBlockAfter(blockAfter.getKey());
+        const nextBlockHasChildren = blockAfterChild &&
+          blockAfterChild.getDepth() > blockAfter.getDepth();
+        if (
+          selection.getAnchorOffset() === block.getText().length
+        ) {
+          if (
+            block.getType() !== "li" &&
+            (block.getDepth() > 0 || nextBlockHasChildren )
+          ) {
+            return "handled";
+          }
+        }
+      }
+      if (command === "enter") {
+        if (block.getType()!=="li" && block.getDepth() > 0) {
+          return "handled";
+        }
+      }
+    }
     if (command === "ctrl-s") {
       e.preventDefault();
       this.props.handleKeyCommand(command);
@@ -89,9 +124,6 @@ class RichEditor extends React.Component {
 
   handleDroppedFiles = (selection, files) => {
     if (files[0].name.endsWith("docx")) {
-      // docx2html(files[0]).then((html)=>{
-      //   this._onPaste(null, html.toString())
-      // })
     }
   }
 
@@ -103,7 +135,6 @@ class RichEditor extends React.Component {
       return false;
     }
   }
-
   render() {
     // const {editorState} = this.props;
 
