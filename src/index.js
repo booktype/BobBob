@@ -1,27 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import reactTapPlugin from 'react-tap-event-plugin';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import BobbobEditor from './containers/Editor';
 import BooktypeApi from './api/booktype';
 import DummyApi from './api/dummy';
 
 
-reactTapPlugin();
-const muiTheme = getMuiTheme({
-  palette: {
-    primary1Color: 'rgb(224, 223, 225)',
-    accent1Color: 'rgb(255, 103, 0)'
-  },
-  appBar: {
-    height: 50,
-  },
-});
 const BobBob = ({api}) => (
-  <MuiThemeProvider muiTheme={muiTheme}>
-    <BobbobEditor api={api}/>
-  </MuiThemeProvider>
+  <BobbobEditor api={api}/>
 );
 
 window.EditorController = class {

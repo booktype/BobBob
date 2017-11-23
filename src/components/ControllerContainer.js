@@ -1,5 +1,5 @@
 import React from 'react';
-// import EntityStyleControls from './EntityStyleControls';
+import {EditorState} from 'draft-js';
 import FontColorPicker from './EditorBar/Home/FontColorPicker';
 import HighlightColorPicker from './EditorBar/Home/HighlightColorPicker';
 import FontSizePicker from './EditorBar/Home/FontSizePicker';
@@ -39,10 +39,13 @@ class ControllerContainer extends React.PureComponent {
     }
     return true;
   }
-
+  handleClick = () => {
+    const editorState = this.props.controller.editorState;
+    this.onChange(EditorState.forceSelection(editorState, editorState.getSelection()));
+  }
   render() {
     return (
-      <div style={{zoom: 0.70}}>
+      <div style={{zoom: 0.70}} onClick={this.handleClick}>
         <Tabs>
           <Tab label={"Home"}>
             <FontPicker fontFamily={this.props.inlineStyles.fontFamily} controller={this.props.controller} onChange={this.onChange}/>

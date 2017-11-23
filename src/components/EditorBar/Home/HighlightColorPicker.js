@@ -2,7 +2,7 @@ import React from 'react';
 import ColorPicker from './ColorPicker/Color';
 import IconButton from '../../IconButton';
 import FormatColorFill from '../../../icons/formatColorFill';
-import Popover from 'material-ui/Popover';
+import Popover from '../../Popover';
 import {RichUtils} from 'draft-js';
 
 
@@ -65,17 +65,17 @@ export default class HighlightColorPicker extends React.PureComponent {
   render() {
     return (
       <div style={{display: "inline-block"}}>
-        <IconButton
-          onTouchTap={this.handleTouchTap}
-          tooltip="Highlight Color"
-        >
-          <FormatColorFill color={this.props.backgroundColor}/>
-        </IconButton>
+        
         <Popover
           open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          icon={
+            <IconButton
+              onTouchTap={this.handleTouchTap}
+              tooltip="Highlight Color"
+            >
+              <FormatColorFill color={this.props.backgroundColor} />
+            </IconButton>
+          }
           onRequestClose={this.handleRequestClose}
         >
           <ColorPicker color={{hex: this.props.backgroundColor}} onChange={this.handleColorChange} disableAlpha={true}/>

@@ -2,7 +2,7 @@ import React from 'react';
 import ColorPicker from './ColorPicker/Color';
 import IconButton from '../../IconButton';
 import FormatColorText from '../../../icons/formatColorText';
-import Popover from 'material-ui/Popover';
+import Popover from '../../Popover';
 import {RichUtils} from 'draft-js';
 
 
@@ -65,20 +65,19 @@ export default class FontColorPicker extends React.PureComponent {
   render() {
     return (
       <div style={{display: "inline-block"}}>
-        <IconButton
-          onTouchTap={this.handleTouchTap}
-          tooltip="Font Color"
-        >
-          <FormatColorText color={this.props.color}/>
-        </IconButton>
         <Popover
           open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
+          icon={
+            <IconButton
+              onTouchTap={this.handleTouchTap}
+              tooltip="Font Color"
+            >
+              <FormatColorText color={this.props.color}/>
+            </IconButton>
+          }
         >
-          <ColorPicker color={{hex: this.props.color}} onChange={this.handleColorChange} disableAlpha={true}/>
+            <ColorPicker color={{hex: this.props.color}} onChange={this.handleColorChange} disableAlpha={true}/>
         </Popover>
       </div>
     );

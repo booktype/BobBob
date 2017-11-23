@@ -1,9 +1,6 @@
 import React from 'react';
-import IconButton from '../../IconButton';
-import FlatButton from 'material-ui/FlatButton';
-import Dialog from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
-import CommentIcon from '../../../icons/comment';
+// import IconButton from '../../IconButton';
+// import CommentIcon from '../../../icons/comment';
 import {RichUtils} from 'draft-js';
 
 
@@ -54,40 +51,9 @@ export default class CommentButton extends React.PureComponent {
   };
 
   render() {
-    const actions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onTouchTap={this.handleClose}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        disabled={!this.state.content}
-        onTouchTap={this.handleTouchTap}
-      />,
-    ];
     return (
       <div style={{display: 'inline-block'}}>
-        <IconButton
-          onTouchTap={this.handleOpen}
-          label={"Insert Comment"}
-        >
-          <CommentIcon/>
-        </IconButton>
-        <Dialog
-          title="Add a comment"
-          actions={actions}
-          modal={true}
-          open={this.state.open}
-        >
-          <p style={{backgroundColor: "yellow"}}>{this.state.text}</p>
-          <TextField
-            hintText="Insert Comment"
-            value={this.state.content}
-            onChange={this.handleChange}
-          />
-        </Dialog>
+        
       </div>
     );
   }

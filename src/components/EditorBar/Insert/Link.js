@@ -1,10 +1,10 @@
 import React from 'react';
 import IconButton from '../../IconButton';
-import Popover from 'material-ui/Popover';
+import Popover from '../../Popover';
 import LinkIcon from '../../../icons/link';
 import LinkOffIcon from '../../../icons/linkOff';
-import TextField from 'material-ui/TextField';
-import {RichUtils} from 'draft-js';
+import TextField from '../../TextField';
+import { RichUtils } from 'draft-js';
 
 
 export default class LinkButton extends React.PureComponent {
@@ -17,21 +17,17 @@ export default class LinkButton extends React.PureComponent {
   }
 
   handleTouchTap = (event) => {
-    // This prevents ghost click.
-    event.preventDefault();
-
     this.setState({
       open: true,
-      anchorEl: event.currentTarget,
     });
   };
 
-  handleRequestClose = () => {
+  handleRequestClose = (e) => {
     this.setState({
       open: false,
     });
   };
-  handleUrlChange = (e, url) => {
+  handleUrlChange = (url) => {
     this.setState({
       url
     });
@@ -40,9 +36,9 @@ export default class LinkButton extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     const data = nextProps.controller.getCurrentMetaData("LINK");
     if (data && data.attributes && data.attributes.href) {
-      this.setState({url: data.attributes.href});
+      this.setState({ url: data.attributes.href });
     } else if (this.state.url) {
-      this.setState({url: ""});
+      this.setState({ url: "" });
     }
   }
 
@@ -91,34 +87,24 @@ export default class LinkButton extends React.PureComponent {
 
   render() {
     return (
-      <div style={{display: 'inline-block'}}>
-        <IconButton
-          onTouchTap={this.handleTouchTap}
-          label={"Insert Link"}
-        >
-          <LinkIcon color={this.state.url ? "orange" : null}/>
-        </IconButton>
-        <IconButton
-          onTouchTap={this.removeLink}
-          disabled={!this.state.url}
-          style={{height: "24px"}}
-          iconStyle={{width: "24px", height: "24px"}}
-          label={"Remove Link"}
-        >
-          <LinkOffIcon color={this.state.url ? "orange" : null}/>
-        </IconButton>
+      <div style={{ display: 'inline-block' }}>
         <Popover
           open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
-          style={{overflowY: "hidden"}}
+          icon={
+            <IconButton
+              onTouchTap={this.handleTouchTap}
+              label={"Insert Link"}
+            >
+              <LinkIcon color={this.state.url ? "orange" : null} />
+            </IconButton>
+          }
         >
           <div>
             <TextField
+              inputRef={(el)=>{this.input = el;}}
               hintText="Url"
-              floatingLabelText="Type Link and hit Enter"
+              label="Type Link and hit Enter"
               type="url"
               value={this.state.url}
               onChange={this.handleUrlChange}
@@ -129,6 +115,16 @@ export default class LinkButton extends React.PureComponent {
             />
           </div>
         </Popover>
+        <IconButton
+          onTouchTap={this.removeLink}
+          disabled={!this.state.url}
+          style={{ height: "24px" }}
+          iconStyle={{ width: "24px", height: "24px" }}
+          label={"Remove Link"}
+        >
+          <LinkOffIcon color={this.state.url ? "orange" : null} />
+        </IconButton>
+
       </div>
     );
   }
