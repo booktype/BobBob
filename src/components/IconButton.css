@@ -5,6 +5,7 @@
   text-align: center;
   padding: 3px;
 }
+
 .qs .popover {
   top: 35px;
   left: -10px;
@@ -12,12 +13,13 @@
   text-align: center;
   display: none;
   font-size: 12px;
-  font-family: 'Helvetica',sans-serif;
+  font-family: 'Helvetica', sans-serif;
   padding: 5px 13px;
   position: absolute;
   z-index: 1000;
-  width:100%;
+  width: 100%;
 }
+
 .qs:hover .popover {
   display: block;
   -webkit-animation: fade-in .3s linear 1;
@@ -33,6 +35,7 @@
     opacity: 1;
   }
 }
+
 @-moz-keyframes fade-in {
   from {
     opacity: 0;
@@ -41,6 +44,7 @@
     opacity: 1;
   }
 }
+
 @-ms-keyframes fade-in {
   from {
     opacity: 0;
@@ -48,4 +52,12 @@
   to {
     opacity: 1;
   }
+}
+
+.icon-button:hover {
+  cursor: pointer;
+}
+
+.icon-button:disabled:hover {
+  cursor: default;
 }

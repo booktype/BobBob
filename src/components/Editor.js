@@ -1,10 +1,10 @@
 import React from 'react';
-import contentRendererFn from '../renderers/contentRendererFn';
 import {
   getDefaultKeyBinding,
   Editor,
   RichUtils
 } from 'draft-js';
+import contentRendererFn from '../renderers/contentRendererFn';
 import leafRendererFn from '../renderers/leafRendererFn';
 import blockRendererFn from '../renderers/blockRendererFn';
 import DefaultDraftBlockRenderMap from '../immutables/DefaultDraftBlockRenderMap';
