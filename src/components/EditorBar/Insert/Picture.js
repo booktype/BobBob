@@ -1,9 +1,8 @@
 import React from 'react';
 import IconButton from '../../IconButton';
-import Popover from 'material-ui/Popover';
+import Popover from '../../Popover';
 import ImageIcon from '../../../icons/imageArea';
-import TextField from 'material-ui/TextField';
-import Upload from 'material-ui-upload/Upload';
+import TextField from '../../TextField';
 
 
 export default class LinkButton extends React.PureComponent {
@@ -19,18 +18,16 @@ export default class LinkButton extends React.PureComponent {
   }
 
   handleTouchTap = (event) => {
-    // This prevents ghost click.
-    event.preventDefault();
-    if (window.booktype) {
-      window.booktype.sendToCurrentBook(
-        {'command': 'attachments_list'},
-        (data) => {
-          console.log(data);
-          this.setState({images: data.attachments});
-        }
-      );
+    // if (window.booktype) {
+    //   window.booktype.sendToCurrentBook(
+    //     {'command': 'attachments_list'},
+    //     (data) => {
+    //       console.log(data);
+    //       this.setState({images: data.attachments});
+    //     }
+    //   );
 
-    }
+    // }
     this.setState({
       open: true,
       anchorEl: event.currentTarget,
@@ -58,17 +55,12 @@ export default class LinkButton extends React.PureComponent {
   }
 
   onFileLoad = (e) => {
-    console.log(e.target.result);
     this.setState({src: e.target.result});
 
-    // client.service("/upload").create({uri: e.target.result}).then((res)=>{
-    //   console.log(res)
-    // })
     this.handlePictureSubmit();
   }
   handlePictureSubmit = () => {
     this.handleRequestClose();
-    console.log(this.state.src);
     if (this.props.controller.currentInlineStyle.has("IMAGE")) {
       this.props.onChange(
         this.props.controller.replaceStyleMetaData(
@@ -106,27 +98,23 @@ export default class LinkButton extends React.PureComponent {
   render() {
     return (
       <div style={{display: 'inline-block'}}>
-        <IconButton
-          onTouchTap={this.handleTouchTap}
-          label={"Insert Image"}
-        >
-          <ImageIcon color={this.state.url ? "orange" : null}/>
-        </IconButton>
         <Popover
           open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
-          style={{overflowY: "hidden"}}
+          icon={
+            <IconButton
+              onTouchTap={this.handleTouchTap}
+              label={"Insert Image"}
+            >
+              <ImageIcon color={this.state.url ? "orange" : null} />
+            </IconButton>
+          }
         >
-          {this.state.images.map(image => {
-            return <img key={image.preview} src={image.preview} alt={''}></img>;
-          })}
           <div>
             <TextField
+              inputRef={(el) => { this.input = el; }}
               hintText="Url"
-              floatingLabelText="Insert Image URL and hit Enter"
+              label="Insert Image URL and hit Enter"
               type="url"
               value={this.state.src}
               onChange={this.handlePictureChange}
@@ -135,10 +123,6 @@ export default class LinkButton extends React.PureComponent {
                 e.key === "Enter" ? this.handlePictureSubmit() : null;
               }}
             />
-            <p>OR</p>
-            <Upload label="Upload Picture"
-                    fileTypeRegex={/\.(gif|jpg|jpeg|png)$/i}
-                    onFileLoad={this.onFileLoad}/>
           </div>
         </Popover>
       </div>

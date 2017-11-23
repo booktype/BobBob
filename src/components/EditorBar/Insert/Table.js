@@ -1,7 +1,7 @@
 import React from 'react';
 import TablePicker from './TablePicker';
 import IconButton from '../../IconButton';
-import Popover from 'material-ui/Popover';
+import Popover from '../../Popover';
 import TableIcon from '../../../icons/table';
 
 
@@ -53,19 +53,18 @@ export default class TableButton extends React.PureComponent {
     return (
       <div style={{display: 'inline-block'}}>
 
+      <Popover
+      open={this.state.open}
+      onRequestClose={this.handleRequestClose}
+      icon={
         <IconButton
           onTouchTap={this.handleTouchTap}
           label={"Insert table"}
         >
           <TableIcon/>
         </IconButton>
-        <Popover
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={this.handleRequestClose}
-        >
+        }
+      >
           <div>{`${this.state.sizeX} x ${this.state.sizeY}`}</div>
           <TablePicker onChange={this.handleSizeChange} onSelect={this.handleChosenSize}/>
         </Popover>
