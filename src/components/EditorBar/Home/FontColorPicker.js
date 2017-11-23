@@ -72,6 +72,7 @@ export default class FontColorPicker extends React.PureComponent {
             <IconButton
               onTouchTap={this.handleTouchTap}
               tooltip="Font Color"
+              disabled={this.props.isCollapsed}
             >
               <FormatColorText color={this.props.color}/>
             </IconButton>

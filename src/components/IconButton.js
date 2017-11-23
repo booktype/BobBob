@@ -4,9 +4,6 @@ import './IconButton.css';
 
 
 export default class IconButton extends React.PureComponent {
-  handleMouseOver = () => {
-
-  }
 
   render() {
     const {tooltip, style, iconStyle} = this.props;

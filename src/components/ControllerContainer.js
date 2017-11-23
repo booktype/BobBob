@@ -33,7 +33,8 @@ class ControllerContainer extends React.PureComponent {
     if (
       JSON.stringify(nextProps.inlineStyles) === JSON.stringify(this.props.inlineStyles) &&
       JSON.stringify(nextProps.blockStyle) === JSON.stringify(this.props.blockStyle) &&
-      JSON.stringify(nextProps.blockTree) === JSON.stringify(this.props.blockTree)
+      JSON.stringify(nextProps.blockTree) === JSON.stringify(this.props.blockTree) &&
+      nextProps.isCollapsed === this.props.isCollapsed
     ) {
       return false;
     }
@@ -50,9 +51,9 @@ class ControllerContainer extends React.PureComponent {
           <Tab label={"Home"}>
             <FontPicker fontFamily={this.props.inlineStyles.fontFamily} controller={this.props.controller} onChange={this.onChange}/>
             <FontSizePicker fontSize={this.props.inlineStyles.fontSize} controller={this.props.controller} onChange={this.onChange}/>
-            <FontColorPicker color={this.props.inlineStyles.color} controller={this.props.controller} onChange={this.onChange}/>
-            <HighlightColorPicker backgroundColor={this.props.inlineStyles.backgroundColor} controller={this.props.controller} onChange={this.onChange}/>
-            <FontStyle styles={this.props.inlineStyles} controller={this.props.controller} onChange={this.onChange}/>
+            <FontColorPicker isCollapsed={this.props.isCollapsed} color={this.props.inlineStyles.color} controller={this.props.controller} onChange={this.onChange}/>
+            <HighlightColorPicker isCollapsed={this.props.isCollapsed} backgroundColor={this.props.inlineStyles.backgroundColor} controller={this.props.controller} onChange={this.onChange}/>
+            <FontStyle isCollapsed={this.props.isCollapsed} styles={this.props.inlineStyles} controller={this.props.controller} onChange={this.onChange}/>
             <ParagraphAlign textAlign={this.props.blockStyle.style.textAlign} controller={this.props.controller} onChange={this.onChange}/>
             <Indent marginLeft={this.props.blockStyle.style.marginLeft} controller={this.props.controller} onChange={this.onChange}/>
             <OrderedList ol={this.props.blockTree['ol']} controller={this.props.controller} onChange={this.onChange}/>

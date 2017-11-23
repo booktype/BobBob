@@ -72,6 +72,7 @@ export default class HighlightColorPicker extends React.PureComponent {
             <IconButton
               onTouchTap={this.handleTouchTap}
               tooltip="Highlight Color"
+              disabled={this.props.isCollapsed}
             >
               <FormatColorFill color={this.props.backgroundColor} />
             </IconButton>

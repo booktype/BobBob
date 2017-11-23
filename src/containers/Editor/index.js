@@ -187,7 +187,12 @@ class BobbobEditor extends Component {
       return block.getKey() === this.controller.selection.getFocusKey();
     });
 
-    this.setState({editorState, blockStyle, blockTree, inlineStyles});
+    this.setState({
+      editorState, 
+      blockStyle, 
+      blockTree, 
+      inlineStyles, 
+      isCollapsed: this.controller.selection.isCollapsed()});
   };
 
   // onClick = (e) => {
@@ -219,6 +224,7 @@ class BobbobEditor extends Component {
                 inlineStyles={this.state.inlineStyles}
                 blockStyle={this.state.blockStyle}
                 blockTree={this.state.blockTree}
+                isCollapsed={this.state.isCollapsed}
                 controller={this.controller}
                 onChange={this.onChange}
                 setReadOnly={this.setReadOnly}

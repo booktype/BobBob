@@ -56,6 +56,7 @@ export default class FontStyle extends React.PureComponent {
                 key={style}
                 onTouchTap={() => this.handleToggleStyle(style)}
                 tooltip={labels[style]}
+                disabled={this.props.isCollapsed}
               >
                 <Icon color={this.props.styles[style] ? "orange" : null}/>
               </IconButton>
