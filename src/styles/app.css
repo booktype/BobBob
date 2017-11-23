@@ -54,3 +54,14 @@
     direction: rtl;
     text-align: right
 }
+
+table, th, td {
+   border: 1px solid black;
+}
+
+.public-DraftStyleDefault-block {
+  text-align: inherit;
+  margin-left: inherit;
+  direction: inherit;
+  line-height: inherit;
+}
