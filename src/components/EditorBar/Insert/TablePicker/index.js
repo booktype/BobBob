@@ -33,7 +33,6 @@ export default class TableSizePicker extends React.PureComponent {
     const bounds = e.target.getBoundingClientRect();
     x = e.pageX - bounds.left + 5;
     y = e.pageY - bounds.top + 21;
-    console.log(x, y);
     const sizeX = 1 - x / 18 % 1 + x / 18;
     const sizeY = 1 - y / 18 % 1 + y / 18;
     x = 1 - x / 18 % 1 + x / 16;
