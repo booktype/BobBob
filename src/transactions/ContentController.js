@@ -12,7 +12,6 @@ import {List, Repeat, Map} from 'immutable';
 
 class ContentController {
   constructor(editorState) {
-
     this.currentContent = editorState.getCurrentContent();
     this.selection = editorState.getSelection();
     this.editorState = editorState;
@@ -50,7 +49,6 @@ class ContentController {
     }
     return false;
   }
-
   replaceStyleMetaData = (styleType, data) => {
     const metaKey = this.editorState.getCurrentMeta().get(styleType);
     const changedContent = Modifier.mergeMetaData(this.currentContent, metaKey, data);
@@ -320,6 +318,11 @@ class ContentController {
     this.updateEditorState(withNewBlock, newSelection);
     return this;
   }
+  splitBlock = () => {
+    const splittedContent = Modifier.splitBlock(this.currentContent, this.selection);
+    this.updateEditorState(splittedContent);
+    return this;
+  };
   toggleBlockInBlock = (type) => {
     const newBlockKey = genKey();
     const currentBlock = this.currentContent.getBlockForKey(this.selection.getFocusKey());

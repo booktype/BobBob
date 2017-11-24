@@ -63,7 +63,7 @@ class ControllerContainer extends React.PureComponent {
           </Tab>
           <Tab label={"Insert"}>
             <TablePicker controller={this.props.controller} onChange={this.onChange}/>
-            <HorizontalLine controller={this.props.controller} onChange={this.onChange}/>
+            <HorizontalLine blockType={this.props.blockStyle.type} controller={this.props.controller} onChange={this.onChange}/>
             <LinkForm controller={this.props.controller} onChange={this.onChange}/>
             <PictureForm controller={this.props.controller} onChange={this.onChange}/>
             <CommentButton controller={this.props.controller} onChange={this.onChange}/>
