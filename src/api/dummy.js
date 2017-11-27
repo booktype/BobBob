@@ -1,4 +1,5 @@
 import ApiInterface from './interface';
+import editorContentsToHTML from '../encoding/editorContentsToHTML';
 
 
 /* eslint-disable */
@@ -176,9 +177,10 @@ class Dummy extends ApiInterface {
   };
 
   saveContent = () => {
-    return true;
-    throw 'Not Implemented Error';
+    let mainEditor = document.querySelector("[data-contents]");
+    mainEditor = mainEditor.cloneNode(true);
 
+    return editorContentsToHTML(mainEditor);
   };
 
   getImages = () => {

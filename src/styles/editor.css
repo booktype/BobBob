@@ -1,0 +1,32 @@
+.ltr {
+  direction: ltr;
+  text-align: left
+}
+
+.rtl {
+  direction: rtl;
+  text-align: right
+}
+
+.PageBreakEditor svg {
+  width: 2.5em;
+  height: 2.5em;
+}
+
+.PageBreakEditor:before {
+  content: " ";
+  position: relative;
+  left: 0;
+  background: #9d9d9d;
+  height: 1px;
+  width: 40%;
+}
+
+.PageBreakEditor:after {
+  content: " ";
+  position: relative;
+  right: 0;
+  background: #9d9d9d;
+  height: 1px;
+  width: 40%;
+}
