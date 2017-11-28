@@ -16,16 +16,18 @@ export default class Tabs extends PureComponent {
   }
 
   render() {
+    const commonTabClasses = "black pointer dim ttu dib link pa1 tc";
+
     return (
-      <div className="bg-white mt3 mh3 bb shadow-1 br2 ">
-        <div className="bg-blue f6 flex shadow-1" style={{justifyContent: 'space-around'}}>
+      <div className="bg-white mt3 mh3 bb b--moon-gray shadow-1">
+        <div className="bg-near-white f6 flex shadow-1" style={{justifyContent: 'space-around'}}>
           {this.props.children.map((tab, idx) => {
             if (tab) {
               return (
                 <a
                   key={idx}
                   className={
-                    this.state.selectedTab === idx ? "ttu dib link pa1 white w3 b bb bw2" : "ttu dib link pa1 white"
+                    this.state.selectedTab === idx ? "w4 b bb bw2 " + commonTabClasses : "" + commonTabClasses
                   }
                   onClick={() => this.selectTab(idx)}
                 >

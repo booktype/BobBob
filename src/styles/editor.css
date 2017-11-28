@@ -1,3 +1,12 @@
+.contentContainer {
+  background-color: #ebebeb;
+}
+
+#contenteditor {
+  width: 50rem;
+  margin: 0 auto;
+}
+
 .ltr {
   direction: ltr;
   text-align: left
@@ -7,13 +16,15 @@
   direction: rtl;
   text-align: right
 }
-
-.PageBreakEditor svg {
-  width: 2.5em;
-  height: 2.5em;
+/**************/
+/* PAGE BREAK */
+/**************/
+.DraftEditor-editorContainer .PageBreakEditor svg {
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
-.PageBreakEditor:before {
+.DraftEditor-editorContainer .PageBreakEditor:before {
   content: " ";
   position: relative;
   left: 0;
@@ -22,7 +33,7 @@
   width: 40%;
 }
 
-.PageBreakEditor:after {
+.DraftEditor-editorContainer .PageBreakEditor:after {
   content: " ";
   position: relative;
   right: 0;
@@ -30,3 +41,25 @@
   height: 1px;
   width: 40%;
 }
+
+/*********/
+/* TABLE */
+/*********/
+.DraftEditor-editorContainer .group_table {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.DraftEditor-editorContainer table {
+  border: 1px solid gray;
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.DraftEditor-editorContainer table td {
+  border: 0.5px solid gray;
+}
+
+

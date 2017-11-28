@@ -16,7 +16,7 @@ export default function editorContentsToHTML(editorContents) {
     element.innerHTML = "";
     element.removeAttribute("contenteditable");
     element.removeAttribute("class");
-    element.setAttribute("class", "page-break")
+    element.setAttribute("class", "page-break");
   });
 
   // remove DraftStyleDefault related classes and unwrap

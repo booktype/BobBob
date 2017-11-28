@@ -86,6 +86,7 @@ class ContentController {
   removeBlock = (block) => {
     this.setCursorOnBlock(block);
     this.removeElement();
+    return this;
   };
   removeElement = () => {
     let lastBlock = this.currentContent.getBlockMap()
@@ -434,6 +435,7 @@ class ContentController {
       anchorOffset: 0
     });
     this.updateEditorState(this.currentContent, selection);
+    return this;
   };
 }
 
