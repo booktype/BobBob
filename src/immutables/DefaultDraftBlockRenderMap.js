@@ -365,6 +365,9 @@ const DefaultDraftBlockRenderMap = Map({
         if (controller.isSelectionAtStartOfBlock()) {
           return controller;
         }
+      },
+      enter: (controller) => {
+        return controller.insertSoftNewLine();
       }
     }, 
     "element": "td"
