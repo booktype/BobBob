@@ -56,8 +56,8 @@ class ControllerContainer extends React.PureComponent {
             <FontStyle styles={this.props.inlineStyles} controller={this.props.controller} onChange={this.onChange}/>
             <ParagraphAlign textAlign={this.props.blockStyle.style.textAlign} controller={this.props.controller} onChange={this.onChange}/>
             <Indent marginLeft={this.props.blockStyle.style.marginLeft} controller={this.props.controller} onChange={this.onChange}/>
-            <OrderedList ol={this.props.blockTree['ol']} controller={this.props.controller} onChange={this.onChange}/>
-            <UnorderedList ul={this.props.blockTree['ul']} controller={this.props.controller} onChange={this.onChange}/>
+            <OrderedList ol={this.props.blockTree['ol']} ul={this.props.blockTree['ul']} controller={this.props.controller} onChange={this.onChange}/>
+            <UnorderedList ul={this.props.blockTree['ul']} ol={this.props.blockTree['ol']} controller={this.props.controller} onChange={this.onChange}/>
             <TextDirection direction={this.props.blockStyle.style.direction} controller={this.props.controller} onChange={this.onChange}/>
             <ParagraphStyles style={this.props.blockStyle.type} controller={this.props.controller} onChange={this.onChange}/>
             <LineSpacing lineHeight={this.props.blockStyle.style.lineHeight} controller={this.props.controller} onChange={this.onChange}/>
