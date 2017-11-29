@@ -80,15 +80,14 @@ class ContentController {
     if (!block) {
       return false;
     }
-    const selection = new SelectionState({
-      focusKey: block.getKey(),
-      anchorKey: block.getKey(),
-      focusOffset: 0,
-      anchorOffset: 0,
-    });
-    this.updateEditorState(this.currentContent, selection);
+    this.setCursorOnBlock(block);
     return this;
   }
+  removeBlock = (block) => {
+    this.setCursorOnBlock(block);
+    this.removeElement();
+    return this;
+  };
   removeElement = () => {
     let lastBlock = this.currentContent.getBlockMap()
       .skipUntil(block => block === this.currentBlock)
@@ -428,6 +427,16 @@ class ContentController {
   getCurrentContent = () => {
     return this.currentContent;
   }
+  setCursorOnBlock = (block) => {
+    const selection = new SelectionState({
+      focusKey: block.getKey(),
+      anchorKey: block.getKey(),
+      focusOffset: 0,
+      anchorOffset: 0
+    });
+    this.updateEditorState(this.currentContent, selection);
+    return this;
+  };
 }
 
 

@@ -15,6 +15,21 @@ export default class HorizontalLine extends React.PureComponent {
 
   _insertHorizontalLine = () => {
     this.props.controller.splitBlock().insertElementAfter('hr');
+
+    let nextBlock = this.props.controller.currentContent.getBlockAfter(
+      this.props.controller.currentBlock.getKey()
+    );
+    // if next block is empty -> remove it
+    if (nextBlock && nextBlock.getText().length === 0) {
+      this.props.controller.removeBlock(nextBlock);
+      nextBlock = this.props.controller.currentContent.getBlockAfter(
+        this.props.controller.currentBlock.getKey()
+      );
+    }
+
+    // put cursor on the next block
+    this.props.controller.setCursorOnBlock(nextBlock);
+
     this.props.onChange(this.props.controller.editorState);
   };
 
