@@ -129,9 +129,10 @@ class BobbobEditor extends Component {
     if (editorState === this.state.editorState) {
       return;
     }
+    let operations = [];
     if (this.props.api.otEnabled) {
       let currentContent = editorState.getCurrentContent();
-      const operations = currentContent.getOperations();
+      operations = currentContent.getOperations();
       const hashes = [];
       operations.forEach((operation, contentHash) => {
         hashes.push(contentHash);
@@ -142,13 +143,14 @@ class BobbobEditor extends Component {
           , contentHash
         });
       });
-      this.setState({operations: this.state.operations.concat(hashes)});
+      operations = this.state.operations.concat(hashes);
       currentContent = Modifier.clearOperations(currentContent);
       editorState = EditorState.set(editorState, {currentContent});
-      this.controller.updateEditorState(editorState.getCurrentContent(), editorState.getSelection());
     }
-    this.controller.editorState = editorState;
-    this.controller.currentContent = editorState.getCurrentContent();
+    this.controller.updateEditorState(
+      editorState.getCurrentContent(),
+      editorState.getSelection()
+    );
     const inlineStyles = editorState.getCurrentInlineStyle().reduce(
       (styles, style) => {
         const [attr, value = true] = style.split("__");
@@ -157,63 +159,22 @@ class BobbobEditor extends Component {
       },
       {}
     );
-    let reachedRoot = false;
-    let blockTree = {};
-    this.controller.currentInlineStyle = editorState.getCurrentInlineStyle();
-    this.controller.blocksArray = this.controller.currentContent.getBlocksAsArray();
-    const previousSelection = this.controller.selection;
-    this.controller.selection = editorState.getSelection();
-    this.controller.currentBlock = this.controller.currentContent.getBlockForKey(this.controller.selection.getAnchorKey());
-    this.controller.location = this.controller.currentContent
-      .getBlockMap()
-      .reverse()
-      .skipUntil((block) => {
-        return block.getKey() === this.controller.currentBlock.getKey();
-      })
-      .takeUntil(block => {
-        if (reachedRoot) {
-          return reachedRoot;
-        }
-        if (block.getDepth() === 0) {
-          reachedRoot = true;
-          return false;
-        }
-        return reachedRoot;
-      })
-      .reduce((tree, block) => {
-        if (!tree[block.getDepth()]) {
-          tree[block.getDepth()] = block;
-          blockTree[block.getType()] = {
-            style: block.getData().get('style'),
-          };
-        }
-        return tree;
-      }, []);
     const blockStyle = {
       type: this.controller.currentBlock.getType(),
       style: this.controller.currentBlock.getData().get('style') || {},
       attributes: this.controller.currentBlock.getData().get('attributes') || {}
     };
-    this.controller.currentDepth = this.controller.currentBlock.getDepth();
-    this.controller.index = this.controller.blocksArray.findIndex((block) => {
-      return block.getKey() === this.controller.selection.getFocusKey();
-    });
-    if (this.controller.selection !== previousSelection) {
+    if (this.controller.selection !== this.controller.previousSelection) {
       this.handleKeyCommand('selection');
     }
-    this.setState({editorState, blockStyle, blockTree, inlineStyles});
+    this.setState({
+      editorState,
+      blockStyle,
+      blockTree: this.controller.blockTree,
+      inlineStyles,
+      operations
+    });
   };
-
-  // onClick = (e) => {
-  //   this.setState({clickTarget: e.target})
-  // };
-  //
-  //
-  // onHover = (e) => {
-  //   if (e.target.dataset.entity) {
-  //     this.setState({hoverTarget: e.target})
-  //   }
-  // };
 
   toHtml = () => {
     let mainEditor = document.querySelector("[data-contents]");
