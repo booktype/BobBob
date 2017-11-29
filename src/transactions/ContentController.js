@@ -6,7 +6,6 @@ import {
   Modifier,
   BlockMapBuilder,
   CharacterMetadata,
-  RichUtils
 } from "draft-js";
 import {List, Repeat, Map} from 'immutable';
 
@@ -17,13 +16,6 @@ class ContentController {
     this.selection = editorState.getSelection();
     this.editorState = editorState;
     this.updateEditorState(this.currentContent);
-  }
-  defaultHandleKeyCommand = (command) => {
-    const newEditorState = RichUtils.handleKeyCommand(this.editorState, command);
-    if (newEditorState) {
-      this.updateEditorState(newEditorState.getCurrentContent());
-    }
-    return this;
   }
   isSelectionAtEndOfBlock = () => {
     return this.selection.getAnchorOffset() === this.currentBlock.getText().length;
@@ -378,6 +370,20 @@ class ContentController {
     this.updateEditorState(withToggledBlock);
     return this;
   }
+  adjustBlockDepth = (depth) => {
+    const adjustedDepth = Modifier.adjustBlockDepth(
+      this.currentContent,
+      this.selection,
+      depth,
+      100
+    );
+    this.updateEditorState(adjustedDepth);
+    return this;
+  }
+  logBlock = () => {
+    console.log(this.currentBlock.toJSON());
+    return this;
+  }
   toggleBlockInBlock = (type) => {
     const newBlockKey = genKey();
     const currentBlock = this.currentContent.getBlockForKey(this.selection.getFocusKey());
@@ -451,9 +457,11 @@ class ContentController {
       this.editorState = EditorState.forceSelection(this.editorState, selection);
     }
     this.currentContent = currentContent;
+    this.previousSelection = this.selection;
     this.selection = selection || this.selection;
-    this.blockKey = this.selection.getFocusKey();
+    this.blockKey = this.selection.getAnchorKey();
     let reachedRoot = false;
+    this.blockTree = {};
     this.location = this
       .currentContent
       .getBlockMap()
@@ -472,11 +480,16 @@ class ContentController {
       .reduce((tree, block) => {
         if (!tree[block.getDepth()]) {
           tree[block.getDepth()] = block;
+          this.blockTree[block.getType()] = {
+            style: block.getData().get('style'),
+          };
         }
         return tree;
       }, []);
     this.blocksArray = currentContent.getBlocksAsArray();
     this.currentBlock = this.currentContent.getBlockForKey(this.selection.getAnchorKey());
+    this.nextBlock = this.currentContent.getBlockAfter(this.selection.getAnchorKey());
+    this.previousBlock = this.currentContent.getBlockBefore(this.selection.getAnchorKey());
     this.currentDepth = this.currentBlock.getDepth();
     this.currentInlineStyle = this.editorState.getCurrentInlineStyle();
     this.index = this.blocksArray.findIndex((block) => {
