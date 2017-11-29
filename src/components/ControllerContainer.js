@@ -17,6 +17,7 @@ import LinkForm from './EditorBar/Insert/Link';
 import HorizontalLine from './EditorBar/Insert/HorizontalLine';
 import PictureForm from './EditorBar/Insert/Picture';
 import CommentButton from './EditorBar/Insert/Comment';
+import PageBreak from './EditorBar/Insert/PageBreak';
 import TableTab from './EditorBar/Table/Layout';
 
 import Tabs from './Tabs/Tabs';
@@ -63,10 +64,11 @@ class ControllerContainer extends React.PureComponent {
           </Tab>
           <Tab label={"Insert"}>
             <TablePicker controller={this.props.controller} onChange={this.onChange}/>
-            <HorizontalLine controller={this.props.controller} onChange={this.onChange}/>
+            <HorizontalLine blockType={this.props.blockStyle.type} controller={this.props.controller} onChange={this.onChange}/>
             <LinkForm controller={this.props.controller} onChange={this.onChange}/>
             <PictureForm controller={this.props.controller} onChange={this.onChange}/>
             <CommentButton controller={this.props.controller} onChange={this.onChange}/>
+            <PageBreak blockType={this.props.blockStyle.type} controller={this.props.controller} onChange={this.onChange}/>
           </Tab>
           {this.props.blockTree['table'] ?
             <Tab label="Table Layout">

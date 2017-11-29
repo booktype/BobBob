@@ -19,6 +19,14 @@ const DefaultDraftBlockRenderMap = Map({
     ],
     "element": "figure"
   },
+  'svg': {
+    element: 'svg',
+    "children": ["path"],
+  },
+  'path': {
+    element: 'path',
+    void: true
+  },
   'unstyled': {
     element: 'div',
   },

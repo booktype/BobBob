@@ -118,7 +118,6 @@ export default class LinkButton extends React.PureComponent {
         <IconButton
           onTouchTap={this.removeLink}
           disabled={!this.state.url}
-          style={{ height: "24px" }}
           iconStyle={{ width: "24px", height: "24px" }}
           label={"Remove Link"}
         >

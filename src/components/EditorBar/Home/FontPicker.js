@@ -64,7 +64,7 @@ export default class FontSizePicker extends React.PureComponent {
         value={this.props.fontFamily || "sans-serif"}
         onChange={(value) => this.handleFontChange(value)}
         style={{width: 150, fontFamily: this.props.fontFamily || "sans-serif"}}
-        hint="Choose font"
+        hint="Font family"
       >
         {this.availableFonts.map(fontFamily => {
           return (

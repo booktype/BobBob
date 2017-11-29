@@ -105,44 +105,45 @@ class RichEditor extends React.Component {
   }
   render() {
 
-    let className = 'RichEditor-editor';
+    let className = 'RichEditor-editor pa4';
     return (
-      <div className="RichEditor-root" id="contenteditor">
-
-        <div className={className} onClick={this.props.onClick} onMouseOver={this.props.onMouseOver}>
-          <Editor
-            readOnly={this.props.readOnly}
-            blockStyleFn={getBlockStyle}
-            customStyleFn={this.customStyleFn}
-            customStyleMap={DefaultDraftInlineStyle}
-            blockRenderMap={DefaultDraftBlockRenderMap}
-            leafRendererFn={leafRendererFn}
-            contentRendererFn={contentRendererFn}
-            blockRendererFn={() => {
-              return {
-                component: blockRendererFn,
-                editable: true,
-                props: {
-                  editorState: this.props.editorState,
-                  onChange: this.props.onChange
-                }
-              };
-            }}
-            editorState={this.props.editorState}
-            handleKeyCommand={this.props.handleKeyCommand}
-            keyBindingFn={this._keyBindingFn}
-            onChange={this.props.onChange}
-            handlePastedText={this._onPaste}
-            handleDroppedFiles={this.handleDroppedFiles}
-            handleBeforeInput={this.props.handleBeforeInput}
-            onTab={this.onTab}
-            placeholder="Tell a story..."
-            ref="editor"
-            spellCheck={true}
-          />
+      <div className="contentContainer">
+        <div className="RichEditor-root br bl bb b--moon-gray" id="contenteditor">
+          <div className={className} onClick={this.props.onClick} onMouseOver={this.props.onMouseOver}>
+            <Editor
+              readOnly={this.props.readOnly}
+              blockStyleFn={getBlockStyle}
+              customStyleFn={this.customStyleFn}
+              customStyleMap={DefaultDraftInlineStyle}
+              blockRenderMap={DefaultDraftBlockRenderMap}
+              leafRendererFn={leafRendererFn}
+              contentRendererFn={contentRendererFn}
+              blockRendererFn={() => {
+                return {
+                  component: blockRendererFn,
+                  editable: true,
+                  props: {
+                    editorState: this.props.editorState,
+                    onChange: this.props.onChange
+                  }
+                };
+              }}
+              editorState={this.props.editorState}
+              handleKeyCommand={this.props.handleKeyCommand}
+              keyBindingFn={this._keyBindingFn}
+              onChange={this.props.onChange}
+              handlePastedText={this._onPaste}
+              handleDroppedFiles={this.handleDroppedFiles}
+              handleBeforeInput={this.props.handleBeforeInput}
+              onTab={this.onTab}
+              placeholder="Tell a story..."
+              ref="editor"
+              spellCheck={true}
+            />
+          </div>
         </div>
-
       </div>
+
     );
   }
 }

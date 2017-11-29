@@ -1,4 +1,7 @@
 import ApiInterface from './interface';
+import editorContentsToHTML from '../encoding/editorContentsToHTML';
+
+
 /* eslint-disable */
 
 class Dummy extends ApiInterface {
@@ -15,8 +18,8 @@ class Dummy extends ApiInterface {
       "profile_url": "/accounts/admin/",
       "profile_image_url": "/data/profile_images/admin.jpg",
       "get_full_name": "Oleg Pshenichniy"
-    }
-  }
+    };
+  };
 
   getUsers = () => {
 
@@ -59,12 +62,12 @@ class Dummy extends ApiInterface {
           }
         ]
       }
-    ]
-  }
+    ];
+  };
 
   getContent = () => {
 
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
 
       resolve(
         {
@@ -78,19 +81,107 @@ class Dummy extends ApiInterface {
               "inlineStyleRanges": [],
               "entityRanges": [],
               "data": {}
+            },
+            {
+              "key": "akoh2",
+              "text": "Donec sollicitudin molestie malesuada. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Cras ultricies ligula sed magna dictum porta. Curabitur aliquet quam id dui posuere blandit. Donec rutrum congue leo eget malesuada. Pellentesque in ipsum id orci porta dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.",
+              "type": "unstyled",
+              "depth": 0,
+              "inlineStyleRanges": [
+                {
+                  "offset": 0,
+                  "length": 517,
+                  "style": "BOLD",
+                  "key": ""
+                }
+              ],
+              "entityRanges": [],
+              "data": {}
+            },
+            {
+              "key": "brfhq",
+              "text": "Donec sollicitudin molestie malesuada. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Cras ultricies ligula sed magna dictum porta. Curabitur aliquet quam id dui posuere blandit. Donec rutrum congue leo eget malesuada. Pellentesque in ipsum id orci porta dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.Donec sollicitudin molestie malesuada. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Cras ultricies ligula sed magna dictum porta. Curabitur aliquet quam id dui posuere blandit. Donec rutrum congue leo eget malesuada. Pellentesque in ipsum id orci porta dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.",
+              "type": "unstyled",
+              "depth": 0,
+              "inlineStyleRanges": [
+                {
+                  "offset": 0,
+                  "length": 1034,
+                  "style": "ITALIC",
+                  "key": ""
+                },
+                {
+                  "offset": 0,
+                  "length": 1034,
+                  "style": "backgroundColor__#ffffff",
+                  "key": ""
+                },
+                {
+                  "offset": 0,
+                  "length": 1034,
+                  "style": "color__#d0021b",
+                  "key": ""
+                }
+              ],
+              "entityRanges": [],
+              "data": {}
+            },
+            {
+              "key": "ft50e",
+              "text": "Donec sollicitudin molestie malesuada. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Cras ultricies ligula sed magna dictum porta. Curabitur aliquet quam id dui posuere blandit. Donec rutrum congue leo eget malesuada. Pellentesque in ipsum id orci porta dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.",
+              "type": "h4",
+              "depth": 0,
+              "inlineStyleRanges": [],
+              "entityRanges": [],
+              "data": {}
+            },
+            {
+              "key": "22ccp",
+              "text": "Donec sollicitudin molestie malesuada. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Cras ultricies ligula sed magna dictum porta. Curabitur aliquet quam id dui posuere blandit. Donec rutrum congue leo eget malesuada. Pellentesque in ipsum id orci porta dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.Donec sollicitudin molestie malesuada. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Cras ultricies ligula sed magna dictum porta. Curabitur aliquet quam id dui posuere blandit. Donec rutrum congue leo eget malesuada. Pellentesque in ipsum id orci porta dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.",
+              "type": "unstyled",
+              "depth": 0,
+              "inlineStyleRanges": [
+                {
+                  "offset": 0,
+                  "length": 1034,
+                  "style": "UNDERLINE",
+                  "key": ""
+                }
+              ],
+              "entityRanges": [],
+              "data": {}
+            },
+            {
+              "key": "94vuo",
+              "text": "Donec sollicitudin molestie malesuada. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Cras ultricies ligula sed magna dictum porta. Curabitur aliquet quam id dui posuere blandit. Donec rutrum congue leo eget malesuada. Pellentesque in ipsum id orci porta dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.",
+              "type": "blockquote",
+              "depth": 0,
+              "inlineStyleRanges": [],
+              "entityRanges": [],
+              "data": {}
+            },
+            {
+              "key": "7s296",
+              "text": "Donec sollicitudin molestie malesuada. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Cras ultricies ligula sed magna dictum porta. Curabitur aliquet quam id dui posuere blandit. Donec rutrum congue leo eget malesuada. Pellentesque in ipsum id orci porta dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.",
+              "type": "unstyled",
+              "depth": 0,
+              "inlineStyleRanges": [],
+              "entityRanges": [],
+              "data": {}
             }
           ],
           "metaMap": {}
         }
-      )
-    })
-  }
+      );
+    });
+  };
 
   saveContent = () => {
-    return true
-    throw 'Not Implemented Error'
+    let mainEditor = document.querySelector("[data-contents]");
+    mainEditor = mainEditor.cloneNode(true);
 
-  }
+    return editorContentsToHTML(mainEditor);
+  };
 
   getImages = () => {
     return [
@@ -98,17 +189,17 @@ class Dummy extends ApiInterface {
         url: '',
         title: ''
       }
-    ]
-    throw 'Not Implemented Error'
-  }
+    ];
+    throw 'Not Implemented Error';
+  };
 
   uploadImage = () => {
     return {
       url: '',
       title: ''
-    }
-    throw 'Not Implemented Error'
-  }
+    };
+    throw 'Not Implemented Error';
+  };
 
   getThemes = () => {
     return [
@@ -117,8 +208,8 @@ class Dummy extends ApiInterface {
         url: '',
 
       }
-    ]
-  }
+    ];
+  };
 
   getFonts = () => {
     return [
@@ -126,8 +217,8 @@ class Dummy extends ApiInterface {
         name: '',
         url: ''
       }
-    ]
-  }
+    ];
+  };
 
   getComments = () => {
     return [
@@ -136,26 +227,27 @@ class Dummy extends ApiInterface {
         id: '',
 
       }
-    ]
-  }
+    ];
+  };
 
   addComment = (content, text) => {
-    throw 'Not Implemented Error'
-  }
+    throw 'Not Implemented Error';
+  };
 
   replyComment = (content, comment_id) => {
-    return 'new_comment_id'
-  }
+    return 'new_comment_id';
+  };
 
   resolveComment = (comment_id) => {
-    return true
-    throw 'Not Implemented Error'
-  }
+    return true;
+    throw 'Not Implemented Error';
+  };
 
   deleteComment = (comment_id) => {
-    return true
-    throw 'Not Implemented Error'
-  }
+    return true;
+    throw 'Not Implemented Error';
+  };
 }
+
 
 export default Dummy;
