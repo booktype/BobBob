@@ -8,8 +8,8 @@ import {
   CharacterMetadata
 } from 'draft-js';
 import transit from 'transit-immutable-js';
-
 import ContentController from '../../transactions/ContentController';
+import DefaultDraftBlockRenderMap from '../../immutables/DefaultDraftBlockRenderMap';
 import DefaultDraftEntityArray from '../../immutables/DefaultDraftEntityArray';
 import createEntityStrategy from '../../utils/createEntityStrategy';
 import editorStateToJSON from '../../encoding/editorStateToJSON';
@@ -101,7 +101,7 @@ class BobbobEditor extends Component {
 
   onSave = () => {
     this.props.api.saveContent(editorStateToJSON(this.state.editorState));
-    console.log('save');
+    console.log(editorStateToJSON(this.state.editorState));
   };
 
   setReadOnly = (readOnly) => {
@@ -112,6 +112,18 @@ class BobbobEditor extends Component {
     if (command === "ctrl-s") {
       this.onSave();
     }
+    const blockType = DefaultDraftBlockRenderMap.get(this.controller.currentBlock.getType());
+    if (blockType.command && blockType.command[command]) {
+      const controller = blockType.command[command](this.controller);
+      if (controller) {
+        this.controller = controller;
+        this.onChange(this.controller.editorState);
+        return "handled";
+      } else {
+        return false;
+      }
+    }
+
   };
   onChange = (editorState) => {
     if (editorState === this.state.editorState) {
@@ -149,6 +161,7 @@ class BobbobEditor extends Component {
     let blockTree = {};
     this.controller.currentInlineStyle = editorState.getCurrentInlineStyle();
     this.controller.blocksArray = this.controller.currentContent.getBlocksAsArray();
+    const previousSelection = this.controller.selection;
     this.controller.selection = editorState.getSelection();
     this.controller.currentBlock = this.controller.currentContent.getBlockForKey(this.controller.selection.getAnchorKey());
     this.controller.location = this.controller.currentContent
@@ -176,7 +189,6 @@ class BobbobEditor extends Component {
         }
         return tree;
       }, []);
-
     const blockStyle = {
       type: this.controller.currentBlock.getType(),
       style: this.controller.currentBlock.getData().get('style') || {},
@@ -186,7 +198,9 @@ class BobbobEditor extends Component {
     this.controller.index = this.controller.blocksArray.findIndex((block) => {
       return block.getKey() === this.controller.selection.getFocusKey();
     });
-
+    if (this.controller.selection !== previousSelection) {
+      this.handleKeyCommand('selection');
+    }
     this.setState({editorState, blockStyle, blockTree, inlineStyles});
   };
 
@@ -229,11 +243,8 @@ class BobbobEditor extends Component {
             <RichEditor
               // ref="editor"
               // readOnly={this.state.readOnly}
-              // onClick={this.onClick}
-              // onMouseOver={this.onHover}
               onSave={this.onSave}
               handleKeyCommand={this.handleKeyCommand}
-              // handleBeforeInput={this.handleBeforeInput}
               onChange={this.onChange}
               editorState={this.state.editorState}
             />
