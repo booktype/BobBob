@@ -51,6 +51,7 @@ export default class TableButton extends React.PureComponent {
         <Popover
           open={this.state.open}
           onRequestClose={this.handleRequestClose}
+          style={{width: '15em', height: '15em'}}
           icon={
             <IconButton
               onTouchTap={this.handleTouchTap}
@@ -60,8 +61,16 @@ export default class TableButton extends React.PureComponent {
             </IconButton>
           }
         >
+          <strong
+            style={{
+              position: 'absolute',
+              zIndex: 5,
+              top: `${this.state.sizeY}em`,
+              left: `${this.state.sizeX}em`,
+            }}
+            >{`${this.state.sizeX} X ${this.state.sizeY}`}</strong>
           <TablePicker onChange={this.handleSizeChange} onSelect={this.handleChosenSize}/>
-        </Popover>
+          </Popover>
       </div>
     );
   }
