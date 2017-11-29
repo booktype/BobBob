@@ -261,6 +261,18 @@ class ContentController {
     this.updateEditorState(withEntity);
     return this.currentContent.getLastCreatedEntityKey();
   }
+  insertSoftNewLine = () => {
+    const withSoftNewLine = Modifier.insertText(
+      this.currentContent,
+      this.selection,
+      '\r\n',
+      this.currentInlineStyle,
+      null,
+      null
+    );
+    this.updateEditorState(withSoftNewLine);
+    return this;
+  }
   insertCharacterAtSelectionEndWithEntity = (char, entityKey) => {
     const withEntity = Modifier.insertText(
       this.currentContent,
