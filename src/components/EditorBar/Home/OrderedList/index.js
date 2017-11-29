@@ -27,11 +27,21 @@ export default class OrderedList extends React.PureComponent {
         .setStyleAttr("listStyleType", listStyleType)
         .editorState
       );
+    } else if (this.props.ul) {
+        this.props.onChange(
+          this.props.controller.queryParent('ul')
+          .toggleBlockType('ol')
+          .setStyleAttr("listStyleType", listStyleType)
+          .editorState
+        );
     } else {
       this.props.onChange(
-        this.props.controller.insertElementAfter("ol")
+        this.props.controller.insertElementBefore("ol")
         .setStyleAttr("listStyleType", listStyleType)
-        .appendChild("li").editorState
+        .selectNextBlock()
+        .toggleBlockType('li')
+        .adjustBlockDepth(1)
+        .editorState
       );
     }
   }

@@ -35,6 +35,13 @@ export default class UnorderedList extends React.PureComponent {
         .setStyleAttr("listStyleType", listStyleType)
         .editorState
       );
+    } else if (this.props.ol) {
+      this.props.onChange(
+        this.props.controller.queryParent('ol')
+        .toggleBlockType('ul')
+        .setStyleAttr("listStyleType", listStyleType)
+        .editorState
+      );
     } else {
       this.props.onChange(
         this.props.controller.insertElementAfter("ul")
@@ -50,7 +57,7 @@ export default class UnorderedList extends React.PureComponent {
         <span style={{display: "flex"}}>
           <IconButton
             onTouchTap={()=>this.handleToggleList("disc")}
-            tooltip="Bulleted List">
+            tooltip="Numbered List">
             <FormatListBulletedType
               color={this.props.ul?"orange":null}
             />

@@ -267,6 +267,13 @@ const DefaultDraftBlockRenderMap = Map({
     "command": {
       enter: (controller) => {
         if (controller.isBlockEmpty()) {
+          if (controller.nextBlock.getType()==='li') {
+            const listBlock = controller.location[0];
+            return controller.toggleBlockType('unstyled')
+            .selectNextBlock()
+            .insertElementBefore(listBlock.getType())
+            .adjustBlockDepth(-1);
+          }
           return controller.toggleBlockType('unstyled');
         }
         return controller.splitBlock();
