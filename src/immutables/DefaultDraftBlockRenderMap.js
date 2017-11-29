@@ -1,31 +1,12 @@
 import {Map} from 'immutable';
 
-// `
-//   parents: [element] // Create Parents if they don't exist
-//
-//   type: text | block // text.children = [block, structure]
-//                      // text.parents = [structure, none]
-//                      // none.children = [none, text]
-//                      // none.parents = [none, structure]
-//                      // block.children = []
-//                      // block.parents = [text]
-//                      // structure.children = [none, text, structure]
-//                      // structure.parents = [text]
-//                      // if text then cut text, insert block, paste text
-//                      // if block:
-//                      //   if collapsed:
-//                      //     if in text:
-//                      //       then cut text, insert block, paste text
-//                      //     else if block:
-//                      //       then toggle from one type to the other
-//                      //   else:
-//                      //     if in text:
-//                      //       then split toggle selectedBefore: p, selected: type, selectedAfter: p
-//                      //       then append
-//                      //     elseif block:
-//                      //       then split toggle selectedBefore: currentType, selected: type, selectedAfter: currentType
-//                      //       then replace
-// `
+// onSplitBlock
+// backspaceOnBlockStart
+// deleteOnBlockEnd
+// onBlock
+// onEnable
+// onDisable
+
 const DefaultDraftBlockRenderMap = Map({
   'firstblock': {
     element: 'div',
@@ -81,7 +62,8 @@ const DefaultDraftBlockRenderMap = Map({
       "valign",
       "width"
     ],
-    "element": "th"
+    "element": "th",
+
   },
   "hr": {
     "name": "Separator",
@@ -235,17 +217,18 @@ const DefaultDraftBlockRenderMap = Map({
     "name": "Heading 1",
     "children": ["inline"],
     "attributes": ["align"],
-    "element": "h1"
+    "element": "h1",
+    "command": {
+      enter: (controller)=>{
+        if (controller.isSelectionAtEndOfBlock()) {
+          return controller.splitBlock().selectNextBlock().toggleBlockType('unstyled');
+        }
+        return controller.splitBlock();
+      }
+    }
   },
   "tr": {
     "name": "Row",
-    toggle: (controller) => {
-      const columns = controller.queryParent("tr")
-        .countChildren();
-      return controller.insertElementBefore("tr")
-        .appendChildren("td", columns)
-        .getCurrentContent();
-    },
     "parents": [
       "tbody", "thead", "tfoot"
     ],
@@ -272,7 +255,25 @@ const DefaultDraftBlockRenderMap = Map({
     "attributes": [
       "type", "value"
     ],
-    "element": "li"
+    "element": "li",
+    "command": {
+      enter: (controller) => {
+        if (controller.isBlockEmpty()) {
+          return controller.toggleBlockType('unstyled');
+        }
+        return controller.splitBlock();
+      },
+      backspace: (controller) => {
+        if (controller.isSelectionAtStartOfBlock()) {
+          if (controller.location.length === 2) {
+            if (controller.isBlockEmpty()) {
+              return controller;
+            }
+          } 
+        }
+
+      }
+    }
   },
   "ul": {
     "name": "Unordered List",
@@ -295,14 +296,6 @@ const DefaultDraftBlockRenderMap = Map({
   },
   "table": {
     "name": "Table",
-    toggle: (controller) => {
-
-      return controller.insertElementAfter("table")
-        .appendChild("tbody")
-        .appendChild("tr")
-        .appendChildren("td", 2)
-        .getCurrentContent();
-    },
     "children": [
       "tbody",
       "caption",
@@ -326,12 +319,6 @@ const DefaultDraftBlockRenderMap = Map({
   },
   "td": {
     "name": "Cell",
-    toggle: (controller) => {
-      const at_index = controller.getChildIndex();
-
-      return controller.queryParent("tbody")
-        .queryAndAppend("tr", "td", at_index).getCurrentContent();
-    },
     "parents": ["tr"],
     "children": ["flow"],
     "attributes": [
@@ -350,6 +337,21 @@ const DefaultDraftBlockRenderMap = Map({
       "valign",
       "width"
     ],
+    "command": {
+      tab: (controller) => {
+        return controller.queryAndSelect('td', 1);
+      },
+      delete: (controller) => {
+        if (controller.isSelectionAtEndOfBlock()) {
+          return controller;
+        }
+      },
+      backspace: (controller) => {
+        if (controller.isSelectionAtStartOfBlock()) {
+          return controller;
+        }
+      }
+    }, 
     "element": "td"
   }
 });
