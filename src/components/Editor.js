@@ -35,8 +35,8 @@ class RichEditor extends React.Component {
   }
 
   _onTab(e) {
-    // const maxDepth = 4;
-    // this.onChange(RichUtils.onTab(e, this.props.editorState, maxDepth));
+    e.preventDefault();
+    this.props.handleKeyCommand('tab');
   }
 
   customStyleFn = (style, block) => {
@@ -64,40 +64,8 @@ class RichEditor extends React.Component {
       command.push(key);
       command = command.join("-");
     }
-    if (command === "delete" || command === "backspace" || command === "enter") {
-      const selection = this.props.editorState.getSelection();
-      const content = this.props.editorState.getCurrentContent();
-      const anchorKey = selection.getAnchorKey();
-      const block = content.getBlockForKey(anchorKey);
-      const blockBefore = content.getBlockBefore(anchorKey);
-      const blockAfter = content.getBlockAfter(anchorKey);
-      if (command === "backspace" && selection.getAnchorOffset()===0) {
-        const block = content.getBlockForKey(selection.getAnchorKey());
-        if (block.getType() === "td" || block.getDepth() > blockBefore.getDepth()) {
-          return "handled";
-        }
-      }
-      if (command === "delete" && blockAfter) {
-        const blockAfterChild = content
-          .getBlockAfter(blockAfter.getKey());
-        const nextBlockHasChildren = blockAfterChild &&
-          blockAfterChild.getDepth() > blockAfter.getDepth();
-        if (
-          selection.getAnchorOffset() === block.getText().length
-        ) {
-          if (
-            block.getType() !== "li" &&
-            (block.getDepth() > 0 || nextBlockHasChildren )
-          ) {
-            return "handled";
-          }
-        }
-      }
-      if (command === "enter") {
-        if (block.getType()!=="li" && block.getDepth() > 0) {
-          return "handled";
-        }
-      }
+    if (this.props.handleKeyCommand(command)) {
+      return "handled";
     }
     if (command === "ctrl-s") {
       e.preventDefault();
@@ -136,17 +104,8 @@ class RichEditor extends React.Component {
     }
   }
   render() {
-    // const {editorState} = this.props;
 
-    // If the user changes block type before entering any text, we can
-    // either style the placeholder or hide it. Let's just hide it now.
     let className = 'RichEditor-editor';
-    // const contentState = editorState.getCurrentContent();
-    // if (!contentState.hasText()) {
-    //   if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-    //     className += ' RichEditor-hidePlaceholder';
-    //   }
-    // }
     return (
       <div className="RichEditor-root" id="contenteditor">
 
