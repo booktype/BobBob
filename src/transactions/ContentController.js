@@ -27,7 +27,7 @@ class ContentController {
     return this.currentBlock.getText().length === 0;
   }
   selectNextBlock = () => {
-    const nextBlockKey = this.currentContent.getKeyAfter(this.selection.getFocusKey());
+    const nextBlockKey = this.nextBlock.getKey();
 
     this.selection = new SelectionState({
       anchorKey: nextBlockKey,
@@ -461,9 +461,8 @@ class ContentController {
     return this.currentInlineStyle.find((style) => style.startsWith(styleType));
   }
   updateEditorState = (currentContent, selection) => {
-    this.editorState = EditorState.push(this.editorState,
-      currentContent,
-      'insert-fragment'
+    this.editorState = EditorState.set(this.editorState,
+      {currentContent}
      );
     if (selection) {
       this.editorState = EditorState.forceSelection(this.editorState, selection);
@@ -471,6 +470,7 @@ class ContentController {
     this.currentContent = currentContent;
     this.previousSelection = this.selection;
     this.selection = selection || this.selection;
+
     this.blockKey = this.selection.getAnchorKey();
     let reachedRoot = false;
     this.blockTree = {};

@@ -111,6 +111,14 @@ class BobbobEditor extends Component {
   handleKeyCommand = (command) => {
     if (command === "ctrl-s") {
       this.onSave();
+      return "handled";
+    }
+    if (command === "ctrl-d") {
+      console.debug(
+        this.controller.selection.toJSON(),
+        this.controller.currentBlock.toJSON()
+      );
+      return "handled";
     }
     const blockType = DefaultDraftBlockRenderMap.get(this.controller.currentBlock.getType());
     if (blockType.command && blockType.command[command]) {
@@ -164,7 +172,7 @@ class BobbobEditor extends Component {
       style: this.controller.currentBlock.getData().get('style') || {},
       attributes: this.controller.currentBlock.getData().get('attributes') || {}
     };
-    if (this.controller.selection !== this.controller.previousSelection) {
+    if (this.controller.selection !== this.state.editorState.getSelection()) {
       this.handleKeyCommand('selection');
     }
     this.setState({
