@@ -64,15 +64,17 @@ class RichEditor extends React.Component {
       command.push(key);
       command = command.join("-");
     }
+    if (command.length === 1) {
+      if (this.props.handleKeyCommand('character')) {
+        e.preventDefault();
+        return "handled";
+      }
+    }
     if (this.props.handleKeyCommand(command)) {
+      e.preventDefault();
       return "handled";
     }
-    if (command === "ctrl-s") {
-      e.preventDefault();
-      this.props.handleKeyCommand(command);
-    }
     if (command === "ctrl-enter") {
-
       this.props.onChange(RichUtils.insertSoftNewline(this.props.editorState));
       return "handled";
     }
