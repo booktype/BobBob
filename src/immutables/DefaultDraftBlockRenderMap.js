@@ -1,5 +1,5 @@
 import {Map} from 'immutable';
-
+import React from 'react';
 // onSplitBlock
 // backspaceOnBlockStart
 // deleteOnBlockEnd
@@ -73,13 +73,43 @@ const DefaultDraftBlockRenderMap = Map({
     "element": "th",
 
   },
+  "page-break": {
+    "name": "Page Break",
+    element: (props)=>{
+      const onChange = props.children.props.blockProps.onChange;
+      const editorState = props.children.props.blockProps.editorState;
+      console.log(onChange, editorState);
+      return (
+        <div 
+          className="PageBreakEditor flex items-center justify-center pa0 mv2 dim pointer" 
+        >
+          <svg className="w1"  data-icon="info" viewBox="0 0 24 24">
+            <path d="M16,12A2,2 0 0,1 18,10A2,2 0 0,1 20,12A2,2 0 0,1 18,14A2,2 0 0,1 16,12M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12M4,12A2,2 0 0,1 6,10A2,2 0 0,1 8,12A2,2 0 0,1 6,14A2,2 0 0,1 4,12Z">
+            </path>
+          </svg>
+        </div>
+      );
+    }
+  },
   "hr": {
     "name": "Separator",
     "attributes": [
       "align", "noshade", "size", "width"
     ],
     "element": "hr",
-    "void": true
+    "void": true,
+    command: {
+      character: (controller) => {
+        return controller;
+      },
+      selection: (controller) => {
+        return false;
+      },
+      enter: (controller) => {
+        return controller;
+      }
+
+    }
   },
   "h6": {
     "name": "Heading 6",

@@ -16,19 +16,7 @@ export default class PageBreak extends React.PureComponent {
 
   _insertPageBreak = () => {
     // div block
-    this.props.controller.splitBlock().insertElementAfter('div')
-      .setAttr("contentEditable", "false")
-      .setAttr("className", "PageBreakEditor flex items-center justify-center pa0 mv2 dim pointer");
-    // svg
-    this.props.controller.appendChild('svg')
-      .setAttr("contentEditable", "false")
-      .setAttr("className", "w1")
-      .setAttr("data-icon", "info")
-      .setAttr("viewBox", "0 0 24 24");
-    // svg path
-    this.props.controller.appendChild('path')
-      .setAttr("contentEditable", "false")
-      .setAttr("d", "M16,12A2,2 0 0,1 18,10A2,2 0 0,1 20,12A2,2 0 0,1 18,14A2,2 0 0,1 16,12M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12M4,12A2,2 0 0,1 6,10A2,2 0 0,1 8,12A2,2 0 0,1 6,14A2,2 0 0,1 4,12Z");
+    this.props.controller.splitBlock().insertElementAfter('page-break');
 
     const svgPathBlock = this.props.controller.currentBlock;
     let nextBlock = this.props.controller.currentContent.getBlockAfter(svgPathBlock.getKey());
