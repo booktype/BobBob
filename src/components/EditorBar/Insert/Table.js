@@ -16,12 +16,8 @@ export default class TableButton extends React.PureComponent {
   }
 
   handleTouchTap = (event) => {
-    // This prevents ghost click.
-    event.preventDefault();
-
     this.setState({
       open: true,
-      anchorEl: event.currentTarget,
     });
   };
 
@@ -31,7 +27,6 @@ export default class TableButton extends React.PureComponent {
     });
   };
   handleSizeChange = (size) => {
-    console.log(size);
     this.setState({...size});
   }
   handleChosenSize = () => {
@@ -53,21 +48,29 @@ export default class TableButton extends React.PureComponent {
     return (
       <div style={{display: 'inline-block'}}>
 
-      <Popover
-      open={this.state.open}
-      onRequestClose={this.handleRequestClose}
-      icon={
-        <IconButton
-          onTouchTap={this.handleTouchTap}
-          label={"Insert table"}
+        <Popover
+          open={this.state.open}
+          onRequestClose={this.handleRequestClose}
+          style={{width: '15em', height: '15em'}}
+          icon={
+            <IconButton
+              onTouchTap={this.handleTouchTap}
+              label={"Insert table"}
+            >
+              <TableIcon/>
+            </IconButton>
+          }
         >
-          <TableIcon/>
-        </IconButton>
-        }
-      >
-          <div>{`${this.state.sizeX} x ${this.state.sizeY}`}</div>
+          <strong
+            style={{
+              position: 'absolute',
+              zIndex: 5,
+              top: `${this.state.sizeY}em`,
+              left: `${this.state.sizeX}em`,
+            }}
+            >{`${this.state.sizeX} X ${this.state.sizeY}`}</strong>
           <TablePicker onChange={this.handleSizeChange} onSelect={this.handleChosenSize}/>
-        </Popover>
+          </Popover>
       </div>
     );
   }

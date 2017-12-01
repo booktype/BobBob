@@ -8,7 +8,11 @@ export default class Tabs extends PureComponent {
       selectedTab: 0
     };
   }
-
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.children[this.state.selectedTab]) {
+      this.selectTab(0);
+    }
+  }
   selectTab = (tab) => {
     this.setState({
       selectedTab: tab

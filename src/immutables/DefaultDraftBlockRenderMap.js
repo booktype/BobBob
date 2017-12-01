@@ -1,31 +1,12 @@
 import {Map} from 'immutable';
+import React from 'react';
+// onSplitBlock
+// backspaceOnBlockStart
+// deleteOnBlockEnd
+// onBlock
+// onEnable
+// onDisable
 
-// `
-//   parents: [element] // Create Parents if they don't exist
-//
-//   type: text | block // text.children = [block, structure]
-//                      // text.parents = [structure, none]
-//                      // none.children = [none, text]
-//                      // none.parents = [none, structure]
-//                      // block.children = []
-//                      // block.parents = [text]
-//                      // structure.children = [none, text, structure]
-//                      // structure.parents = [text]
-//                      // if text then cut text, insert block, paste text
-//                      // if block:
-//                      //   if collapsed:
-//                      //     if in text:
-//                      //       then cut text, insert block, paste text
-//                      //     else if block:
-//                      //       then toggle from one type to the other
-//                      //   else:
-//                      //     if in text:
-//                      //       then split toggle selectedBefore: p, selected: type, selectedAfter: p
-//                      //       then append
-//                      //     elseif block:
-//                      //       then split toggle selectedBefore: currentType, selected: type, selectedAfter: currentType
-//                      //       then replace
-// `
 const DefaultDraftBlockRenderMap = Map({
   'firstblock': {
     element: 'div',
@@ -89,7 +70,26 @@ const DefaultDraftBlockRenderMap = Map({
       "valign",
       "width"
     ],
-    "element": "th"
+    "element": "th",
+
+  },
+  "page-break": {
+    "name": "Page Break",
+    element: (props)=>{
+      const onChange = props.children.props.blockProps.onChange;
+      const editorState = props.children.props.blockProps.editorState;
+      console.log(onChange, editorState);
+      return (
+        <div 
+          className="PageBreakEditor flex items-center justify-center pa0 mv2 dim pointer" 
+        >
+          <svg className="w1"  data-icon="info" viewBox="0 0 24 24">
+            <path d="M16,12A2,2 0 0,1 18,10A2,2 0 0,1 20,12A2,2 0 0,1 18,14A2,2 0 0,1 16,12M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12M4,12A2,2 0 0,1 6,10A2,2 0 0,1 8,12A2,2 0 0,1 6,14A2,2 0 0,1 4,12Z">
+            </path>
+          </svg>
+        </div>
+      );
+    }
   },
   "hr": {
     "name": "Separator",
@@ -97,7 +97,19 @@ const DefaultDraftBlockRenderMap = Map({
       "align", "noshade", "size", "width"
     ],
     "element": "hr",
-    "void": true
+    "void": true,
+    command: {
+      character: (controller) => {
+        return controller;
+      },
+      selection: (controller) => {
+        return false;
+      },
+      enter: (controller) => {
+        return controller;
+      }
+
+    }
   },
   "h6": {
     "name": "Heading 6",
@@ -243,17 +255,18 @@ const DefaultDraftBlockRenderMap = Map({
     "name": "Heading 1",
     "children": ["inline"],
     "attributes": ["align"],
-    "element": "h1"
+    "element": "h1",
+    "command": {
+      enter: (controller)=>{
+        if (controller.isSelectionAtEndOfBlock()) {
+          return controller.splitBlock().selectNextBlock().toggleBlockType('unstyled');
+        }
+        return controller.splitBlock();
+      }
+    }
   },
   "tr": {
     "name": "Row",
-    toggle: (controller) => {
-      const columns = controller.queryParent("tr")
-        .countChildren();
-      return controller.insertElementBefore("tr")
-        .appendChildren("td", columns)
-        .getCurrentContent();
-    },
     "parents": [
       "tbody", "thead", "tfoot"
     ],
@@ -280,7 +293,32 @@ const DefaultDraftBlockRenderMap = Map({
     "attributes": [
       "type", "value"
     ],
-    "element": "li"
+    "element": "li",
+    "command": {
+      enter: (controller) => {
+        if (controller.isBlockEmpty()) {
+          if (controller.nextBlock.getType()==='li') {
+            const listBlock = controller.location[0];
+            return controller.toggleBlockType('unstyled')
+            .selectNextBlock()
+            .insertElementBefore(listBlock.getType())
+            .adjustBlockDepth(-1);
+          }
+          return controller.toggleBlockType('unstyled');
+        }
+        return controller.splitBlock();
+      },
+      backspace: (controller) => {
+        if (controller.isSelectionAtStartOfBlock()) {
+          if (controller.location.length === 2) {
+            if (controller.isBlockEmpty()) {
+              return controller;
+            }
+          } 
+        }
+
+      }
+    }
   },
   "ul": {
     "name": "Unordered List",
@@ -303,14 +341,6 @@ const DefaultDraftBlockRenderMap = Map({
   },
   "table": {
     "name": "Table",
-    toggle: (controller) => {
-
-      return controller.insertElementAfter("table")
-        .appendChild("tbody")
-        .appendChild("tr")
-        .appendChildren("td", 2)
-        .getCurrentContent();
-    },
     "children": [
       "tbody",
       "caption",
@@ -334,12 +364,6 @@ const DefaultDraftBlockRenderMap = Map({
   },
   "td": {
     "name": "Cell",
-    toggle: (controller) => {
-      const at_index = controller.getChildIndex();
-
-      return controller.queryParent("tbody")
-        .queryAndAppend("tr", "td", at_index).getCurrentContent();
-    },
     "parents": ["tr"],
     "children": ["flow"],
     "attributes": [
@@ -358,6 +382,24 @@ const DefaultDraftBlockRenderMap = Map({
       "valign",
       "width"
     ],
+    "command": {
+      tab: (controller) => {
+        return controller.queryAndSelect('td', 1);
+      },
+      delete: (controller) => {
+        if (controller.isSelectionAtEndOfBlock()) {
+          return controller;
+        }
+      },
+      backspace: (controller) => {
+        if (controller.isSelectionAtStartOfBlock()) {
+          return controller;
+        }
+      },
+      enter: (controller) => {
+        return controller.insertSoftNewLine();
+      }
+    }, 
     "element": "td"
   }
 });

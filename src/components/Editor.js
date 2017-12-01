@@ -35,8 +35,8 @@ class RichEditor extends React.Component {
   }
 
   _onTab(e) {
-    const maxDepth = 4;
-    this.onChange(RichUtils.onTab(e, this.props.editorState, maxDepth));
+    e.preventDefault();
+    this.props.handleKeyCommand('tab');
   }
 
   customStyleFn = (style, block) => {
@@ -64,12 +64,17 @@ class RichEditor extends React.Component {
       command.push(key);
       command = command.join("-");
     }
-    if (command === "ctrl-s") {
+    if (command.length === 1) {
+      if (this.props.handleKeyCommand('character')) {
+        e.preventDefault();
+        return "handled";
+      }
+    }
+    if (this.props.handleKeyCommand(command)) {
       e.preventDefault();
-      this.props.handleKeyCommand(command);
+      return "handled";
     }
     if (command === "ctrl-enter") {
-
       this.props.onChange(RichUtils.insertSoftNewline(this.props.editorState));
       return "handled";
     }
@@ -89,9 +94,6 @@ class RichEditor extends React.Component {
 
   handleDroppedFiles = (selection, files) => {
     if (files[0].name.endsWith("docx")) {
-      // docx2html(files[0]).then((html)=>{
-      //   this._onPaste(null, html.toString())
-      // })
     }
   }
 
@@ -103,19 +105,9 @@ class RichEditor extends React.Component {
       return false;
     }
   }
-
   render() {
-    // const {editorState} = this.props;
 
-    // If the user changes block type before entering any text, we can
-    // either style the placeholder or hide it. Let's just hide it now.
     let className = 'RichEditor-editor pa4';
-    // const contentState = editorState.getCurrentContent();
-    // if (!contentState.hasText()) {
-    //   if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-    //     className += ' RichEditor-hidePlaceholder';
-    //   }
-    // }
     return (
       <div className="contentContainer">
         <div className="RichEditor-root br bl bb b--moon-gray" id="contenteditor">

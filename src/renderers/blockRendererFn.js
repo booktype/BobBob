@@ -12,14 +12,11 @@
  */
 
 
-const ContentBlock = require('draft-js/lib/ContentBlock');
-const ContentState = require('draft-js/lib/ContentState');
 const DraftEditorLeaf = require('draft-js/lib/DraftEditorLeaf.react');
 const DraftOffsetKey = require('draft-js/lib/DraftOffsetKey');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const Scroll = require('fbjs/lib/Scroll');
-const SelectionState = require('draft-js/lib/SelectionState');
 const Style = require('fbjs/lib/Style');
 const UnicodeBidi = require('fbjs/lib/UnicodeBidi');
 const UnicodeBidiDirection = require('fbjs/lib/UnicodeBidiDirection');
@@ -30,26 +27,9 @@ const getScrollPosition = require('fbjs/lib/getScrollPosition');
 const getViewportDimensions = require('fbjs/lib/getViewportDimensions');
 const nullthrows = require('fbjs/lib/nullthrows');
 
-import type {BidiDirection} from 'draft-js/lib/UnicodeBidiDirection';
-import type {DraftDecoratorType} from 'draft-js/lib/DraftDecoratorType';
-import type {List} from 'immutable';
 
 const SCROLL_BUFFER = 10;
 
-type Props = {
-  contentState: ContentState,
-  block: ContentBlock,
-  customStyleMap: Object,
-  customStyleFn: Function,
-  tree: List<any>,
-  selection: SelectionState,
-  decorator: DraftDecoratorType,
-  forceSelection: boolean,
-  direction: BidiDirection,
-  blockProps?: Object,
-  startIndent?: boolean,
-  blockStyleFn: Function,
-};
 
 /**
  * The default block renderer for a `DraftEditor` component.
@@ -58,7 +38,7 @@ type Props = {
  * appropriate decorator and inline style components.
  */
 class DraftEditorBlock extends React.Component {
-  shouldComponentUpdate(nextProps: Props): boolean {
+  shouldComponentUpdate(nextProps) {
     return (
       this.props.block !== nextProps.block ||
       this.props.tree !== nextProps.tree ||
@@ -85,7 +65,7 @@ class DraftEditorBlock extends React.Component {
    * parent, and adjust it to align the entire block to the bottom of the
    * scroll parent.
    */
-  componentDidMount(): void {
+  componentDidMount() {
     var selection = this.props.selection;
     var endKey = selection.getEndKey();
     if (!selection.getHasFocus() || endKey !== this.props.block.getKey()) {
@@ -121,7 +101,7 @@ class DraftEditorBlock extends React.Component {
     }
   }
 
-  _renderChildren(): Array<React.Element<any>> {
+  _renderChildren() {
     var block = this.props.block;
     var blockKey = block.getKey();
     var text = block.getText();
@@ -198,7 +178,7 @@ class DraftEditorBlock extends React.Component {
     }).toArray();
   }
 
-  render(): React.Element<any> {
+  render() {
     const {direction, offsetKey} = this.props;
     const className = cx({
       'public/DraftStyleDefault/block': true,
@@ -218,9 +198,9 @@ class DraftEditorBlock extends React.Component {
  * Return whether a block overlaps with either edge of the `SelectionState`.
  */
 function isBlockOnSelectionEdge(
-  selection: SelectionState,
-  key: string
-): boolean {
+  selection,
+  key
+) {
   return (
     selection.getAnchorKey() === key ||
     selection.getFocusKey() === key

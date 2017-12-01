@@ -66,7 +66,6 @@ export default function contentRendererFn(props) {
     const voidElement = configForType.void;
     const depth = block.getDepth();
     let className = props.blockStyleFn(block);
-
     const Component = CustomComponent || EditorBlock;
     let childProps = {
       className,
@@ -75,6 +74,10 @@ export default function contentRendererFn(props) {
       'data-offset-key': offsetKey,
       key,
     };
+    if (voidElement) {
+      customEditable = false;
+      childProps['data-block'] = false;
+    }
     if (customEditable !== undefined) {
       childProps = {
         ...childProps,
@@ -82,6 +85,7 @@ export default function contentRendererFn(props) {
         suppressContentEditableWarning: true,
       };
     }
+
 
     const child = React.createElement(
       Element,

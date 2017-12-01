@@ -17,11 +17,11 @@ export default class Popover extends React.PureComponent {
           e.stopPropagation();
           e.nativeEvent.stopImmediatePropagation();
         }}
-        style={this.props.style || {}} 
+         
         className={"popover-container" + (this.props.open ? " show" : "")}>
         {this.props.icon}
         <div className="popover-content">
-          <div>
+          <div style={this.props.style || {}}>
             {this.props.children}
           </div>
         </div>

@@ -5,7 +5,7 @@ import {
   SelectionState,
   Modifier,
   BlockMapBuilder,
-  CharacterMetadata
+  CharacterMetadata,
 } from "draft-js";
 import {List, Repeat, Map} from 'immutable';
 
@@ -17,10 +17,36 @@ class ContentController {
     this.editorState = editorState;
     this.updateEditorState(this.currentContent);
   }
+  isSelectionAtEndOfBlock = () => {
+    return this.selection.getAnchorOffset() === this.currentBlock.getText().length;
+  }
+  isSelectionAtStartOfBlock = () => {
+    return this.selection.getFocusOffset() === 0;
+  }
+  isBlockEmpty = () => {
+    return this.currentBlock.getText().length === 0;
+  }
+  selectNextBlock = () => {
+    const nextBlockKey = this.nextBlock.getKey();
 
+    this.selection = new SelectionState({
+      anchorKey: nextBlockKey,
+      anchorOffset: 0,
+      focusKey: nextBlockKey,
+      focusOffset: 0,
+      hasFocus: true
+    });
+    this.updateEditorState(this.currentContent, this.selection);
+    return this;
+  }
   getSelectedText = () => {
     return this.currentBlock.getText()
       .slice(this.selection.getAnchorOffset(), this.selection.getFocusOffset());
+  }
+  splitBlock = () => {
+    const withSplittedBlock = Modifier.splitBlock(this.currentContent, this.selection);
+    this.updateEditorState(withSplittedBlock);
+    return this;
   }
   countChildren = () => {
     const tail = this.blocksArray.slice(this.index + 1);
@@ -143,6 +169,24 @@ class ContentController {
       });
     return this;
   }
+  queryAndSelect = (query, minDepth = 0) => {
+    const currentBlockKey = this.currentBlock.getKey();
+    const queriedBlock = this.currentContent
+      .getBlockMap()
+      .skipUntil(block => block.getKey() === currentBlockKey)
+      .takeUntil(block => block.getDepth() === minDepth)
+      .find(block => block.getType() === query && block.getKey()!==this.currentBlock.getKey());
+    if ( queriedBlock ) {
+      const newSelection = new SelectionState({
+        focusKey: queriedBlock.getKey(),
+        anchorKey: queriedBlock.getKey(),
+        hasFocus: true
+      });
+      this.updateEditorState(this.currentContent, newSelection);
+    }
+    return this;
+    
+  }
   queryAndAppend = (query, type, at_index = 0) => {
     let counter = -1;
     let selection;
@@ -217,6 +261,18 @@ class ContentController {
     this.updateEditorState(withEntity);
     return this.currentContent.getLastCreatedEntityKey();
   }
+  insertSoftNewLine = () => {
+    const withSoftNewLine = Modifier.insertText(
+      this.currentContent,
+      this.selection,
+      '\r\n',
+      this.currentInlineStyle,
+      null,
+      null
+    );
+    this.updateEditorState(withSoftNewLine);
+    return this;
+  }
   insertCharacterAtSelectionEndWithEntity = (char, entityKey) => {
     const withEntity = Modifier.insertText(
       this.currentContent,
@@ -236,7 +292,7 @@ class ContentController {
       key: newBlockKey,
       type,
       depth: this.currentBlock.getDepth(),
-      text: " ",
+      text: "",
       characterList: List([charData])
     });
     let inBlock = false;
@@ -288,7 +344,7 @@ class ContentController {
       key: newBlockKey,
       type,
       depth: this.currentBlock.getDepth(),
-      text: " ",
+      text: "",
       characterList: List([charData])
     });
     const newBlockMap = BlockMapBuilder.createFromArray(
@@ -317,11 +373,29 @@ class ContentController {
     this.updateEditorState(withNewBlock, newSelection);
     return this;
   }
-  splitBlock = () => {
-    const splittedContent = Modifier.splitBlock(this.currentContent, this.selection);
-    this.updateEditorState(splittedContent);
+  toggleBlockType = (type) => {
+    const withToggledBlock = Modifier.setBlockType(
+      this.currentContent, 
+      this.selection, 
+      type
+    );
+    this.updateEditorState(withToggledBlock);
     return this;
-  };
+  }
+  adjustBlockDepth = (depth) => {
+    const adjustedDepth = Modifier.adjustBlockDepth(
+      this.currentContent,
+      this.selection,
+      depth,
+      100
+    );
+    this.updateEditorState(adjustedDepth);
+    return this;
+  }
+  logBlock = () => {
+    console.log(this.currentBlock.toJSON());
+    return this;
+  }
   toggleBlockInBlock = (type) => {
     const newBlockKey = genKey();
     const currentBlock = this.currentContent.getBlockForKey(this.selection.getFocusKey());
@@ -387,14 +461,19 @@ class ContentController {
     return this.currentInlineStyle.find((style) => style.startsWith(styleType));
   }
   updateEditorState = (currentContent, selection) => {
-    this.editorState = EditorState.set(this.editorState, {
-      currentContent,
-      selection: selection || this.selection
-    });
+    this.editorState = EditorState.set(this.editorState,
+      {currentContent}
+     );
+    if (selection) {
+      this.editorState = EditorState.forceSelection(this.editorState, selection);
+    }
     this.currentContent = currentContent;
+    this.previousSelection = this.selection;
     this.selection = selection || this.selection;
-    this.blockKey = this.selection.getFocusKey();
+
+    this.blockKey = this.selection.getAnchorKey();
     let reachedRoot = false;
+    this.blockTree = {};
     this.location = this
       .currentContent
       .getBlockMap()
@@ -413,11 +492,16 @@ class ContentController {
       .reduce((tree, block) => {
         if (!tree[block.getDepth()]) {
           tree[block.getDepth()] = block;
+          this.blockTree[block.getType()] = {
+            style: block.getData().get('style'),
+          };
         }
         return tree;
       }, []);
     this.blocksArray = currentContent.getBlocksAsArray();
     this.currentBlock = this.currentContent.getBlockForKey(this.selection.getAnchorKey());
+    this.nextBlock = this.currentContent.getBlockAfter(this.selection.getAnchorKey());
+    this.previousBlock = this.currentContent.getBlockBefore(this.selection.getAnchorKey());
     this.currentDepth = this.currentBlock.getDepth();
     this.currentInlineStyle = this.editorState.getCurrentInlineStyle();
     this.index = this.blocksArray.findIndex((block) => {
